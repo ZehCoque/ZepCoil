@@ -1,0 +1,155 @@
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
+<!-- * * * * * * * to get started with your project! * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img
+    width="40"
+    alt="Angular Logo"
+    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
+  />
+  <span>Bem vindo</span>
+    <div class="spacer"></div>
+    <a aria-label="Angular on twitter" target="_blank" rel="noopener" title="Notificações">
+      <img style="filter: invert();" src="../assets/icons8-bell-24.png">
+    </a>
+</div>
+
+<div class="content" role="main">
+
+  <div class="row">
+
+    <div class="column leftmost">
+
+      <cdk-virtual-scroll-viewport itemSize="65" (scrolledIndexChange)="scroll_func($event)">
+
+        <div style="padding-bottom: 10px;" *cdkVirtualFor="let item of list"  >
+          <mat-card class="card">
+            <mat-card-content>
+              <div class="unselectable-line column-process display-flex el-col el-col-2" style=" align-items: center">
+                <div class="el-tag--plain tag-padding el-col-5">
+                  <img width="25px" src="../assets/icons8-minus-40.png">
+                </div>
+
+                <div class="el-tag--plain tag-padding el-col-5">
+                  Valor
+                </div>
+
+                <div class="el-tag--plain tag-padding el-col-5">
+                  Data
+                </div>
+
+                <div class="el-tag--plain tag-padding el-col-5">
+                  C Custo
+                </div>
+
+                <div class="el-tag--plain tag-padding el-col-5">
+                  Vencimento
+                </div>
+
+                <div class="el-tag--plain tag-padding el-col-5">
+                  Div CC
+                </div >
+
+                <div class="el-tag--plain tag-padding el-col-5">
+                  img
+                </div>
+
+              </div>
+
+            </mat-card-content>
+
+          </mat-card>
+        </div>
+
+      </cdk-virtual-scroll-viewport>
+
+
+    </div>
+
+    <div class="column rightmost">
+
+      <form [formGroup]="addNewform">
+
+        <mat-form-field class="form-field">
+          <mat-label>Part Number</mat-label>
+          <input matInput formControlName="partnumber" [errorStateMatcher]="matcher">
+          <mat-error *ngIf="addNewform.get('partnumber').hasError('required')" >
+            Part Number required.
+          </mat-error>
+          <mat-error *ngIf="addNewform.get('partnumber').hasError('pattern')" >
+            Only letters and numbers are allowed.
+          </mat-error>
+          <!-- <mat-hint>Errors appear instantly!</mat-hint> -->
+        </mat-form-field>
+
+        <mat-form-field style="width:375px" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" [errorStateMatcher]="matcher">
+          <mat-error *ngIf="addNewform.get('description').hasError('pattern')" >
+            Only letters and numbers are allowed.
+          </mat-error>
+          <mat-error *ngIf="addNewform.get('description').hasError('required')" >
+            Description required.
+          </mat-error>
+          <!-- <mat-hint>Errors appear instantly!</mat-hint> -->
+        </mat-form-field>
+        <div>
+        <mat-form-field  class="form-field">
+          <mat-label>Package type</mat-label>
+          <mat-select  formControlName="box_family">
+            <mat-option *ngFor="let b1 of box_type" [value]="b1.value">
+              {{b1.display}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="form-field" >
+          <mat-label>Package name</mat-label>
+          <mat-select formControlName="box_type">
+          <mat-option *ngFor="let b2 of selected_box_type.names" [value]="b2">
+           {{ b2 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+      </form>
+
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+  <!-- Footer -->
+  <footer>
+
+  </footer>
+
+  <svg id="clouds" alt="Gray Clouds Background" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677">
+    <path id="Path_39" data-name="Path 39" d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z" transform="translate(142.69 -634.312)" fill="#eee"/>
+  </svg>
+
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+
+<router-outlet></router-outlet>
