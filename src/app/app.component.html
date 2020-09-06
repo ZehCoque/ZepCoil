@@ -40,19 +40,19 @@
                 </div>
 
                 <div class="el-tag--plain tag-padding el-col-5">
-                  Valor
+                  Energia Elétrica
                 </div>
 
                 <div class="el-tag--plain tag-padding el-col-5">
-                  Data
+                  R$ 1500,98
                 </div>
 
                 <div class="el-tag--plain tag-padding el-col-5">
-                  C Custo
+                  Nome 1
                 </div>
 
                 <div class="el-tag--plain tag-padding el-col-5">
-                  Vencimento
+                  {{ "2020-09-06T21:55:56+00:00" | amCalendar}}
                 </div>
 
                 <div class="el-tag--plain tag-padding el-col-5">
@@ -79,7 +79,17 @@
 
       <form [formGroup]="newEntryForm">
 
-        <mat-form-field class="form-field">
+        <div>
+          <mat-form-field style="width: 100%;" class="example-full-width">
+            <mat-label>Noma da Entrada</mat-label>
+            <textarea matInput formControlName="nome_entrada" [errorStateMatcher]="errorMatcher"></textarea>
+            <mat-error *ngIf="newEntryForm.get('nome_entrada').hasError('required')" >
+              É necessário inserir um nome de entrada.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field style="width: 30%;" class="form-field">
           <mat-label>Valor</mat-label>
           <input matInput formControlName="valor" [errorStateMatcher]="errorMatcher"   >
 
@@ -90,17 +100,27 @@
           <mat-hint> </mat-hint>
         </mat-form-field>
 
-        <mat-form-field class="form-field">
+        <mat-form-field style="width: 30%;" class="form-field">
           <mat-label>Data de entrada</mat-label>
-          <input matInput formControlName="data_entrada" [matDatepicker]="picker">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <input matInput formControlName="data_entrada" [matDatepicker]="picker1">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
           <mat-error *ngIf="newEntryForm.get('data_entrada').hasError('required')" >
             É necessário inserir uma data de entrada válida.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="form-field">
+        <mat-form-field style="width: 30%;" class="form-field">
+          <mat-label>Data de vencimento</mat-label>
+          <input matInput formControlName="data_vencimento" [matDatepicker]="picker2">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <mat-error *ngIf="newEntryForm.get('data_vencimento').hasError('required')" >
+            É necessário inserir uma data de vencimento válida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field style="width: 45%;" class="form-field">
           <mat-label>Centro de Custo</mat-label>
           <mat-select formControlName="CC">
           <mat-option *ngFor="let cc of CC.nomes" [value]="cc">
@@ -112,7 +132,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="form-field">
+      <mat-form-field style="width: 45%;" class="form-field">
         <mat-label>Divisão Centro de Custo</mat-label>
         <mat-select formControlName="div_CC">
         <mat-option *ngFor="let cc of CC.nomes" [value]="cc">
@@ -124,20 +144,10 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field">
-      <mat-label>Data de entrada</mat-label>
-      <input matInput formControlName="data_vencimento" [matDatepicker]="picker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="newEntryForm.get('data_vencimento').hasError('required')" >
-        É necessário inserir uma data de entrada válida.
-      </mat-error>
-    </mat-form-field>
-
     <div>
       <mat-form-field style="width: 100%;" class="example-full-width">
         <mat-label>Observação</mat-label>
-        <textarea matInput></textarea>
+        <textarea matInput formControlName="observacao" [errorStateMatcher]="errorMatcher"></textarea>
       </mat-form-field>
     </div>
 

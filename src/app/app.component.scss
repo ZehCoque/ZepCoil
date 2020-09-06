@@ -151,14 +151,12 @@ p {
 }
 
 .align-center{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      padding-top: 12%;
 
 }
 
 .button-row {
-  width: 490px;
+  width: 100%;
   text-align: center;
 }
 
@@ -186,10 +184,9 @@ p {
 
 .content-fluid{
   overflow: hidden;
-  margin: 16px auto;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  margin-top: 15px;
+  width: 85%;
+
   margin-right: auto;
   margin-left: auto;
   align-items: center;
@@ -233,13 +230,14 @@ svg.material-icons:not(:last-child) {
 .leftmost{
   float: left;
   width: 70%;
+  padding-left: 10px;
 }
 
 .rightmost{
-  margin-left: 20px;
-  float: right;
-  padding-left: 20px;
-  width: 20%;
+
+  float: left;
+  margin-left: 15px;
+  width: 28%;
 }
 
 .card-container .card:not(:last-child) {

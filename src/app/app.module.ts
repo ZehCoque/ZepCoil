@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {LOCALE_ID} from '@angular/core';
+import { MomentModule } from 'ngx-moment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,7 +28,11 @@ registerLocaleData(localePtBr);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
-
+    MomentModule.forRoot({
+      relativeTimeThresholdOptions: {
+        'm': 59
+      }
+    })
   ],
   providers: [
     {

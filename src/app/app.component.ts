@@ -27,6 +27,8 @@ export class AppComponent {
   viewport: CdkVirtualScrollViewport;
   newEntryForm: FormGroup;
   errorMatcher: ErrorMatcherDirective
+  nextMonth:string
+  today = new Date().toISOString();
 
   list = Array(20);
 
@@ -43,13 +45,17 @@ export class AppComponent {
     let newDate = new Date();
     newDate.setMonth(newDate.getMonth() + 1);
 
+    this.nextMonth = newDate.toISOString();
+    console.log(this.nextMonth)
+
     this.newEntryForm = this.formBuilder.group({
       valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
       data_entrada: new FormControl(new Date(), Validators.required),
       CC: new FormControl('',Validators.required),
       div_CC: new FormControl('',Validators.required),
       data_vencimento: new FormControl(newDate, Validators.required),
-      complemento: new FormControl('')
+      observacao: new FormControl(''),
+      nome_entrada: new FormControl('', Validators.required)
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
