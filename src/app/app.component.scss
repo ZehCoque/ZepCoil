@@ -142,16 +142,62 @@ p {
   opacity: 0.8;
 }
 
-.column {
-  float: left;
-  }
-
 .content {
   overflow: hidden;
   margin: 16px auto;
 
-  max-width: 1140px;
+  max-width: 1760px;
   align-items: center;
+}
+
+.align-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.button-row {
+  width: 490px;
+  text-align: center;
+}
+
+.button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.content-fluid{
+  overflow: hidden;
+  margin: 16px auto;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  align-items: center;
+}
+
+.form-field{
+  margin-right: 15px;
+  margin-bottom: 15px;
 }
 
 svg.material-icons {
@@ -185,12 +231,15 @@ svg.material-icons:not(:last-child) {
 }
 
 .leftmost{
+  float: left;
   width: 70%;
 }
 
 .rightmost{
-  padding-left: 10px;
-  width: 25%;
+  margin-left: 20px;
+  float: right;
+  padding-left: 20px;
+  width: 20%;
 }
 
 .card-container .card:not(:last-child) {
