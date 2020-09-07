@@ -3,7 +3,10 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ErrorMatcherDirective } from './directives/error-matcher.directive'
 import { CurrencyPipe } from '@angular/common';
+import { ServerService } from './services/server.service'
+import { Entrada } from './classes/entrada'
 
+import * as moment from 'moment';
 
 interface CC {
   numero: Array<number>;
@@ -26,11 +29,11 @@ export class AppComponent {
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
   newEntryForm: FormGroup;
-  errorMatcher: ErrorMatcherDirective
-  nextMonth:string
-  today = new Date().toISOString();
+  errorMatcher: ErrorMatcherDirective;
+  today = moment().toISOString();
+  nextMonth = moment(this.today).add(1, 'M')
 
-  list = Array(20);
+  Entradas: Array<Entrada> = new Array();
 
   CC:CC ={
     numero:[100, 200 ,300],
@@ -38,22 +41,17 @@ export class AppComponent {
   } ;
 
   constructor(private formBuilder: FormBuilder,
-    private currencyPipe : CurrencyPipe) { }
+    private currencyPipe : CurrencyPipe,
+    private server: ServerService) { }
 
   ngOnInit()  {
 
-    let newDate = new Date();
-    newDate.setMonth(newDate.getMonth() + 1);
-
-    this.nextMonth = newDate.toISOString();
-    console.log(this.nextMonth)
-
     this.newEntryForm = this.formBuilder.group({
       valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
-      data_entrada: new FormControl(new Date(), Validators.required),
+      data_entrada: new FormControl(moment().toISOString(), Validators.required),
       CC: new FormControl('',Validators.required),
       div_CC: new FormControl('',Validators.required),
-      data_vencimento: new FormControl(newDate, Validators.required),
+      data_vencimento: new FormControl(moment(this.today).add(1, 'M'), Validators.required),
       observacao: new FormControl(''),
       nome_entrada: new FormControl('', Validators.required)
     });
@@ -71,6 +69,20 @@ export class AppComponent {
           {emitEvent:false})
       }
     });
+
+     this.server.get_List('main_table_query').then((response: any) => {
+
+      response.forEach( (element:Entrada) => {
+
+        this.Entradas.push(element);
+
+
+      });
+
+    });
+
+    console.log(this.Entradas)
+
   }
 
   scroll_func(event){

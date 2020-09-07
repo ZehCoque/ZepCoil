@@ -1,7 +1,7 @@
 {
-  "name": "mysql_ezwms",
+  "name": "mysql_prototype1",
   "version": "1.0.0",
-  "description": "MySql server for EZWMS app",
+  "description": "MySql server for ZepCoil app",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,6 +17,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.4"
   }
 }

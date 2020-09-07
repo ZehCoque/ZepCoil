@@ -27,41 +27,91 @@
 
     <div class="leftmost">
 
+      <div class="unselectable-line display-flex header_row" style=" align-items: center">
+        <div class="el-tag--plain el-col-1">
+          Tipo
+        </div>
+
+        <div class="el-tag--plain el-col-3">
+          Nº Entrada
+        </div>
+
+        <div class="el-tag--plain el-col-3">
+          Nome
+        </div>
+
+        <div class="el-tag--plain el-col-3">
+          Valor
+        </div>
+
+        <div class="el-tag--plain el-col-5">
+          Centro de Custo
+        </div>
+
+
+        <div class="el-tag--plain el-col-5">
+          Divisão Centro de Custo
+        </div >
+
+        <div class="el-tag--plain el-col-4">
+          Vencimento
+        </div>
+
+        <div class="el-tag--plain el-col-4">
+          Observação
+        </div>
+
+      </div>
+
       <cdk-virtual-scroll-viewport itemSize="65" (scrolledIndexChange)="scroll_func($event)">
 
-        <div style="padding-bottom: 10px;" *cdkVirtualFor="let item of list"  >
+        <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas"  >
+
           <mat-card class="card">
             <mat-card-content>
-              <div class="unselectable-line column-process display-flex el-col el-col-2" style=" align-items: center">
-                <div class="el-tag--plain tag-padding el-col-5">
-                  <button mat-mini-fab color="warn">
-                    <mat-icon>remove</mat-icon>
+              <div class="unselectable-line display-flex" style=" align-items: center">
+                <div class="el-tag--plain el-col-1">
+                  <button *ngIf="Entrada.Tipo == 0" mat-mini-fab color="warn">
+                    <mat-icon >remove</mat-icon>
+                  </button>
+                  <button *ngIf="Entrada.Tipo == 1" mat-mini-fab color="success">
+                    <mat-icon >add</mat-icon>
+                  </button>
+                  <button *ngIf="Entrada.Tipo == 2" mat-mini-fab color="accent" style="color: white;">
+                    <mat-icon >show_chart</mat-icon>
                   </button>
                 </div>
 
-                <div class="el-tag--plain tag-padding el-col-5">
-                  Energia Elétrica
+                <div class="el-tag--plain el-col-3">
+                  {{Entrada.ID}}
                 </div>
 
-                <div class="el-tag--plain tag-padding el-col-5">
-                  R$ 1500,98
+                <div class="el-tag--plain el-col-3">
+                  {{Entrada.Nome}}
                 </div>
 
-                <div class="el-tag--plain tag-padding el-col-5">
-                  Nome 1
+                <div class="el-tag--plain el-col-3">
+                  {{ Entrada.Valor | currency:'BRL'}}
                 </div>
 
-                <div class="el-tag--plain tag-padding el-col-5">
-                  {{ "2020-09-06T21:55:56+00:00" | amCalendar}}
+                <div class="el-tag--plain el-col-5">
+                  {{Entrada.CC}}
                 </div>
 
-                <div class="el-tag--plain tag-padding el-col-5">
-                  Div CC
+
+                <div class="el-tag--plain el-col-5">
+                  {{Entrada.Div_CC}}
                 </div >
 
-                <div class="el-tag--plain tag-padding el-col-5">
-                  img
+                <div class="el-tag--plain el-col-4">
+                  Em {{Entrada.Vencimento | amDifference: today :'days' : true}} dias
                 </div>
+
+                <div class="el-tag--plain el-col-4">
+                <button disabled mat-icon-button style="color: black;">
+                  <mat-icon  matTooltip="Entrada.Observacao">info</mat-icon>
+                </button>
+              </div>
 
               </div>
 
@@ -80,8 +130,8 @@
       <form [formGroup]="newEntryForm">
 
         <div>
-          <mat-form-field style="width: 100%;" class="example-full-width">
-            <mat-label>Noma da Entrada</mat-label>
+          <mat-form-field style="width: 100%;" class="form-field">
+            <mat-label>Nome da Entrada</mat-label>
             <textarea matInput formControlName="nome_entrada" [errorStateMatcher]="errorMatcher"></textarea>
             <mat-error *ngIf="newEntryForm.get('nome_entrada').hasError('required')" >
               É necessário inserir um nome de entrada.
@@ -161,6 +211,9 @@
         <mat-icon>remove</mat-icon>
       </button>
 
+      <button type="submit" mat-fab color="accent" style="color: white;">
+        <mat-icon>show_chart</mat-icon>
+      </button>
     </div>
 
       </form>

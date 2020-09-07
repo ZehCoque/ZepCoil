@@ -32,18 +32,12 @@ app.use(cors({
 const pool = require('./connection/dbconnection.js');
 
 // server functions
-const pn_list = require('./models/pn_list.js');
-const nf_list = require('./models/nf_list.js');
-const fake_nf_server = require('./models/fake_nf_server.js');
-const main_pn_info = require('./models/main_pn_info.js');
+const main_table_query = require('./models/main_table_query.js');
 
-app.use(pn_list(pool));
-app.use(nf_list(pool));
-app.use(fake_nf_server(pool));
-app.use(main_pn_info(pool));
+app.use(main_table_query(pool));
 
 console.log(`serving ${www}`);
 app.get('*', (req, res) => {
-  res.send(`MYSQL SERVER - EZWMS DATABASE`);
+  res.send(`MYSQL SERVER - ZEPCOIL DATABASE`);
 });
 app.listen(port, () => console.log(`listening on http://localhost:${port}`));

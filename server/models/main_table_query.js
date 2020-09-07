@@ -4,12 +4,12 @@ function main_pn_info_router(db) {
   const router = express.Router();
 
 // workaround to send get requests with body
-router.post('/main_pn_info/:PN', function (req, res, next) {
+router.get('/main_table_query', function (req, res, next) {
   db.query(
-    'SELECT * FROM main_pn_info WHERE PN=?',
-    [req.body.value],
+    'SELECT * FROM lançamentos ORDER BY id',
+    [],
     (error, results) => {
-      if (error || results.length === 0) {
+      if (error) {
         console.log(error);
         res.status(500).json({status: 'error'});
       } else {
@@ -18,7 +18,6 @@ router.post('/main_pn_info/:PN', function (req, res, next) {
     }
   );
 });
-
 return router;
 }
 module.exports = main_pn_info_router;
