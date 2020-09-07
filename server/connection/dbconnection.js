@@ -7,7 +7,17 @@ var pool  = mysql.createPool({
   database        : process.env.DB_NAME,
 });
 pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected!
-  });
+    if (err) {
+      var pool2  = mysql.createPool({
+        connectionLimit : 10,
+        host            : process.env.DB_LOCALHOST,
+        user            : process.env.DB_USERNAME,
+        password        : process.env.DB_PASSWORD,
+        database        : process.env.DB_NAME,
+      });
+      pool2.getConnection(function(err, connection) {
+        if (err) throw(err)
+        else module.exports = pool2  // not connected!
+      })}});
 
 module.exports = pool;
