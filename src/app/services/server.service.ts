@@ -25,17 +25,17 @@ export class ServerService {
   get_List(slash_url) {
     return this.request('GET', `${environment.serverUrl}/${slash_url}`);
   }
-  get_Value(info,slash_url){
-    return this.request('POST', `${environment.serverUrl}/${slash_url}/${info}`, info);
+  get_Value(data,slash_url){
+    return this.request('POST', `${environment.serverUrl}/${slash_url}/${data}`, data);
   }
-  add_List(info,slash_url) {
-    return this.request('POST', `${environment.serverUrl}/${slash_url}`, info);
+  add_List(data,slash_url) {
+    return this.request('POST', `${environment.serverUrl}/${slash_url}`, data);
   }
-  update_List(info,slash_url) {
-    return this.request('PUT', `${environment.serverUrl}/${slash_url}/${info}`, info);
+  update_List(data,slash_url) {
+    return this.request('PUT', `${environment.serverUrl}/${slash_url}/${data}`, data);
   }
-  delete_List(info,slash_url) {
-    return this.request('DELETE', `${environment.serverUrl}/${slash_url}/${info}`, info);
+  delete_List(data,slash_url) {
+    return this.request('DELETE', `${environment.serverUrl}/${slash_url}/${data}`, data);
   }
 
 }

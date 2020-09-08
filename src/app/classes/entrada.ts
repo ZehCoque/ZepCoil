@@ -1,11 +1,11 @@
 export class Entrada {
-  Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
-  ID: number;
+  ID?: String;
   Nome: String;
-  Data_Entrada: moment.Moment;
+  Data_Entrada: Date;
   CC: String;
   Div_CC: String;
-  Vencimento: moment.Moment;
+  Vencimento: Date;
   Valor: Number;
   Observacao: String;
+  Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
 }

@@ -4,7 +4,7 @@
   "main": "./src/electron/electron.dev.js",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"nodemon ./server/server\" \"npm run electron-build\"",
+    "start": "concurrently \"nodemon ./server/server\" \"ng serve --open\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

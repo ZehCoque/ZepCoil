@@ -32,26 +32,35 @@ md-divider {
   border-color: #a3cbdf;
   color: #187caf;
   text-align: center;
-
+  font-size: 0.9vw;
 }
 
 .el-col-1{
   width: 5%;
+  background-color: rgba(0, 0, 0, 0)
   // border: solid 2px black;
+}
+
+.el-col-2{
+  width: 10%;
+  background-color: rgba(0, 0, 0, 0)
 }
 
 .el-col-3 {
   width: 15%;
+  background-color: rgba(0, 0, 0, 0)
   // border: solid 2px black;
 }
 
 .el-col-4 {
   width: 12%;
+  background-color: rgba(0, 0, 0, 0)
   // border: solid 2px black;
 }
 
 .el-col-5 {
   width: 21%;
+  background-color: rgba(0, 0, 0, 0)
   // border: solid 2px black;
 }
 
@@ -84,13 +93,20 @@ md-divider {
 }
 
 .header_row{
-  font-size: 20px;
-  padding-left: 17px;
-  padding-right: 31px;
-  padding-bottom: 15px;
+  border: 1px solid #d1e5ef;
+  border-radius: 5px;
+  background-color: rgb(242,249,252);
+  font-weight: bold;
+  font-size: 36px; /* Some tweener fallback that doesn't look awful */
+  font-size: 1.1vw;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 7.5px;
+  padding-top: 7.5px;
 }
 
 .scroll_box {
+
   display: flex;
   overflow: auto;
   flex: none;
@@ -103,10 +119,23 @@ md-divider {
   // scroll-padding-top: 45px;
 }
 
+.empty-results-disclaimer{
+  width: 50%;
+  border: 1px solid #d1e5ef;
+  border-radius: 5px;
+  background-color: rgb(242,249,252);
+  font-weight: bold;
+  font-size: 36px; /* Some tweener fallback that doesn't look awful */
+  font-size: 1.1vw;
+  color: #187caf;
+  text-align: center;
+  display: block;
+}
+
 cdk-virtual-scroll-viewport {
   border-radius: 4px;
   border: 1px solid #ebeef5;
-  background-color: #fff;
+  background-color: rgb(242,249,252);
   height: 83vh;
 
   li {
@@ -177,7 +206,7 @@ p {
 }
 
 .align-center{
-      padding-top: 12%;
+      padding-top: 10vh;
 
 }
 
@@ -212,6 +241,7 @@ p {
   overflow: hidden;
   margin-top: 15px;
   width: 85%;
+  height: 80vh;
 
   margin-right: auto;
   margin-left: auto;
@@ -263,7 +293,7 @@ svg.material-icons:not(:last-child) {
 
   float: left;
   margin-left: 15px;
-  width: 28%;
+  width: 27%;
 }
 
 .card-container .card:not(:last-child) {
