@@ -37,7 +37,7 @@
         </div>
 
         <div class="el-tag--plain el-col-3">
-          Nome
+          Descrição
         </div>
 
         <div class="el-tag--plain el-col-3">
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="el-tag--plain el-col-3">
-                  {{Entrada.Nome}}
+                  {{Entrada.Descricao}}
                 </div>
 
                 <div class="el-tag--plain el-col-3">
@@ -148,10 +148,10 @@
 
         <div>
           <mat-form-field style="width: 100%;" class="form-field">
-            <mat-label>Nome da Entrada</mat-label>
-            <input matInput formControlName="Nome" [errorStateMatcher]="errorMatcher">
-            <mat-error *ngIf="newEntryForm.get('Nome').hasError('required')" >
-              É necessário inserir um nome de entrada.
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
+            <mat-error *ngIf="newEntryForm.get('Descricao').hasError('required')" >
+              É necessário inserir uma descrição.
             </mat-error>
           </mat-form-field>
         </div>

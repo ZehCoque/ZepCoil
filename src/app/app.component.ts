@@ -55,7 +55,7 @@ export class AppComponent {
       Div_CC: new FormControl('',Validators.required),
       Vencimento: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
       Observacao: new FormControl(''),
-      Nome: new FormControl('', Validators.required)
+      Descricao: new FormControl('', Validators.required)
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
@@ -70,7 +70,7 @@ export class AppComponent {
      this.server.get_List('main_table_query').then((response: any) => {
 
       response.forEach( (element:Entrada) => {
-        element.ID = element.ID.substr(element.ID.length - 4);
+
         this.Entradas = [...this.Entradas, element];
         this.cdk_empty = false;
       });
@@ -103,14 +103,15 @@ export class AppComponent {
   onSubmit(type: number){
 
     let input_json: Entrada = {
-      Nome: this.newEntryForm.get("Nome").value,
+      Descricao: this.newEntryForm.get("Descricao").value,
       Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
       CC: this.newEntryForm.get("CC").value,
       Div_CC: this.newEntryForm.get("Div_CC").value,
       Vencimento: moment(this.newEntryForm.get("Vencimento").value).toDate(),
       Valor:  this.getNumberValue(this.newEntryForm.get("Valor").value),
       Observacao: this.newEntryForm.get("Observacao").value,
-      Tipo: type
+      Tipo: type,
+      Destinatário: "Zep"
     }
 
     this.Entradas = [...this.Entradas, input_json]

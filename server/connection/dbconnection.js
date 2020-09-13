@@ -1,23 +1,13 @@
 var mysql = require('mysql');
 var pool  = mysql.createPool({
   connectionLimit : 10,
-  host            : process.env.DB_HOST,
+  host            : process.env.DB_LOCALHOST,
   user            : process.env.DB_USERNAME,
   password        : process.env.DB_PASSWORD,
   database        : process.env.DB_NAME,
 });
 pool.getConnection(function(err, connection) {
-    if (err) {
-      var pool2  = mysql.createPool({
-        connectionLimit : 10,
-        host            : process.env.DB_LOCALHOST,
-        user            : process.env.DB_USERNAME,
-        password        : process.env.DB_PASSWORD,
-        database        : process.env.DB_NAME,
-      });
-      pool2.getConnection(function(err, connection) {
-        if (err) throw(err)
-        else module.exports = pool2  // not connected!
-      })}});
+    if (err) throw err; // not connected!
+  });
 
 module.exports = pool;

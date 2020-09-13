@@ -1,6 +1,6 @@
 export class Entrada {
-  ID?: String;
-  Nome: String;
+  ID?: SVGAnimatedNumberList;
+  Descricao: String;
   Data_Entrada: Date;
   CC: String;
   Div_CC: String;
@@ -8,4 +8,7 @@ export class Entrada {
   Valor: Number;
   Observacao: String;
   Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
+  N_invest?: number;
+  Nome_f?: String;
+  Destinatário: String;
 }
