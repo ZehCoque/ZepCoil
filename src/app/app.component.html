@@ -63,11 +63,11 @@
 
       </div>
 
-      <cdk-virtual-scroll-viewport *ngIf="!cdk_empty; else elseBlock" itemSize="65" (scrolledIndexChange)="scroll_func($event)">
+      <cdk-virtual-scroll-viewport *ngIf="!cdk_empty; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
 
         <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas"  >
 
-          <mat-card class="card">
+          <mat-card class="card" (contextmenu)="onContextMenu($event, Entrada)">
             <mat-card-content>
               <div class="unselectable-line display-flex" style=" align-items: center">
                 <div class="el-tag--plain el-col-1">
@@ -127,6 +127,17 @@
         </div>
 
       </cdk-virtual-scroll-viewport>
+      <div style="visibility: hidden; position: fixed"
+      [style.left]="contextMenuPosition.x"
+      [style.top]="contextMenuPosition.y"
+      [matMenuTriggerFor]="contextMenu">
+       </div>
+      <mat-menu #contextMenu="matMenu">
+        <ng-template matMenuContent>
+          <button mat-menu-item (click)="editLine()">Editar</button>
+          <button mat-menu-item (click)="deleteLine()">Deletar</button>
+        </ng-template>
+      </mat-menu>
 
       <ng-template #elseBlock>
         <div style="padding-top: 20px; display: flex;

@@ -7,6 +7,7 @@ import { ServerService } from './services/server.service'
 import { Entrada } from './classes/entrada'
 
 import * as moment from 'moment';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 interface CC {
   numero: Array<number>;
@@ -26,11 +27,16 @@ export class AppComponent {
 //     this.key = event.key
 
 // }
+  @ViewChild(MatMenuTrigger)
+
+  contextMenu: MatMenuTrigger;
+  contextMenuPosition = { x: '0px', y: '0px' };
   changeDetection: ChangeDetectionStrategy.OnPush;
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
   newEntryForm: FormGroup;
   errorMatcher: ErrorMatcherDirective;
+  max_id:number;
 
   today = moment().toISOString();
 
@@ -38,7 +44,7 @@ export class AppComponent {
 
   CC:CC ={
     numero:[120, 150 ,22, 55],
-    nomes:['Nome 1', 'Nome 2', 'Nome 3', 'Nome 4']
+    nomes:['Div 1', 'Div 2', 'Div 3', 'Div 4']
   } ;
   cdk_empty: boolean = true;
 
@@ -59,13 +65,21 @@ export class AppComponent {
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
-      let valor = this.getNumberValue(val.Valor);
       if (val.Valor) {
+        let valor = this.getNumberValue(val.Valor);
         this.newEntryForm.patchValue({
           Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
           {emitEvent:false})
       }
     });
+
+    this.server.get_List('max_id').then((response:any) => {
+
+      this.max_id = response[0].max_id;
+      if (this.max_id == undefined){
+        this.max_id = 0;
+      }
+    })
 
      this.server.get_List('main_table_query').then((response: any) => {
 
@@ -102,7 +116,20 @@ export class AppComponent {
 
   onSubmit(type: number){
 
+    let string_max_id;
+
+    if (this.max_id < 10) {
+      string_max_id = "000" + String(this.max_id);
+    } else if (this.max_id < 100){
+      string_max_id = "00" + String(this.max_id);
+    } else if (this.max_id < 1000){
+      string_max_id = "0" + String(this.max_id);
+    } else if (this.max_id < 10000){
+      string_max_id = String(this.max_id);
+    }
+
     let input_json: Entrada = {
+      ID: string_max_id,
       Nome: this.newEntryForm.get("Nome").value,
       Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
       CC: this.newEntryForm.get("CC").value,
@@ -113,12 +140,36 @@ export class AppComponent {
       Tipo: type
     }
 
+    this.newEntryForm.reset();
+    this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+
+    this.max_id ++;
     this.Entradas = [...this.Entradas, input_json]
     this.cdk_empty = false;
+    if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
 
     this.server.add_List(input_json,'main_table_query').then(res => {
 
     });
+
+  }
+
+  onContextMenu(event: MouseEvent, item) {
+
+    event.preventDefault();
+      this.contextMenuPosition.x = event.clientX + 'px';
+      this.contextMenuPosition.y = event.clientY + 'px';
+      this.contextMenu.menuData = { 'item': item };
+      this.contextMenu.menu.focusFirstItem('mouse');
+      this.contextMenu.openMenu();
+
+  }
+
+  editLine(){
+
+  }
+
+  deleteLine(){
 
   }
 

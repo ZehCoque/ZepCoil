@@ -1,5 +1,5 @@
 export class Entrada {
-  ID?: String;
+  ID: String;
   Nome: String;
   Data_Entrada: Date;
   CC: String;
