@@ -100,7 +100,7 @@ md-divider {
   font-size: 36px; /* Some tweener fallback that doesn't look awful */
   font-size: 1.1vw;
   padding-left: 20px;
-  padding-right: 20px;
+  padding-right: 31px;
   padding-bottom: 7.5px;
   padding-top: 7.5px;
 }
@@ -136,7 +136,7 @@ cdk-virtual-scroll-viewport {
   border-radius: 4px;
   border: 1px solid #ebeef5;
   background-color: rgb(242,249,252);
-  height: 83vh;
+  height: 74vh;
 
   li {
     height: 100px;
