@@ -33,10 +33,10 @@
         </div>
 
         <div class="el-tag--plain el-col-3">
-          Nº Entrada
+          Datas
         </div>
 
-        <div class="el-tag--plain el-col-3">
+        <div class="el-tag--plain el-col-4">
           Descrição
         </div>
 
@@ -44,20 +44,24 @@
           Valor
         </div>
 
-        <div class="el-tag--plain el-col-5">
-          Centro de Custo
+        <div class="el-tag--plain el-col-2">
+          C.C.
         </div>
 
 
-        <div class="el-tag--plain el-col-5">
-          Divisão C.C.
+        <div class="el-tag--plain el-col-2">
+          Div. C.C
         </div >
 
-        <div class="el-tag--plain el-col-4">
-          Vencimento
+        <div class="el-tag--plain el-col-3">
+          Vence em
         </div>
 
         <div class="el-tag--plain el-col-2">
+          Resp.
+        </div>
+
+        <div class="el-tag--plain el-col-1">
           Obs
         </div>
 
@@ -82,11 +86,15 @@
                   </button>
                 </div>
 
-                <div class="el-tag--plain el-col-3">
-                  {{ Entrada.ID }}
+                <div class="el-tag--plain el-col-3" style="align-items: center;">
+                  <div style="font-size: 0.8vw; ">
+                    <img src="../assets/icons8-time-24.png" width="13vw" >
+                     {{ Entrada.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
+                  <div style="font-size: 0.8vw;"><img src="../assets/icons8-expired-26.png" width="15vw">
+                    {{ Entrada.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
                 </div>
 
-                <div class="el-tag--plain el-col-3">
+                <div class="el-tag--plain el-col-4">
                   {{Entrada.Descricao}}
                 </div>
 
@@ -94,20 +102,24 @@
                   {{ Entrada.Valor | currency:'BRL'}}
                 </div>
 
-                <div class="el-tag--plain el-col-5">
+                <div class="el-tag--plain el-col-2">
                   {{Entrada.CC}}
                 </div>
 
 
-                <div class="el-tag--plain el-col-5">
+                <div class="el-tag--plain el-col-2">
                   {{Entrada.Div_CC}}
                 </div >
 
-                <div class="el-tag--plain el-col-4">
+                <div class="el-tag--plain el-col-3">
                   Em {{Entrada.Vencimento | amDifference: today :'days' : false}} dias
                 </div>
 
                 <div class="el-tag--plain el-col-2">
+                  {{Entrada.Responsavel}}
+                </div>
+
+                <div class="el-tag--plain el-col-1">
                 <button *ngIf="Entrada.Observacao; else elseBlockOBS" disabled mat-icon-button style="color: black;">
                   <mat-icon  matTooltip="{{Entrada.Observacao}}">info</mat-icon>
                 </button>
@@ -153,11 +165,52 @@
       </ng-template>
     </div>
 
-    <div class="rightmost align-center">
+    <div class="rightmost">
 
       <form [formGroup]="newEntryForm">
 
-        <div>
+        <div class="button-selector">
+
+          <div class="el-tag--plain">
+            Tipo
+          </div>
+
+          <div class="button-row flex-container button-container">
+
+            <button name="addButton" type="button" mat-fab color="success" class="selection-button" (click)="selectType(0)">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button name="removeButton"  type="button" mat-fab color="warn" class="selection-button" (click)="selectType(1)">
+              <mat-icon>remove</mat-icon>
+            </button>
+
+            <button name="investButton" type="button" mat-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
+              <mat-icon>show_chart</mat-icon>
+            </button>
+          </div>
+
+        </div>
+
+        <div class="button-selector">
+
+          <div class="el-tag--plain">
+            Responsável
+          </div>
+
+        <div class="button-row flex-container button-container">
+
+          <button name="CButton" type="button" mat-fab style="background-color: black; color: white;" class="selection-button" (click)="selectResp('C')">
+            <a style="font-size: 20px; font-weight: bolder;">Coil</a>
+          </button>
+          <button name="ZButton"  type="button" mat-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Z')">
+            <a style="font-size: 20px; font-weight: bolder;">Zep</a>
+          </button>
+
+        </div>
+
+      </div>
+      <div class="formulario">
+      <div>
           <mat-form-field style="width: 100%;" class="form-field">
             <mat-label>Descrição</mat-label>
             <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
@@ -222,27 +275,36 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field *ngIf="selectionType == 1" style="width: 45%;" class="form-field">
+      <mat-label>Destinatário</mat-label>
+      <mat-select formControlName="Destinatario">
+      <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
+       {{ dest }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selectionType == 2" style="width: 45%;" class="form-field">
+    <mat-label>Nº do Investimento</mat-label>
+    <input matInput formControlName="Num_Invest" [errorStateMatcher]="errorMatcher"   >
+
+    <mat-error *ngIf="newEntryForm.get('Num_Invest').hasError('pattern')" >
+      O número de investimento deve ser um número.
+    </mat-error>
+</mat-form-field>
+
     <div>
       <mat-form-field style="width: 100%;" class="example-full-width">
         <mat-label>Observação</mat-label>
         <textarea matInput formControlName="Observacao" [errorStateMatcher]="errorMatcher"></textarea>
       </mat-form-field>
     </div>
+      </div>
 
-
-    <div class="button-row flex-container button-container">
-
-      <button type="submit" mat-fab color="success" [disabled]="!newEntryForm.valid" (click)="onSubmit(0)">
-        <mat-icon>add</mat-icon>
-      </button>
-      <button type="submit" mat-fab color="warn" [disabled]="!newEntryForm.valid" (click)="onSubmit(1)">
-        <mat-icon>remove</mat-icon>
-      </button>
-
-      <button type="submit" mat-fab color="accent" style="color: white;" [disabled]="!newEntryForm.valid" (click)="onSubmit(2)">
-        <mat-icon>show_chart</mat-icon>
-      </button>
-    </div>
+      <div class="button-row">
+        <button mat-raised-button>Concluir</button>
+        <button mat-raised-button color="warn">Limpar</button>
+      </div>
 
       </form>
 

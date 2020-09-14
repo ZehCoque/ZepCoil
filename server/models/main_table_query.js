@@ -5,8 +5,8 @@ function main_pn_info_router(db) {
   db.getConnection(function(err, connection) {
     router.post('/main_table_query', (req, res, next) => {
       db.query(
-        'INSERT INTO lançamentos (`Descrição`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`) VALUES (?,?,?,?,?,?,?,?)',
-        [req.body.Nome,
+        'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`) VALUES (?,?,?,?,?,?,?,?)',
+        [req.body.Descricao,
           new Date(req.body.Data_Entrada),
           req.body.CC,
           req.body.Div_CC,

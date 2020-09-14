@@ -10,5 +10,5 @@ export class Entrada {
   Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
   N_invest?: number;
   Nome_f?: String;
-  Destinatário: String;
+  Destinatario: String;
 }
