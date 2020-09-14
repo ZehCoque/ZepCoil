@@ -14,7 +14,7 @@ interface CC {
   nomes: Array<string>
 }
 
-interface Dest{
+interface Nome_f{
   nomes: Array<string>;
 }
 
@@ -50,12 +50,10 @@ export class AppComponent {
     nomes:['Div 1', 'Div 2', 'Div 3', 'Div 4']
   } ;
 
-  Destinatarios:Dest ={
+  Destinatarios:Nome_f ={
     nomes:['Dest1', 'Dest2', 'Dest3', 'Dest4']
   } ;
   cdk_empty: boolean = true;
-  selectionType: number;
-  selectionResp: string;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -72,7 +70,8 @@ export class AppComponent {
       Vencimento: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
       Observacao: new FormControl(''),
       Num_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
-      Destinatario: new FormControl('')
+      Responsavel: new FormControl('',Validators.required),
+      Tipo: new FormControl('',Validators.required)
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
@@ -127,12 +126,16 @@ export class AppComponent {
       Vencimento: moment(this.newEntryForm.get("Vencimento").value).toDate(),
       Valor:  this.getNumberValue(this.newEntryForm.get("Valor").value),
       Observacao: this.newEntryForm.get("Observacao").value,
-      Tipo: this.selectionType,
-      Destinatario: "Zep"
+      Tipo: this.newEntryForm.get("Tipo").value,
+      Responsavel: this.newEntryForm.get("Responsavel").value,
+      N_invest: this.newEntryForm.get("N_invest").value,
+      Nome_f: this.newEntryForm.get("Nome_f").value
     }
 
     this.newEntryForm.reset();
     this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+    this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
+    this.newEntryForm.controls.Vencimento.patchValue(moment(this.today).add(1, 'M').toISOString());
 
     this.Entradas = [...this.Entradas, input_json]
     this.cdk_empty = false;
@@ -156,7 +159,7 @@ export class AppComponent {
   }
 
   selectType(type:number){
-    this.selectionType = type;
+    this.newEntryForm.controls.Tipo.setValue(type);
     if (type == 0){
       document.getElementsByName("addButton")[0].style.opacity = "1";
       document.getElementsByName("removeButton")[0].style.opacity = "0.4";
@@ -175,12 +178,12 @@ export class AppComponent {
   }
 
   selectResp(resp:string){
-    this.selectionResp = resp;
-    if (resp == "C"){
+    this.newEntryForm.controls.Responsavel.setValue(resp);
+    if (resp == "Coil"){
       document.getElementsByName("CButton")[0].style.opacity = "1";
       document.getElementsByName("ZButton")[0].style.opacity = "0.4";
     }
-    if (resp == "Z"){
+    if (resp == "Zep"){
       document.getElementsByName("CButton")[0].style.opacity = "0.4";
       document.getElementsByName("ZButton")[0].style.opacity = "1";
     }

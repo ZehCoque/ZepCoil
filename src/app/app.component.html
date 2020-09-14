@@ -90,7 +90,7 @@
                   <div style="font-size: 0.8vw; ">
                     <img src="../assets/icons8-time-24.png" width="13vw" >
                      {{ Entrada.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
-                  <div style="font-size: 0.8vw;"><img src="../assets/icons8-expired-26.png" width="15vw">
+                  <div style="font-size: 0.8vw;"><img src="../assets/icons8-expired-26.png" width="13vw">
                     {{ Entrada.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
                 </div>
 
@@ -177,14 +177,14 @@
 
           <div class="button-row flex-container button-container">
 
-            <button name="addButton" type="button" mat-fab color="success" class="selection-button" (click)="selectType(0)">
+            <button name="addButton" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
               <mat-icon>add</mat-icon>
             </button>
-            <button name="removeButton"  type="button" mat-fab color="warn" class="selection-button" (click)="selectType(1)">
+            <button name="removeButton"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
               <mat-icon>remove</mat-icon>
             </button>
 
-            <button name="investButton" type="button" mat-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
+            <button name="investButton" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
               <mat-icon>show_chart</mat-icon>
             </button>
           </div>
@@ -199,10 +199,10 @@
 
         <div class="button-row flex-container button-container">
 
-          <button name="CButton" type="button" mat-fab style="background-color: black; color: white;" class="selection-button" (click)="selectResp('C')">
+          <button name="CButton" type="button" mat-mini-fab style="background-color: black; color: white;" class="selection-button" (click)="selectResp('Coil')">
             <a style="font-size: 20px; font-weight: bolder;">Coil</a>
           </button>
-          <button name="ZButton"  type="button" mat-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Z')">
+          <button name="ZButton"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Zep')">
             <a style="font-size: 20px; font-weight: bolder;">Zep</a>
           </button>
 
@@ -275,16 +275,16 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="selectionType == 1" style="width: 45%;" class="form-field">
+    <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 1" style="width: 45%;" class="form-field">
       <mat-label>Destinatário</mat-label>
-      <mat-select formControlName="Destinatario">
+      <mat-select formControlName="Nome_f">
       <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
        {{ dest }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="selectionType == 2" style="width: 45%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 2" style="width: 45%;" class="form-field">
     <mat-label>Nº do Investimento</mat-label>
     <input matInput formControlName="Num_Invest" [errorStateMatcher]="errorMatcher"   >
 
