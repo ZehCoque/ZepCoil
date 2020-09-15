@@ -29,13 +29,12 @@ app.use(cors({
 // ****** allow cross-origin requests code END ****** //
 
 // connection auth with mysql
-const pool = require('./connection/dbconnection.js');
+const connection = require('./connection/dbconnection.js');
 
 // server functions
 const main_table_query = require('./models/main_table_query.js');
 
-
-app.use(main_table_query(pool));
+app.use(main_table_query(connection));
 
 console.log(`serving ${www}`);
 app.get('*', (req, res) => {
