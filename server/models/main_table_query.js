@@ -2,7 +2,6 @@ const express = require('express');
 
 function main_pn_info_router(db) {
   const router = express.Router();
-  db.on("error");
     router.post('/main_table_query', (req, res, next) => {
       db.query(
         'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Nome_f`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
