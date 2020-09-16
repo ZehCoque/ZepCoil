@@ -1,9 +1,9 @@
 const express = require('express');
 
-function main_pn_info_router(db) {
+function main_pn_info_router(connection) {
   const router = express.Router();
     router.post('/main_table_query', (req, res, next) => {
-      db.query(
+      connection.query(
         'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Nome_f`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
@@ -28,7 +28,7 @@ function main_pn_info_router(db) {
     });
 
   router.get('/main_table_query', function (req, res, next) {
-    db.query(
+    connection.query(
       'SELECT * FROM lançamentos ORDER BY ID',
       [],
       (error, results) => {

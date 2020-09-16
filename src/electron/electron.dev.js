@@ -18,7 +18,7 @@ function createWindow () {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `../../dist/prototype1/index.html`),
+      pathname: path.join(__dirname, `../../dist/zepcoil/index.html`),
       protocol: "file:",
       slashes: true
     })

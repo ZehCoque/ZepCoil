@@ -2,10 +2,10 @@ var mysql = require('mysql');
 
 var connection  = mysql.createConnection({
   connectionLimit : 10,
-  host            : process.env.DB_HOST,
-  user            : process.env.DB_USERNAME,
-  password        : process.env.DB_PASSWORD,
-  database        : process.env.DB_NAME,
+  host            : '25.6.127.61',
+  user            : 'remote_access',
+  password        : 'supersecretpassword',
+  database        : 'prototype1',
 });
 
 
@@ -16,10 +16,10 @@ connection.connect(function(err) {
       console.error('Trying local connection...');
       connection  = mysql.createConnection({
         connectionLimit : 10,
-        host            : process.env.DB_LOCALHOST,
-        user            : process.env.DB_USERNAME,
-        password        : process.env.DB_PASSWORD,
-        database        : process.env.DB_NAME,
+        host            : 'localhost',
+        user            : 'root',
+        password        : 'supersecretpassword',
+        database        : 'prototype1',
       });
       connection.connect(function(err) {
         if (err){

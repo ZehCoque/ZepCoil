@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
-require('dotenv').config();
+//require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const allowedOrigins = process.env.allowedOrigins.split(',');
-const port = process.env.PORT;
-const www = process.env.WWW || './';
+//const allowedOrigins = process.env.allowedOrigins.split(',');
+const port = "3000";
+const www = "MYSQL DATABASE CONNECTION" || './';
 app.use(express.static(www));
 app.use(bodyParser.json())
 // ****** allow cross-origin requests code START ****** //
