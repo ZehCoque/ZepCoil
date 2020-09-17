@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron ./src/electron/electron.dev",
-    "electron-build": "ng build --prod --base-href ./ && electron .",
+    "electron-build": "ng build --prod && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },

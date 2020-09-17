@@ -17,7 +17,7 @@
   <span>Bem vindo</span>
     <div class="spacer"></div>
     <a aria-label="Angular on twitter" target="_blank" rel="noopener" title="Notificações">
-      <img style="filter: invert();" src="../assets/icons8-bell-24.png">
+      <img style="filter: invert();" src="assets/icons8-bell-24.png">
     </a>
 </div>
 
@@ -81,16 +81,21 @@
                   <button *ngIf="Entrada.Tipo == 0" mat-mini-fab color="success">
                     <mat-icon >add</mat-icon>
                   </button>
+                  <div>
                   <button *ngIf="Entrada.Tipo == 2" mat-mini-fab color="accent" style="color: white;">
                     <mat-icon >show_chart</mat-icon>
                   </button>
+                  <span *ngIf="Entrada.Tipo == 2 && Entrada.N_Invest" color="blue" class="dot">
+                    {{Entrada.N_Invest}}
+                  </span>
+                </div>
                 </div>
 
                 <div class="el-tag--plain el-col-3" style="align-items: center;">
                   <div style="font-size: 0.7vw; ">
-                    <img src="../assets/icons8-time-24.png" width="13vw" >
+                    <img src="assets/icons8-time-24.png" width="13vw" >
                      {{ Entrada.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
-                  <div style="font-size: 0.7vw;"><img src="../assets/icons8-expired-26.png" width="13vw">
+                  <div style="font-size: 0.7vw;"><img src="assets/icons8-expired-26.png" width="13vw">
                     {{ Entrada.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
                 </div>
 
@@ -254,7 +259,7 @@
         <mat-form-field style="width: 45%;" class="form-field">
           <mat-label>Centro de Custo</mat-label>
           <mat-select formControlName="CC">
-          <mat-option *ngFor="let cc of CC.numero" [value]="cc">
+          <mat-option *ngFor="let cc of CC.nomes" [value]="cc">
            {{ cc }}
           </mat-option>
         </mat-select>
@@ -266,7 +271,7 @@
       <mat-form-field style="width: 45%;" class="form-field">
         <mat-label>Divisão Centro de Custo</mat-label>
         <mat-select formControlName="Div_CC">
-        <mat-option *ngFor="let cc of CC.nomes" [value]="cc">
+        <mat-option *ngFor="let cc of CC.numero" [value]="cc">
          {{ cc }}
         </mat-option>
       </mat-select>
@@ -275,7 +280,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 1" style="width: 45%;" class="form-field">
+    <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 1" style="width: 40%;" class="form-field">
       <mat-label>Destinatário</mat-label>
       <mat-select formControlName="Nome_f">
       <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
@@ -284,11 +289,11 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 2" style="width: 45%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 2" style="width: 40%;" class="form-field">
     <mat-label>Nº do Investimento</mat-label>
-    <input matInput formControlName="Num_Invest" [errorStateMatcher]="errorMatcher"   >
+    <input matInput formControlName="N_Invest" [errorStateMatcher]="errorMatcher"   >
 
-    <mat-error *ngIf="newEntryForm.get('Num_Invest').hasError('pattern')" >
+    <mat-error *ngIf="newEntryForm.get('N_Invest').hasError('pattern')" >
       O número de investimento deve ser um número.
     </mat-error>
 </mat-form-field>
@@ -302,8 +307,8 @@
       </div>
 
       <div class="button-row">
-        <button mat-raised-button>Concluir</button>
-        <button mat-raised-button color="warn">Limpar</button>
+        <button mat-raised-button (click)='onSubmit()'>Concluir</button>
+        <button mat-raised-button color="warn" (click)='onClear()'>Limpar</button>
       </div>
 
       </form>

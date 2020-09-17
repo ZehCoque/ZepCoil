@@ -47,7 +47,7 @@ export class AppComponent {
 
   CC:CC ={
     numero:[120, 150 ,22, 55],
-    nomes:['Div 1', 'Div 2', 'Div 3', 'Div 4']
+    nomes:['CJ', 'Uba']
   } ;
 
   Destinatarios:Nome_f ={
@@ -69,9 +69,10 @@ export class AppComponent {
       Div_CC: new FormControl('',Validators.required),
       Vencimento: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
       Observacao: new FormControl(''),
-      Num_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
+      N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
-      Tipo: new FormControl('',Validators.required)
+      Tipo: new FormControl('',Validators.required),
+      Nome_f: new FormControl('')
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
@@ -128,14 +129,11 @@ export class AppComponent {
       Observacao: this.newEntryForm.get("Observacao").value,
       Tipo: this.newEntryForm.get("Tipo").value,
       Responsavel: this.newEntryForm.get("Responsavel").value,
-      N_invest: this.newEntryForm.get("N_invest").value,
+      N_Invest: this.newEntryForm.get("N_Invest").value,
       Nome_f: this.newEntryForm.get("Nome_f").value
     }
 
-    this.newEntryForm.reset();
-    this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
-    this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
-    this.newEntryForm.controls.Vencimento.patchValue(moment(this.today).add(1, 'M').toISOString());
+    this.onClear();
 
     this.Entradas = [...this.Entradas, input_json]
     this.cdk_empty = false;
@@ -145,6 +143,18 @@ export class AppComponent {
 
     });
 
+  }
+
+  onClear(){
+    this.newEntryForm.reset();
+    this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+    this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
+    this.newEntryForm.controls.Vencimento.patchValue(moment(this.today).add(1, 'M').toISOString());
+    document.getElementsByName("addButton")[0].style.opacity = "0.4";
+    document.getElementsByName("removeButton")[0].style.opacity = "0.4";
+    document.getElementsByName("investButton")[0].style.opacity = "0.4";
+    document.getElementsByName("CButton")[0].style.opacity = "0.4";
+    document.getElementsByName("ZButton")[0].style.opacity = "0.4";
   }
 
   onContextMenu(event: MouseEvent, item) {

@@ -8,7 +8,7 @@ export class Entrada {
   Valor: Number;
   Observacao: String;
   Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
-  N_invest?: number;
+  N_Invest?: number;
   Nome_f?: String;
   Responsavel: String;
 }
