@@ -75,9 +75,14 @@
             <mat-card-content>
               <div class="unselectable-line display-flex" style=" align-items: center">
                 <div class="el-tag--plain el-col-1">
-                  <button *ngIf="Entrada.Tipo == 1" mat-mini-fab color="warn">
-                    <mat-icon >remove</mat-icon>
-                  </button>
+                  <div>
+                    <button *ngIf="Entrada.Tipo == 1" mat-mini-fab color="warn">
+                      <mat-icon >remove</mat-icon>
+                    </button>
+                    <span *ngIf="Entrada.Tipo == 1 && Entrada.Nome_f" color="red" class="blue-rectangle">
+                      {{Entrada.Nome_f}}
+                    </span>
+                  </div>
                   <button *ngIf="Entrada.Tipo == 0" mat-mini-fab color="success">
                     <mat-icon >add</mat-icon>
                   </button>
@@ -85,7 +90,7 @@
                   <button *ngIf="Entrada.Tipo == 2" mat-mini-fab color="accent" style="color: white;">
                     <mat-icon >show_chart</mat-icon>
                   </button>
-                  <span *ngIf="Entrada.Tipo == 2 && Entrada.N_Invest" color="blue" class="dot">
+                  <span *ngIf="Entrada.Tipo == 2 && Entrada.N_Invest" color="blue" class="blue-dot">
                     {{Entrada.N_Invest}}
                   </span>
                 </div>

@@ -129,9 +129,11 @@ export class AppComponent {
       Observacao: this.newEntryForm.get("Observacao").value,
       Tipo: this.newEntryForm.get("Tipo").value,
       Responsavel: this.newEntryForm.get("Responsavel").value,
-      N_Invest: this.newEntryForm.get("N_Invest").value,
+      N_Invest: Number(this.newEntryForm.get("N_Invest").value),
       Nome_f: this.newEntryForm.get("Nome_f").value
     }
+
+
 
     this.onClear();
 
