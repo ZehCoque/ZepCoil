@@ -13,21 +13,6 @@ connection.connect(function(err) {
   console.error('Trying connection to ' + connection.config.host + ' as ' + connection.config.user);
   if (err) {
       console.error('Error connecting to remote database: ' + err);
-      console.error('Trying local connection...');
-      connection  = mysql.createConnection({
-        connectionLimit : 10,
-        host            : 'localhost',
-        user            : 'root',
-        password        : 'supersecretpassword',
-        database        : 'prototype1',
-      });
-      connection.connect(function(err) {
-        if (err){
-          console.error('Error connecting to local database: ' + err);
-        }
-        console.log('Connected to LOCAL DATABASE as ' + connection.config.user);
-      });
-      return;
   }
   console.log('Connected to REMOTE DATABASE as ' + connection.config.user);
 });
