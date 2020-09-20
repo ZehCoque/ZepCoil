@@ -1,13 +1,4 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<!-- Toolbar -->
 <div class="toolbar" role="banner">
   <img
     width="40"
@@ -26,63 +17,63 @@
   <div class="row">
 
     <div class="leftmost">
+      <div class="header-padding">
+        <div class="unselectable-line display-flex header-row" style=" align-items: center">
+          <div class="el-tag--plain el-col-1">
+            Tipo
+          </div>
 
-      <div class="unselectable-line display-flex header_row" style=" align-items: center">
-        <div class="el-tag--plain el-col-1">
-          Tipo
+          <div class="el-tag--plain el-col-3">
+            Datas
+          </div>
+
+          <div class="el-tag--plain el-col-4">
+            Descrição
+          </div>
+
+          <div class="el-tag--plain el-col-3">
+            Valor
+          </div>
+
+          <div class="el-tag--plain el-col-2">
+            C.C.
+          </div>
+
+          <div class="el-tag--plain el-col-2">
+            Div. C.C
+          </div >
+
+          <div class="el-tag--plain el-col-3">
+            Vence em
+          </div>
+
+          <div class="el-tag--plain el-col-2">
+            Pessoa
+          </div>
+
+          <div class="el-tag--plain el-col-2">
+            Resp.
+          </div>
+
+          <div class="el-tag--plain el-col-1">
+            Obs
+          </div>
+
         </div>
-
-        <div class="el-tag--plain el-col-3">
-          Datas
-        </div>
-
-        <div class="el-tag--plain el-col-4">
-          Descrição
-        </div>
-
-        <div class="el-tag--plain el-col-3">
-          Valor
-        </div>
-
-        <div class="el-tag--plain el-col-2">
-          C.C.
-        </div>
-
-
-        <div class="el-tag--plain el-col-2">
-          Div. C.C
-        </div >
-
-        <div class="el-tag--plain el-col-3">
-          Vence em
-        </div>
-
-        <div class="el-tag--plain el-col-2">
-          Resp.
-        </div>
-
-        <div class="el-tag--plain el-col-1">
-          Obs
-        </div>
-
       </div>
+
 
       <cdk-virtual-scroll-viewport *ngIf="!cdk_empty; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
 
-        <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas"  >
+        <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas, let i=index"  >
 
-          <mat-card class="card" (contextmenu)="onContextMenu($event, Entrada)">
+          <mat-card class="card" (contextmenu)="onContextMenu($event, Entrada, i)">
             <mat-card-content>
               <div class="unselectable-line display-flex" style=" align-items: center">
                 <div class="el-tag--plain el-col-1">
-                  <div>
                     <button *ngIf="Entrada.Tipo == 1" mat-mini-fab color="warn">
                       <mat-icon >remove</mat-icon>
                     </button>
-                    <span *ngIf="Entrada.Tipo == 1 && Entrada.Nome_f" color="red" class="blue-rectangle">
-                      {{Entrada.Nome_f}}
-                    </span>
-                  </div>
                   <button *ngIf="Entrada.Tipo == 0" mat-mini-fab color="success">
                     <mat-icon >add</mat-icon>
                   </button>
@@ -126,6 +117,10 @@
                 </div>
 
                 <div class="el-tag--plain el-col-2">
+                  {{Entrada.Nome_f}}
+                </div>
+
+                <div class="el-tag--plain el-col-2">
                   {{Entrada.Responsavel}}
                 </div>
 
@@ -155,9 +150,9 @@
       [matMenuTriggerFor]="contextMenu">
        </div>
       <mat-menu #contextMenu="matMenu">
-        <ng-template matMenuContent>
+        <ng-template matMenuContent let-item="item" let-index = "index">
           <button mat-menu-item (click)="editLine()">Editar</button>
-          <button mat-menu-item (click)="deleteLine()">Deletar</button>
+          <button mat-menu-item (click)="deleteLine(item,index)">Deletar</button>
         </ng-template>
       </mat-menu>
 
@@ -185,7 +180,7 @@
             Tipo
           </div>
 
-          <div class="button-row flex-container button-container">
+          <div class="button-row button-container">
 
             <button name="addButton" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
               <mat-icon>add</mat-icon>
@@ -199,6 +194,10 @@
             </button>
           </div>
 
+          <mat-error *ngIf="newEntryForm.get('Tipo').hasError('required') && newEntryForm.dirty" style="font-size: 1.5vh; text-align: center;">
+            É necessário selecionar um tipo de entrada.
+          </mat-error>
+
         </div>
 
         <div class="button-selector">
@@ -207,16 +206,20 @@
             Responsável
           </div>
 
-        <div class="button-row flex-container button-container">
+        <div class="button-row button-container">
 
           <button name="CButton" type="button" mat-mini-fab style="background-color: black; color: white;" class="selection-button" (click)="selectResp('Coil')">
-            <a style="font-size: 20px; font-weight: bolder;">Coil</a>
+            <a style="font-size: 2vh; font-weight: bolder;">Coil</a>
           </button>
           <button name="ZButton"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Zep')">
-            <a style="font-size: 20px; font-weight: bolder;">Zep</a>
+            <a style="font-size: 2vh; font-weight: bolder;">Zep</a>
           </button>
 
         </div>
+
+        <mat-error *ngIf="newEntryForm.get('Responsavel').hasError('required') && newEntryForm.dirty" style="font-size: 1.5vh; text-align: center;">
+          É necessário selecionar um responsável.
+        </mat-error>
 
       </div>
       <div class="formulario">
@@ -285,7 +288,16 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 1" style="width: 40%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0" style="width: 40%;" class="form-field">
+      <mat-label>Origem</mat-label>
+      <mat-select formControlName="Nome_f">
+      <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
+       {{ dest }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 40%;" class="form-field">
       <mat-label>Destinatário</mat-label>
       <mat-select formControlName="Nome_f">
       <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
@@ -294,7 +306,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value == 2" style="width: 40%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 2" style="width: 40%;" class="form-field">
     <mat-label>Nº do Investimento</mat-label>
     <input matInput formControlName="N_Invest" [errorStateMatcher]="errorMatcher"   >
 
@@ -312,8 +324,8 @@
       </div>
 
       <div class="button-row">
-        <button mat-raised-button (click)='onSubmit()'>Concluir</button>
-        <button mat-raised-button color="warn" (click)='onClear()'>Limpar</button>
+        <button mat-raised-button (click)='onSubmit()' [disabled]="!newEntryForm.valid">Concluir</button>
+        <button mat-raised-button color="warn" (click)='onClear()' type="button">Limpar</button>
       </div>
 
       </form>

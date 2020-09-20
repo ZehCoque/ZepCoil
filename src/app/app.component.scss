@@ -35,19 +35,19 @@ md-divider {
 }
 
 .el-col-1{
-  width: 5%;
+  width: 8%;
   background-color: rgba(0, 0, 0, 0);
   // border: solid 2px black;
 }
 
 .el-col-2{
-  width: 10%;
+  width: 9%;
   background-color: rgba(0, 0, 0, 0);
   // border: solid 2px black;
 }
 
 .el-col-3 {
-  width: 15%;
+  width: 11%;
   background-color: rgba(0, 0, 0, 0);
   // border: solid 2px black;
 }
@@ -55,7 +55,7 @@ md-divider {
 
 
 .el-col-4 {
-  width: 18%;
+  width: 15%;
   background-color: rgba(0, 0, 0, 0);
   // border: solid 2px black;
 }
@@ -112,15 +112,19 @@ md-divider {
   font-size: 1.5vh;
 }
 
-.header_row{
-  border: 1px solid #d1e5ef;
-  border-radius: 5px;
-  background-color: rgba(242,249,252,1);
+.header-row{
+
   font-weight: bold;
   font-size: 36px; /* Some tweener fallback that doesn't look awful */
   font-size: 1.1vw;
   padding-left: 17px;
-  padding-right: 17px;
+  padding-right: 27px;
+}
+
+.header-padding{
+  border: 1px solid #d1e5ef;
+  border-radius: 5px;
+  background-color: rgba(242,249,252,1);
   padding-bottom: 7.5px;
   padding-top: 7.5px;
 }
@@ -164,7 +168,7 @@ cdk-virtual-scroll-viewport {
 
   // Bonus points
   &::-webkit-scrollbar {
-    width: 1em;
+    width: 10px;
   }
 
   &::-webkit-scrollbar-track {
@@ -244,11 +248,7 @@ p {
 
 }
 
-.flex-container {
-  display: flex;
-  justify-content: space-between;
 
-}
 
 .mat-success {
   background-color: green;
@@ -266,7 +266,7 @@ p {
   position: absolute;
   z-index: 10;
   top: 59%;
-  left: 5%;
+  left: 6.5%;
   font-size: 8px;
 }
 

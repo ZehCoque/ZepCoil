@@ -157,14 +157,15 @@ export class AppComponent {
     document.getElementsByName("investButton")[0].style.opacity = "0.4";
     document.getElementsByName("CButton")[0].style.opacity = "0.4";
     document.getElementsByName("ZButton")[0].style.opacity = "0.4";
+    this.newEntryForm.untouched;
   }
 
-  onContextMenu(event: MouseEvent, item) {
+  onContextMenu(event: MouseEvent, item, index) {
 
     event.preventDefault();
       this.contextMenuPosition.x = event.clientX + 'px';
       this.contextMenuPosition.y = event.clientY + 'px';
-      this.contextMenu.menuData = { 'item': item };
+      this.contextMenu.menuData = { 'item': item, 'index': index };
       this.contextMenu.menu.focusFirstItem('mouse');
       this.contextMenu.openMenu();
 
@@ -205,8 +206,11 @@ export class AppComponent {
 
   }
 
-  deleteLine(){
+  deleteLine(item, row){
+    this.Entradas = this.Entradas.filter((item, index) => index !== row)
+    this.server.delete_List(item,'main_table_query').then(() =>{
 
-  }
+    })
+   }
 
 }

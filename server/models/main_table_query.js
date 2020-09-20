@@ -42,6 +42,21 @@ function main_pn_info_router(connection) {
     );
   });
 
+  router.delete('/main_table_query/:ID', function (req, res, next) {
+    console.log(req.body.ID)
+    connection.query(
+      'DELETE FROM lançamentos WHERE ID=?',
+      [req.body.ID],
+      (error) => {
+        if (error) {
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json({status: 'ok'});
+        }
+      }
+    );
+  });
+
 return router;
 }
 module.exports = main_pn_info_router;
