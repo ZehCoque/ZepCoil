@@ -8,6 +8,7 @@
 /bazel-out
 .env
 /build
+*.rar
 
 # dependencies
 /node_modules
