@@ -16,12 +16,14 @@ import { HttpClientModule } from '@angular/common/http';
 import localePtBr from '@angular/common/locales/pt';
 
 import { registerLocaleData } from '@angular/common';
+import { EditRowComponent } from './edit-row/edit-row.component';
 
 registerLocaleData(localePtBr);
 
 @NgModule({
   declarations: [
     AppComponent,
+    EditRowComponent,
   ],
   imports: [
     CommonModule,

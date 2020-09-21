@@ -21,51 +21,6 @@ md-divider {
   display: flex;
 }
 
-.el-tag--mini {
-  height: 20px;
-  padding: 0 5px;
-  line-height: 19px;
-}
-
-.el-tag--plain {
-  border-color: #a3cbdf;
-  color: #187caf;
-  text-align: center;
-  font-size: 0.9vw;
-}
-
-.el-col-1{
-  width: 8%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
-}
-
-.el-col-2{
-  width: 9%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
-}
-
-.el-col-3 {
-  width: 11%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
-}
-
-
-
-.el-col-4 {
-  width: 15%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
-}
-
-.el-col-5 {
-  width: 21%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
-}
-
 .tag-padding{
   padding-right: 15px;
 }
@@ -105,10 +60,6 @@ md-divider {
 }
 
 .formulario{
-  border: 1px solid #d1e5ef;
-  border-radius: 5px;
-  background-color: rgba(242,249,252,0.6);
-  padding: 10px;
   font-size: 1.5vh;
 }
 
@@ -234,27 +185,6 @@ p {
   align-items: center;
 }
 
-
-
-.button-row {
-  width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: space-around;
-}
-
-.button-row .mat-button-base {
-  margin: 8px 8px 8px 0;
-
-}
-
-
-
-.mat-success {
-  background-color: green;
-  color: #fff;
-}
-
 .blue-dot {
   height: 20px;
   width: 20px;
@@ -286,11 +216,6 @@ p {
 }
 
 
-.button-container {
-  display: flex;
-  justify-content: center;
-}
-
 .content-fluid{
   overflow: hidden;
   margin-top: 15px;
@@ -300,11 +225,6 @@ p {
   margin-right: auto;
   margin-left: auto;
   align-items: center;
-}
-
-.form-field{
-  margin-right: 15px;
-  margin-bottom: 15px;
 }
 
 svg.material-icons {

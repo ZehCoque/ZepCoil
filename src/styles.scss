@@ -2,3 +2,103 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+.button-row {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+
+.button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+
+}
+
+.formulario{
+  border: 1px solid #d1e5ef;
+  border-radius: 5px;
+  background-color: rgba(242,249,252,0.6);
+  padding: 10px;
+}
+
+.button-selector{
+  border: 1px solid #d1e5ef;
+  border-radius: 5px;
+  background-color: rgba(242,249,252,0.6);
+  font-weight: bold;
+  font-size: 36px; /* Some tweener fallback that doesn't look awful */
+  font-size: 1.1vw;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-field{
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.el-tag--mini {
+  height: 20px;
+  padding: 0 5px;
+  line-height: 19px;
+}
+
+.el-tag--plain {
+  border-color: #a3cbdf;
+  color: #187caf;
+  text-align: center;
+  font-size: 0.9vw;
+}
+
+.el-title{
+  background-color: rgba(242,249,252,0.6);
+  border: solid 1px;
+  border-color: #a3cbdf;
+  border-radius: 5px;
+  color: #187caf;
+  text-align: center;
+  font-size: 1.2vw;
+  font-weight: bolder;
+}
+
+.el-col-1{
+  width: 8%;
+  background-color: rgba(0, 0, 0, 0);
+  // border: solid 2px black;
+}
+
+.el-col-2{
+  width: 9%;
+  background-color: rgba(0, 0, 0, 0);
+  // border: solid 2px black;
+}
+
+.el-col-3 {
+  width: 11%;
+  background-color: rgba(0, 0, 0, 0);
+  // border: solid 2px black;
+}
+
+
+
+.el-col-4 {
+  width: 15%;
+  background-color: rgba(0, 0, 0, 0);
+  // border: solid 2px black;
+}
+
+.el-col-5 {
+  width: 21%;
+  background-color: rgba(0, 0, 0, 0);
+  // border: solid 2px black;
+}

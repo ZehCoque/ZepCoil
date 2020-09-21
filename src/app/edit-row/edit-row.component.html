@@ -1,0 +1,164 @@
+  <div class="el-title" style="margin-bottom: 10px;">
+    Editar uma linha
+  </div>
+
+<form [formGroup]="editedEntryForm">
+  <div style="display: flex; justify-content: space-between;">
+    <div class="button-selector" style="width: 45%; align-items: center;">
+
+      <div class="el-tag--plain">
+        Tipo
+      </div>
+
+      <div class="button-row button-container">
+
+        <button name="addButton_edit" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button name="removeButton_edit"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <button name="investButton_edit" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
+          <mat-icon>show_chart</mat-icon>
+        </button>
+      </div>
+
+      <mat-error *ngIf="editedEntryForm.get('Tipo').hasError('required') && editedEntryForm.dirty" style="font-size: 1.5vh; text-align: center;">
+        É necessário selecionar um tipo de entrada.
+      </mat-error>
+
+    </div>
+
+    <div class="button-selector" style="width: 45%; align-items: center;">
+
+      <div class="el-tag--plain">
+        Responsável
+      </div>
+
+    <div class="button-row button-container">
+
+      <button name="CButton_edit" type="button" mat-mini-fab style="background-color: black; color: white;" class="selection-button" (click)="selectResp('Coil')">
+        <a style="font-size: 2vh; font-weight: bolder;">Coil</a>
+      </button>
+      <button name="ZButton_edit"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Zep')">
+        <a style="font-size: 2vh; font-weight: bolder;">Zep</a>
+      </button>
+
+    </div>
+
+    <mat-error *ngIf="editedEntryForm.get('Responsavel').hasError('required') && editedEntryForm.dirty" style="font-size: 1.5vh; text-align: center;">
+      É necessário selecionar um responsável.
+    </mat-error>
+
+  </div>
+  </div>
+
+<div class="formulario">
+<div>
+    <mat-form-field style="width: 100%;" class="form-field">
+      <mat-label>Descrição</mat-label>
+      <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="editedEntryForm.get('Descricao').hasError('required')" >
+        É necessário inserir uma descrição.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field style="width: 45%;" class="form-field">
+    <mat-label>Valor</mat-label>
+    <input matInput formControlName="Valor" [errorStateMatcher]="errorMatcher"   >
+
+    <mat-error *ngIf="editedEntryForm.get('Valor').hasError('required')" >
+      É necessário inserir um valor.
+    </mat-error>
+
+    <mat-hint> </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field style="width: 45%;" class="form-field">
+    <mat-label>Data de entrada</mat-label>
+    <input matInput formControlName="Data_Entrada" [matDatepicker]="picker1">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+    <mat-error *ngIf="editedEntryForm.get('Data_Entrada').hasError('required')" >
+      É necessário inserir uma data de entrada válida.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field style="width: 45%;" class="form-field">
+    <mat-label>Data de vencimento</mat-label>
+    <input matInput formControlName="Vencimento" [matDatepicker]="picker2">
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+    <mat-error *ngIf="editedEntryForm.get('Vencimento').hasError('required')" >
+      É necessário inserir uma data de vencimento válida.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field style="width: 45%;" class="form-field">
+    <mat-label>Centro de Custo</mat-label>
+    <mat-select formControlName="CC">
+    <mat-option *ngFor="let nomes of CC.nomes" [value]="nomes">
+     {{ nomes }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="editedEntryForm.get('Div_CC').hasError('required')" >
+    É necessário inserir um de centro de custo.
+  </mat-error>
+</mat-form-field>
+
+<mat-form-field style="width: 45%;" class="form-field">
+  <mat-label>Divisão Centro de Custo</mat-label>
+  <mat-select formControlName="Div_CC">
+  <mat-option *ngFor="let numeros of CC.numero" [value]="numeros">
+   {{ numeros }}
+  </mat-option>
+</mat-select>
+<mat-error *ngIf="editedEntryForm.get('Div_CC').hasError('required')" >
+  É necessário inserir uma divisão de centro de custo.
+</mat-error>
+</mat-form-field>
+
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0" style="width: 45%;" class="form-field">
+<mat-label>Origem</mat-label>
+<mat-select formControlName="Nome_f">
+<mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
+ {{ dest }}
+</mat-option>
+</mat-select>
+</mat-form-field>
+
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1" style="width: 45%;" class="form-field">
+<mat-label>Destinatário</mat-label>
+<mat-select formControlName="Nome_f">
+<mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
+ {{ dest }}
+</mat-option>
+</mat-select>
+</mat-form-field>
+
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 2" style="width: 45%;" class="form-field">
+<mat-label>Nº do Investimento</mat-label>
+<input matInput formControlName="N_Invest" [errorStateMatcher]="errorMatcher"   >
+
+<mat-error *ngIf="editedEntryForm.get('N_Invest').hasError('pattern')" >
+O número de investimento deve ser um número.
+</mat-error>
+</mat-form-field>
+
+<div>
+<mat-form-field style="width: 100%;" class="example-full-width">
+  <mat-label>Observação</mat-label>
+  <textarea matInput formControlName="Observacao" [errorStateMatcher]="errorMatcher"></textarea>
+</mat-form-field>
+</div>
+</div>
+
+<div class="button-row">
+  <button mat-raised-button (click)='onSubmit()' [disabled]="!editedEntryForm.valid">Concluir</button>
+  <button mat-raised-button (click)='onClear()' type="button">Valores Originais</button>
+  <button mat-raised-button (click)='Cancel()' type="button">Cancelar</button>
+</div>
+
+</form>

@@ -151,7 +151,7 @@
        </div>
       <mat-menu #contextMenu="matMenu">
         <ng-template matMenuContent let-item="item" let-index = "index">
-          <button mat-menu-item (click)="editLine()">Editar</button>
+          <button mat-menu-item (click)="editLine(item,index)">Editar</button>
           <button mat-menu-item (click)="deleteLine(item,index)">Deletar</button>
         </ng-template>
       </mat-menu>

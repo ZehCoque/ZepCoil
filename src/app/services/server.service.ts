@@ -32,7 +32,7 @@ export class ServerService {
     return this.request('POST', `${environment.serverUrl}/${slash_url}`, data);
   }
   update_List(data,slash_url) {
-    return this.request('PUT', `${environment.serverUrl}/${slash_url}/${data}`, data);
+    return this.request('PUT', `${environment.serverUrl}/${slash_url}/${data.ID}`, data);
   }
   delete_List(data,slash_url) {
     return this.request('DELETE', `${environment.serverUrl}/${slash_url}/${data}`, data);

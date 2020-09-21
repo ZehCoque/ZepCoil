@@ -8,6 +8,8 @@ import { Entrada } from './classes/entrada'
 
 import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { EditRowComponent } from './edit-row/edit-row.component';
 
 interface CC {
   numero: Array<number>;
@@ -55,9 +57,12 @@ export class AppComponent {
   } ;
   cdk_empty: boolean = true;
 
+  editRowDialogRef: MatDialogRef<EditRowComponent>;
+
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
-    private server: ServerService) { }
+    private server: ServerService,
+    private dialog: MatDialog) { }
 
   ngOnInit()  {
 
@@ -133,8 +138,6 @@ export class AppComponent {
       Nome_f: this.newEntryForm.get("Nome_f").value
     }
 
-
-
     this.onClear();
 
     this.Entradas = [...this.Entradas, input_json]
@@ -202,8 +205,25 @@ export class AppComponent {
     }
   }
 
-  editLine(){
+  editLine(item, row){
+    this.editRowDialogRef = this.dialog.open(EditRowComponent,{
+      width: "50%",
+      data: item
+    });
 
+    let sub = this.editRowDialogRef.afterClosed().subscribe(editedData => {
+
+      if (editedData != item && editedData != undefined){
+        this.Entradas[row] = editedData;
+        editedData = {...editedData, ...{['ID']: this.Entradas[row].ID}};
+        this.Entradas = [...this.Entradas]
+
+        console.log(this.Entradas[row])
+        this.server.update_List(this.Entradas[row],'main_table_query').then(() => {
+          sub.unsubscribe();
+        });
+      }
+    });
   }
 
   deleteLine(item, row){
