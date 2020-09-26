@@ -17,6 +17,7 @@ import localePtBr from '@angular/common/locales/pt';
 
 import { registerLocaleData } from '@angular/common';
 import { EditRowComponent } from './edit-row/edit-row.component';
+import { FocusNextDirective } from './directives/focus-next.directive';
 
 registerLocaleData(localePtBr);
 
@@ -24,6 +25,7 @@ registerLocaleData(localePtBr);
   declarations: [
     AppComponent,
     EditRowComponent,
+    FocusNextDirective,
   ],
   imports: [
     CommonModule,

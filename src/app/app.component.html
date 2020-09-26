@@ -172,7 +172,7 @@
 
     <div class="rightmost">
 
-      <form [formGroup]="newEntryForm">
+      <form focusNext [formGroup]="newEntryForm">
 
         <div class="button-selector">
 
@@ -233,9 +233,9 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field style="width: 40%;" class="form-field">
+        <mat-form-field style="width: 40%;" class="form-field noselect">
           <mat-label>Valor</mat-label>
-          <input matInput formControlName="Valor" [errorStateMatcher]="errorMatcher"   >
+          <input class="noselect"  matInput formControlName="Valor" [errorStateMatcher]="errorMatcher"   >
 
           <mat-error *ngIf="newEntryForm.get('Valor').hasError('required')" >
             É necessário inserir um valor.

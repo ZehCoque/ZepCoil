@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, ɵConsole } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ErrorMatcherDirective } from './directives/error-matcher.directive'
@@ -104,9 +104,13 @@ export class AppComponent {
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
+    console.log(numberValue)
     numberValue = [numberValue.slice(0, numberValue.length - 2), '.', numberValue.slice(numberValue.length - 2)].join('');
     if (numberValue.charAt(0) == '0'){
       numberValue = numberValue.slice(1);
+    }
+    if (numberValue.charAt(0) == '.'){
+      numberValue = 0;
     }
     return numberValue;
   }
@@ -206,6 +210,7 @@ export class AppComponent {
   }
 
   editLine(item, row){
+    console.log("item",item);
     this.editRowDialogRef = this.dialog.open(EditRowComponent,{
       width: "50%",
       data: item
@@ -214,12 +219,14 @@ export class AppComponent {
     let sub = this.editRowDialogRef.afterClosed().subscribe(editedData => {
 
       if (editedData != item && editedData != undefined){
-        this.Entradas[row] = editedData;
+
         editedData = {...editedData, ...{['ID']: this.Entradas[row].ID}};
+        this.Entradas[row] = editedData;
         this.Entradas = [...this.Entradas]
 
-        console.log(this.Entradas[row])
+
         this.server.update_List(this.Entradas[row],'main_table_query').then(() => {
+
           sub.unsubscribe();
         });
       }
@@ -232,5 +239,17 @@ export class AppComponent {
 
     })
    }
+
+   moveCursorToEnd(el) {
+     console.log(el)
+    if (typeof el.selectionStart == "number") {
+        el.selectionStart = el.selectionEnd = el.value.length;
+    } else if (typeof el.createTextRange != "undefined") {
+        el.focus();
+        var range = el.createTextRange();
+        range.collapse(false);
+        range.select();
+    }
+  }
 
 }

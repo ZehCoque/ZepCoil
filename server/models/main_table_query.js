@@ -72,7 +72,7 @@ function main_pn_info_router(connection) {
         req.body.Responsavel,
         req.body.ID],
       (error) => {
-        console.log(error)
+        console.log(req.body.ID)
         if (error) {
           res.status(500).json({status: 'error'});
         } else {

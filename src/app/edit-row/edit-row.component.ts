@@ -62,7 +62,7 @@ export class EditRowComponent implements OnInit {
       Nome_f: new FormControl(this.current_data.Nome_f)
     });
 
-    console.log(this.editedEntryForm.get("Div_CC").value);
+    console.log(this.editedEntryForm.get("Data_Entrada").value);
 
     this.selectType(this.current_data.Tipo);
     this.selectResp(this.current_data.Responsavel);

@@ -2,7 +2,7 @@ var mysql = require('mysql');
 
 var connection  = mysql.createConnection({
   connectionLimit : 10,
-  host            : '25.6.127.61',
+  host            : 'localhost',
   user            : 'remote_access',
   password        : 'supersecretpassword',
   database        : 'prototype1',
