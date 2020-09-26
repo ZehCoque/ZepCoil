@@ -145,9 +145,13 @@ export class EditRowComponent implements OnInit {
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
+    console.log(numberValue)
     numberValue = [numberValue.slice(0, numberValue.length - 2), '.', numberValue.slice(numberValue.length - 2)].join('');
     if (numberValue.charAt(0) == '0'){
       numberValue = numberValue.slice(1);
+    }
+    if (numberValue.charAt(0) == '.'){
+      numberValue = 0;
     }
     return numberValue;
   }
