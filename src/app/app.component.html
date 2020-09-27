@@ -12,6 +12,8 @@
     </a>
 </div>
 
+
+
 <div class="content-fluid" role="main">
 
   <div class="row">
@@ -19,40 +21,97 @@
     <div class="leftmost">
       <div class="header-padding">
         <div class="unselectable-line display-flex header-row" style=" align-items: center">
+
           <div class="el-tag--plain el-col-1">
             Tipo
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-3">
             Datas
+            <button [matMenuTriggerFor]="menu" class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <!-- <mat-icon>arrow_drop_down</mat-icon> -->
+              <mat-icon>filter_alt</mat-icon>
+              <mat-icon style="font-size: 15px; margin-left: -15px; line-height: 35px;">arrow_downward</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <button [matMenuTriggerFor]="filtrar" mat-menu-item>Filtrar</button>
+              <button [matMenuTriggerFor]="classificar" mat-menu-item>Classificar</button>
+            </mat-menu>
+
+            <mat-menu #filtrar="matMenu">
+              <button mat-menu-item>Fishes</button>
+              <button mat-menu-item>Amphibians</button>
+              <button mat-menu-item>Reptiles</button>
+              <button mat-menu-item>Birds</button>
+              <button mat-menu-item>Mammals</button>
+            </mat-menu>
+
+            <mat-menu #classificar="matMenu">
+              <button mat-menu-item (click)="sortBy('Data_Entrada')"><mat-icon>arrow_downward</mat-icon>Ascendente</button>
+              <button mat-menu-item (click)="sortBy('Data_Entrada')"><mat-icon>arrow_upward</mat-icon>Descendente</button>
+            </mat-menu>
+
           </div>
 
           <div class="el-tag--plain el-col-4">
             Descrição
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-3">
             Valor
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-2">
             C.C.
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-2">
             Div. C.C
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div >
 
           <div class="el-tag--plain el-col-3">
             Vence em
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-2">
             Pessoa
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-2">
             Resp.
+            <button class="small-icon-button position-absolute" mat-icon-button color="primary">
+              <mat-icon>arrow_drop_down</mat-icon>
+              <!-- <mat-icon>filter_alt</mat-icon> -->
+            </button>
           </div>
 
           <div class="el-tag--plain el-col-1">

@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from './edit-row/edit-row.component';
+import { BehaviorSubject } from 'rxjs';
 
 interface CC {
   numero: Array<number>;
@@ -57,8 +58,9 @@ export class AppComponent {
   } ;
   cdk_empty: boolean = true;
 
-  editRowDialogRef: MatDialogRef<EditRowComponent>;
 
+  editRowDialogRef: MatDialogRef<EditRowComponent>;
+  EntradasObservable = new BehaviorSubject(this.Entradas);
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     private server: ServerService,
@@ -250,6 +252,19 @@ export class AppComponent {
         range.collapse(false);
         range.select();
     }
+  }
+
+  sortBy(prop) {
+    this.EntradasObservable.next(this.Entradas.map(s => ({ ...s })).sort((a, b) => {
+      const aProp = a[prop], bProp = b[prop];
+      console.log(aProp)
+      if (aProp < bProp) {
+        return -1;
+      } else if (aProp > bProp) {
+        return 1;
+      }
+      return 0;
+    }));
   }
 
 }

@@ -72,11 +72,25 @@ function main_pn_info_router(connection) {
         req.body.Responsavel,
         req.body.ID],
       (error) => {
-        console.log(req.body.ID)
         if (error) {
           res.status(500).json({status: 'error'});
         } else {
           res.status(200).json({status: 'ok'});
+        }
+      }
+    );
+  });
+
+  router.post('/main_table_query_sort_filter', function (req, res, next) {
+    connection.query(
+      'SELECT * FROM lançamentos ORDER BY ? WHERE ?',
+      [req.body.active_sort, req.body.active_filter],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
         }
       }
     );
