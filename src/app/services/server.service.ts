@@ -38,4 +38,10 @@ export class ServerService {
     return this.request('DELETE', `${environment.serverUrl}/${slash_url}/${data}`, data);
   }
 
+  get_List_CF(slash_url,active_filters,active_sorts, sort_dir){
+    let json = {active_filters,active_sorts,sort_dir};
+    console.log(json)
+    return this.request('POST', `${environment.serverUrl}/${slash_url}`,json);
+  }
+
 }

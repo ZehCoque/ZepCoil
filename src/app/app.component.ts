@@ -254,17 +254,16 @@ export class AppComponent {
     }
   }
 
-  sortBy(prop) {
-    this.EntradasObservable.next(this.Entradas.map(s => ({ ...s })).sort((a, b) => {
-      const aProp = a[prop], bProp = b[prop];
-      console.log(aProp)
-      if (aProp < bProp) {
-        return -1;
-      } else if (aProp > bProp) {
-        return 1;
-      }
-      return 0;
-    }));
+  sortBy(column: string, sort_dir: string, filter?){
+    this.server.get_List_CF('main_table_query_SF',filter,column,sort_dir).then((response: any) => {
+      this.Entradas = [];
+      response.forEach( (element:Entrada) => {
+        console.log(element.ID)
+        this.Entradas = [...this.Entradas, element];
+        this.cdk_empty = false;
+      });
+
+    });
   }
 
 }

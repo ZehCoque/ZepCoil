@@ -81,10 +81,10 @@ function main_pn_info_router(connection) {
     );
   });
 
-  router.post('/main_table_query_sort_filter', function (req, res, next) {
+  router.post('/main_table_query_SF', function (req, res, next) {
     connection.query(
-      'SELECT * FROM lançamentos ORDER BY ? WHERE ?',
-      [req.body.active_sort, req.body.active_filter],
+      'SELECT * FROM lançamentos ORDER BY ' + req.body.active_sorts + ' ' + req.body.sort_dir,
+      [],
       (error, results) => {
         if (error) {
           console.log(error);
