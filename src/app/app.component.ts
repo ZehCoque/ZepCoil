@@ -5,12 +5,13 @@ import { ErrorMatcherDirective } from './directives/error-matcher.directive'
 import { CurrencyPipe } from '@angular/common';
 import { ServerService } from './services/server.service'
 import { Entrada } from './classes/entrada'
+import { Active } from './classes/active_filters_and_sorts';
 
 import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from './edit-row/edit-row.component';
-import { BehaviorSubject } from 'rxjs';
+
 
 interface CC {
   numero: Array<number>;
@@ -57,9 +58,10 @@ export class AppComponent {
   } ;
   cdk_empty: boolean = true;
 
+  active: Active;
 
   editRowDialogRef: MatDialogRef<EditRowComponent>;
-  EntradasObservable = new BehaviorSubject(this.Entradas);
+
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     private server: ServerService,
@@ -253,10 +255,10 @@ export class AppComponent {
   }
 
   sortBy(column: string, sort_dir: string, filter?){
+    this.active.ActiveFilters.column
     this.server.get_List_CF('main_table_query_SF',filter,column,sort_dir).then((response: any) => {
       this.Entradas = [];
       response.forEach( (element:Entrada) => {
-        console.log(element.ID)
         this.Entradas = [...this.Entradas, element];
         this.cdk_empty = false;
       });
