@@ -11,7 +11,7 @@ interface CC {
   nomes: Array<string>
 }
 
-interface Nome_f{
+interface Pessoa{
   nomes: Array<string>;
 }
 
@@ -29,7 +29,7 @@ export class EditRowComponent implements OnInit {
     nomes:['CJ', 'Uba']
   } ;
 
-  Destinatarios:Nome_f ={
+  Destinatarios:Pessoa ={
     nomes:['Dest1', 'Dest2', 'Dest3', 'Dest4']
   } ;
 
@@ -59,7 +59,7 @@ export class EditRowComponent implements OnInit {
       N_Invest: new FormControl(this.current_data.N_Invest, Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl(this.current_data.Responsavel,Validators.required),
       Tipo: new FormControl(this.current_data.Tipo,Validators.required),
-      Nome_f: new FormControl(this.current_data.Nome_f)
+      Pessoa: new FormControl(this.current_data.Pessoa)
     });
 
     console.log(this.editedEntryForm.get("Data_Entrada").value);
@@ -122,7 +122,7 @@ export class EditRowComponent implements OnInit {
       Tipo: this.editedEntryForm.get("Tipo").value,
       Responsavel: this.editedEntryForm.get("Responsavel").value,
       N_Invest: Number(this.editedEntryForm.get("N_Invest").value),
-      Nome_f: this.editedEntryForm.get("Nome_f").value
+      Pessoa: this.editedEntryForm.get("Pessoa").value
     }
 
     this.dialogRef.close(edited_json);

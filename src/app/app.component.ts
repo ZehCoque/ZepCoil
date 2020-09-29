@@ -17,7 +17,7 @@ interface CC {
   nomes: Array<string>
 }
 
-interface Nome_f{
+interface Pessoa{
   nomes: Array<string>;
 }
 
@@ -34,9 +34,8 @@ export class AppComponent {
 //     this.key = event.key
 
 // }
-  @ViewChild(MatMenuTrigger)
+  @ViewChild('contextMenuTrigger') contextMenu: MatMenuTrigger;
 
-  contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
   changeDetection: ChangeDetectionStrategy.OnPush;
   @ViewChild(CdkVirtualScrollViewport)
@@ -53,7 +52,7 @@ export class AppComponent {
     nomes:['CJ', 'Uba']
   } ;
 
-  Destinatarios:Nome_f ={
+  Destinatarios:Pessoa ={
     nomes:['Dest1', 'Dest2', 'Dest3', 'Dest4']
   } ;
   cdk_empty: boolean = true;
@@ -79,7 +78,7 @@ export class AppComponent {
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
       Tipo: new FormControl('',Validators.required),
-      Nome_f: new FormControl('')
+      Pessoa: new FormControl('')
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
@@ -141,7 +140,7 @@ export class AppComponent {
       Tipo: this.newEntryForm.get("Tipo").value,
       Responsavel: this.newEntryForm.get("Responsavel").value,
       N_Invest: Number(this.newEntryForm.get("N_Invest").value),
-      Nome_f: this.newEntryForm.get("Nome_f").value
+      Pessoa: this.newEntryForm.get("Pessoa").value
     }
 
     this.onClear();
@@ -175,7 +174,6 @@ export class AppComponent {
       this.contextMenuPosition.x = event.clientX + 'px';
       this.contextMenuPosition.y = event.clientY + 'px';
       this.contextMenu.menuData = { 'item': item, 'index': index };
-      this.contextMenu.menu.focusFirstItem('mouse');
       this.contextMenu.openMenu();
 
   }

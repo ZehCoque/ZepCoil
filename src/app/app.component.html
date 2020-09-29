@@ -32,13 +32,13 @@
 
           <div class="el-tag--plain el-col-3">
             Datas
-            <button [matMenuTriggerFor]="menu" class="small-icon-button position-absolute" mat-icon-button color="primary">
+            <button [matMenuTriggerFor]="dropdown_menu" class="small-icon-button position-absolute" mat-icon-button color="primary">
               <!-- <mat-icon>arrow_drop_down</mat-icon> -->
               <mat-icon>filter_alt</mat-icon>
               <mat-icon style="font-size: 15px; margin-left: -15px; line-height: 35px;">arrow_downward</mat-icon>
             </button>
 
-            <mat-menu #menu="matMenu">
+            <mat-menu #dropdown_menu="matMenu">
               <button [matMenuTriggerFor]="filtrar" mat-menu-item>Filtrar</button>
               <button [matMenuTriggerFor]="classificar" mat-menu-item>Classificar</button>
             </mat-menu>
@@ -176,7 +176,7 @@
                 </div>
 
                 <div class="el-tag--plain el-col-2">
-                  {{Entrada.Nome_f}}
+                  {{Entrada.Pessoa}}
                 </div>
 
                 <div class="el-tag--plain el-col-2">
@@ -206,9 +206,10 @@
       <div style="visibility: hidden; position: fixed"
       [style.left]="contextMenuPosition.x"
       [style.top]="contextMenuPosition.y"
-      [matMenuTriggerFor]="contextMenu">
+      [matMenuTriggerFor]="contextMenu"
+      #contextMenuTrigger="matMenuTrigger">
        </div>
-      <mat-menu #contextMenu="matMenu">
+      <mat-menu #contextMenu="matMenu" >
         <ng-template matMenuContent let-item="item" let-index = "index">
           <button mat-menu-item (click)="editLine(item,index)">Editar</button>
           <button mat-menu-item (click)="deleteLine(item,index)">Deletar</button>
@@ -349,7 +350,7 @@
 
   <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0" style="width: 40%;" class="form-field">
       <mat-label>Origem</mat-label>
-      <mat-select formControlName="Nome_f">
+      <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
        {{ dest }}
       </mat-option>
@@ -358,7 +359,7 @@
 
   <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 40%;" class="form-field">
       <mat-label>Destinatário</mat-label>
-      <mat-select formControlName="Nome_f">
+      <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
        {{ dest }}
       </mat-option>
