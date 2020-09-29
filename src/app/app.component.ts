@@ -255,7 +255,6 @@ export class AppComponent {
   }
 
   sortBy(column: string, sort_dir: string, filter?){
-    this.active.ActiveFilters.column
     this.server.get_List_CF('main_table_query_SF',filter,column,sort_dir).then((response: any) => {
       this.Entradas = [];
       response.forEach( (element:Entrada) => {
