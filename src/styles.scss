@@ -1,17 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mat-success {
-  background-color: green;
-  color: #fff;
-}
-
-.mat-blue {
-  background-color: rgb(25,118,210);
-  color: #fff;
-}
 
 .mat-purple {
   background-color: rgb(103,58,183);
@@ -29,6 +17,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin: 8px 8px 8px 0;
 
 }
+
+
 
 .formulario{
   border: 1px solid #d1e5ef;
