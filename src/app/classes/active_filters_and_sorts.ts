@@ -1,4 +1,45 @@
-export interface Active {
-  ActiveFilters: Array<String>;
-  ActiveSorts: Array<String>;
+interface sortJson {
+  active: boolean,
+  dir: string
 }
+
+interface dirMsgJson{
+  up: string;
+  down: string;
+}
+
+export class ActiveFilters {
+    Descricao: Boolean = false;
+    Data_Entrada: Boolean = false;
+    CC: Boolean = false;
+    Div_CC: Boolean = false;
+    Vencimento: Boolean = false;
+    Valor: Boolean = false;
+    Tipo:  Boolean = false;
+    N_Invest: Boolean = false;
+    Pessoa: Boolean = false;
+    Responsavel: Boolean = false;
+  }
+
+export class ActiveSorts {
+  Descricao: sortJson = {active: false, dir: 'arrow_downward'};
+  Data_Entrada: sortJson = {active: false, dir: 'arrow_downward'};
+  CC: sortJson = {active: false, dir: 'arrow_downward'};
+  Div_CC: sortJson = {active: false, dir: 'arrow_downward'};
+  Vencimento: sortJson = {active: false, dir: 'arrow_downward'};
+  Valor: sortJson = {active: false, dir: 'arrow_downward'};
+  Tipo:  sortJson = {active: false, dir: 'arrow_downward'};
+  N_Invest: sortJson = {active: false, dir: 'arrow_downward'};
+  Pessoa: sortJson = {active: false, dir: 'arrow_downward'};
+  Responsavel: sortJson = {active: false, dir: 'arrow_downward'};
+}
+
+export class SortMessages{
+  forDates:dirMsgJson = {up: "Mais antigo para mais novo", down:"Mais novo para mais antigo"};
+  forText:dirMsgJson = {up: "A - Z", down: "Z - A"};
+  forNumber:dirMsgJson = {up: "Menor para o maior", down: "Maior para o menor"};
+  forType:dirMsgJson = {up: "Recebimentos primeiro" , down: "Investimentos primeiro"}
+  forExpire:dirMsgJson = {up: "Mais curto para o mais longo" , down: "Mais longo para o mais curto"}
+}
+
+

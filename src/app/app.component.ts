@@ -5,12 +5,13 @@ import { ErrorMatcherDirective } from './directives/error-matcher.directive'
 import { CurrencyPipe } from '@angular/common';
 import { ServerService } from './services/server.service'
 import { Entrada } from './classes/entrada'
-import { Active } from './classes/active_filters_and_sorts';
+
 
 import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from './edit-row/edit-row.component';
+import { ActiveFilters, ActiveSorts, SortMessages } from './classes/active_filters_and_sorts';
 
 
 interface CC {
@@ -58,9 +59,12 @@ export class AppComponent {
   } ;
   cdk_empty: boolean = true;
 
-  active: Active;
+  activeSorts: ActiveSorts = new ActiveSorts;
+  activeFilters: ActiveFilters = new ActiveFilters;
+  sortMessages: SortMessages = new SortMessages;
 
   editRowDialogRef: MatDialogRef<EditRowComponent>;
+  currentActiveSort: string;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -255,6 +259,20 @@ export class AppComponent {
   }
 
   sortBy(column: string, sort_dir: string, filter?){
+
+    if (this.currentActiveSort){
+      this.activeSorts[this.currentActiveSort].active = false;
+    }
+
+    this.activeSorts[column].active = true;
+    if (sort_dir == 'ASC'){
+      this.activeSorts[column].dir = 'arrow_downward';
+    } else {
+      this.activeSorts[column].dir = 'arrow_upward';
+    }
+
+    this.currentActiveSort = column;
+
     this.server.get_List_CF('main_table_query_SF',filter,column,sort_dir).then((response: any) => {
       this.Entradas = [];
       response.forEach( (element:Entrada) => {

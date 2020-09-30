@@ -4,7 +4,7 @@ function main_pn_info_router(connection) {
   const router = express.Router();
     router.post('/main_table_query', (req, res, next) => {
       connection.query(
-        'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Nome_f`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
           req.body.CC,
@@ -14,7 +14,7 @@ function main_pn_info_router(connection) {
           req.body.Observacao,
           req.body.Tipo,
           req.body.N_Invest,
-          req.body.Nome_f,
+          req.body.Pessoa,
           req.body.Responsavel],
         (error) => {
           if (error) {
@@ -58,7 +58,7 @@ function main_pn_info_router(connection) {
 
   router.put('/main_table_query/:ID', function (req, res, next) {
     connection.query(
-      'UPDATE lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Nome_f`=?, `Responsavel`=?  WHERE `ID`=?',
+      'UPDATE lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
       [req.body.Descricao,
         new Date(req.body.Data_Entrada),
         req.body.CC,
@@ -68,7 +68,7 @@ function main_pn_info_router(connection) {
         req.body.Observacao,
         req.body.Tipo,
         req.body.N_Invest,
-        req.body.Nome_f,
+        req.body.Pessoa,
         req.body.Responsavel,
         req.body.ID],
       (error) => {
