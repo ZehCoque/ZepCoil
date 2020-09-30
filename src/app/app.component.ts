@@ -44,7 +44,7 @@ export class AppComponent {
   viewport: CdkVirtualScrollViewport;
   newEntryForm: FormGroup;
   errorMatcher: ErrorMatcherDirective;
-
+  loading = true;
   today = moment().toISOString();
 
   Entradas: Array<Entrada> = new Array();
@@ -96,15 +96,17 @@ export class AppComponent {
       }
     });
 
-     this.server.get_List('main_table_query').then((response: any) => {
+     this.server.get_List('main_table_query').then(async (response: any) => {
 
-      response.forEach( (element:Entrada) => {
+      await response.forEach( (element:Entrada) => {
         console.log(element)
         this.Entradas = [...this.Entradas, element];
         this.cdk_empty = false;
       });
 
     });
+
+    this.loading = false;
 
 
   }

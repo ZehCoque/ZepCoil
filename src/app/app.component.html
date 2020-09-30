@@ -121,7 +121,7 @@
       </div>
 
 
-      <cdk-virtual-scroll-viewport *ngIf="!cdk_empty; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
+      <cdk-virtual-scroll-viewport *ngIf="!cdk_empty && !loading; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
 
         <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas, let i=index"  >
 
@@ -202,6 +202,25 @@
         </div>
 
       </cdk-virtual-scroll-viewport>
+
+      <ng-template #elseBlock>
+        <div *ngIf="!loading" style="padding-top: 20px; display: flex;
+        justify-content: center;
+        align-items: center;">
+          <mat-card class="empty-results-disclaimer">
+            <mat-card-content>Nada para mostrar</mat-card-content>
+
+          </mat-card>
+        </div>
+        <div *ngIf="loading" class="loading-indicator">
+          <mat-spinner></mat-spinner>
+          <div>Carregando...</div>
+        </div>
+
+      </ng-template>
+
+
+
       <div style="visibility: hidden; position: fixed"
       [style.left]="contextMenuPosition.x"
       [style.top]="contextMenuPosition.y"
@@ -238,18 +257,6 @@
       </ng-template>
       </mat-menu>
 
-      <ng-template #elseBlock>
-        <div style="padding-top: 20px; display: flex;
-        justify-content: center;
-        align-items: center;">
-          <mat-card class="empty-results-disclaimer">
-            <mat-card-content>Nada para mostrar</mat-card-content>
-
-          </mat-card>
-        </div>
-
-
-      </ng-template>
     </div>
 
     <div class="rightmost">
