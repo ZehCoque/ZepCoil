@@ -1,8 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './helpers/auth.guard';
+import { LancamentosComponent } from './lancamentos/lancamentos.component';
+import { LoginComponent } from './login/login.component';
 
+const routes: Routes = [
+  { path: 'lancamentos', component: LancamentosComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
 
-const routes: Routes = [];
+  // otherwise redirect to home
+  { path: '**', redirectTo: '' }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

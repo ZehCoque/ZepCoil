@@ -1,17 +1,16 @@
-import { Component, ViewChild, ChangeDetectionStrategy, ɵConsole } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ErrorMatcherDirective } from './directives/error-matcher.directive'
+import { ErrorMatcherDirective } from '../directives/error-matcher.directive'
 import { CurrencyPipe } from '@angular/common';
-import { ServerService } from './services/server.service'
-import { Entrada } from './classes/entrada'
-
+import { ServerService } from '../services/server.service'
+import { Entrada } from '../classes/entrada'
 
 import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { EditRowComponent } from './edit-row/edit-row.component';
-import { ActiveFilters, ActiveSorts, SortMessages } from './classes/active_filters_and_sorts';
+import { EditRowComponent } from '../edit-row/edit-row.component';
+import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
 
 
 interface CC {
@@ -24,11 +23,11 @@ interface Pessoa{
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-lancamentos',
+  templateUrl: './lancamentos.component.html',
+  styleUrls: ['./lancamentos.component.scss']
 })
-export class AppComponent {
+export class LancamentosComponent implements OnInit {
 
   // key:any;
 
@@ -286,3 +285,4 @@ export class AppComponent {
   }
 
 }
+

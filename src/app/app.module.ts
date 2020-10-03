@@ -18,7 +18,8 @@ import localePtBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 import { EditRowComponent } from './edit-row/edit-row.component';
 import { FocusNextDirective } from './directives/focus-next.directive';
-import { LoginPageComponent } from './login-page/login-page.component';
+import { LoginComponent } from './login/login.component';
+import { LancamentosComponent } from './lancamentos/lancamentos.component';
 
 registerLocaleData(localePtBr);
 
@@ -27,7 +28,8 @@ registerLocaleData(localePtBr);
     AppComponent,
     EditRowComponent,
     FocusNextDirective,
-    LoginPageComponent,
+    LoginComponent,
+    LancamentosComponent,
   ],
   imports: [
     CommonModule,

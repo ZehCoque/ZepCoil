@@ -3,13 +3,6 @@ const app = express();
 //require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-var session = require('express-session');
-
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
 
 //const allowedOrigins = process.env.allowedOrigins.split(',');
 const port = "3000";
