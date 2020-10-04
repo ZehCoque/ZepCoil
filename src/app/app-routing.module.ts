@@ -8,8 +8,8 @@ const routes: Routes = [
   { path: 'lancamentos', component: LancamentosComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
 
-  // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  // otherwise 
+  { path: '**', redirectTo: 'lancamentos' }
 ];
 
 @NgModule({
