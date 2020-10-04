@@ -25,6 +25,7 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
+        console.log(username)
         return this.http.post<any>(`${environment.serverUrl}/users/authenticate`, { username, password }, { withCredentials: true })
             .pipe(map(user => {
                 this.userSubject.next(user);

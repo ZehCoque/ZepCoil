@@ -4,36 +4,36 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-//const allowedOrigins = process.env.allowedOrigins.split(',');
 const port = "3000";
 const www = "MYSQL DATABASE CONNECTION" || './';
 app.use(express.static(www));
 app.use(bodyParser.json())
-// ****** allow cross-origin requests code START ****** //
-app.use(cors()); // uncomment this to enable all CORS and delete cors(corsOptions) in below code
 
-/**
+var allowedOrigins = ['http://localhost:3000',
+                      'http://localhost:4200'];
+
 app.use(cors({
-    origin: function (origin, callback) {
-        // allow requests with no origin
-        // (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            var msg = 'The CORS policy for this site does not ' + 'allow access from the specified Origin.';
-            return callback(new Error(msg), false);
-        }
-        return callback(null, true);
+  credentials: true,
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
     }
+    return callback(null, true);
+  }
 }));
- */
-// ****** allow cross-origin requests code END ****** //
 
 // connection auth with mysql
+const auth_connection = require('./connection/auth.connection.js');
 const connection = require('./connection/dbconnection.js');
 
 // server functions
 const main_table_query = require('./models/main_table_query.js');
+const auth = require('./models/auth.js');
 
+app.use(auth(auth_connection));
 app.use(main_table_query(connection));
 
 console.log(`serving ${www}`);

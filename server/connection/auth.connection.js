@@ -3,9 +3,9 @@ var mysql = require('mysql');
 var connection  = mysql.createConnection({
   connectionLimit : 10,
   host            : 'localhost',
-  user            : 'remote_access',
-  password        : 'supersecretpassword',
-  database        : 'zepcoil',
+  user            : 'authenticator',
+  password        : 'N99FrLuBDNPCqb58',
+  database        : 'accounts',
 });
 
 
