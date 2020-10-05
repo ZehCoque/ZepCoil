@@ -44,6 +44,7 @@ export class AuthenticationService {
     refreshToken() {
         return this.http.post<any>(`${environment.serverUrl}/users/refresh-token`, {}, { withCredentials: true })
             .pipe(map((user) => {
+              console.log(user)
                 this.userSubject.next(user);
                 this.startRefreshTokenTimer();
                 return user;
@@ -56,7 +57,7 @@ export class AuthenticationService {
 
     private startRefreshTokenTimer() {
         // parse json object from base64 encoded jwt token
-        const jwtToken = JSON.parse(atob(this.userValue.jwtToken.split('.')[1]));
+        const jwtToken = JSON.parse(this.userValue.jwtToken.split('.')[1]);
 
         // set a timeout to refresh the token a minute before it expires
         const expires = new Date(jwtToken.exp * 1000);

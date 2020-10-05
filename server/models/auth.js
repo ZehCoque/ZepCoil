@@ -1,14 +1,5 @@
+const { RSA_PKCS1_OAEP_PADDING } = require('constants');
 const express = require('express');
-
-class Users {
-  constructor(username, password, firstName, lastName, refreshToken = '') {
-    this.username = username;
-    this.password = password,
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.refreshToken = refreshToken;
-  }
-}
 
 function auth_router(connection) {
 
@@ -24,9 +15,13 @@ function auth_router(connection) {
       refreshToken(connection, req, res) ;
     });
 
-    router.post('/users/revoke-token', function(req, res) {});
+    router.post('/users/revoke-token', function(req, res) {
+      revokeToken(connection, req, res);
+    });
 
-    router.get('/users', function(req, res) {});
+    router.get('/users', function(req, res) {
+      getUsers(connection, res);
+    });
 
 
   return router;
@@ -35,122 +30,128 @@ function auth_router(connection) {
 
   function authenticate(connection, req, res) {
 
-    var user = new Users;
+    get_user(connection, req, res).then((user) => {
 
+      if (user === undefined) return error(res,'Username or password is incorrect');
+      // add refresh token to user
+      update_user(connection, req, res, generateRefreshToken(res)).then(() => {
+        return ok({
+          id: user.id,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          jwtToken: generateJwtToken()
+      }, res)
+      }).catch(err => console.log(err));
+
+    }).catch(err => console.log(err));
+
+}
+
+function get_user(connection, req, res) {
+
+  return new Promise(function(resolve, reject) {
     connection.query(
       'SELECT * FROM account_info WHERE username = ? AND password = ?',
       [req.body.username, req.body.password],
       (error, results) => {
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          user = results;
+        if (error){
+          return reject(error);
         }
-      }
-    );
-      console.log(user)
-    if (user.length == 0) return error('Username or password is incorrect');
-      console.log(user.username)
-    // add refresh token to user
+        if (results.length == 0) {
+          resolve();
+        } else {
+          resolve(JSON.parse(JSON.stringify(results[0])));
+        }
+      })
+  	});
+
+}
+
+function update_user(connection, req, res, refreshToken) {
+
+  return new Promise(function(resolve, reject) {
     connection.query(
       'UPDATE `account_info` SET `refreshToken` = ? WHERE `username` = ?;',
-      [generateRefreshToken(res),user.username],
+      [refreshToken,req.body.username],
       (error, results) => {
         if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
+          return reject(error);
+        }
+        if (results.affectedRows == 0) {
+          resolve('No rows affected');;
         } else {
-          user = results;
+          resolve();
         }
       }
     );
-
-    return ok({
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        jwtToken: generateJwtToken()
-    }, res)
+  });
 }
 
 function refreshToken(connection, req, res) {
     const refreshToken = getRefreshToken(req);
-
+    console.log(refreshToken);
     if (!refreshToken) return unauthorized(res);
 
-    const user = new Users;
+    get_user(connection, req, res).then((user) => {
+      if (user.length == 0) return unauthorized(res);
 
-    connection.query(
-      'SELECT * FROM account_info WHERE username = ? AND password = ?',
-      [req.body.username, req.body.password],
-      (error, results) => {
-        console.log(results);
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          user = results;
-        }
-      }
-    );
+      // replace old refresh token with a new one and save
 
-    if (user.length == 0) return unauthorized(res);
+      update_user(connection, req, res,generateRefreshToken(res)).then(() => {
+        return ok({
+          id: user.id,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          jwtToken: generateJwtToken()
+      },res)
+      }).catch(err => console.log(err));
 
-    // replace old refresh token with a new one and save
-    connection.query(
-      'UPDATE `accounts`.`account_info` SET `refreshToken` = ? WHERE `username` = ?;',
-      [generateRefreshToken(res),user],
-      (error, results) => {
-        console.log(results);
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          user = results.user;
-        }
-      }
-    );
+    }).catch(err => console.log(err));
 
-    return ok({
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        jwtToken: generateJwtToken()
-    },res)
 }
 
-function revokeToken() {
+function revokeToken(connection, req, res) {
     if (!isLoggedIn()) return unauthorized(res);
 
-    const refreshToken = getRefreshToken(req);
+    get_user(connection, req, res).then((user) => {
+      // revoke token and save
+      update_user(connection, req, res,'').then(() => {
+        return ok({}, res);
+      }).catch(err => console.log(err));
 
-    connection.query(
-      'SELECT * FROM account_info WHERE refreshToken = ?',
-      [refreshToken],
-      (error, results) => {
-        console.log(results);
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          user = results;
-        }
-      }
-    );
+    }).catch(err => console.log(err));
 
-    // revoke token and save
-    user.refreshTokens = user.refreshTokens.filter(x => x !== refreshToken);
-    localStorage.setItem(usersKey, JSON.stringify(users));
-
-    return ok({}, res);
 }
 
-function getUsers(res) {
+function getUsers(connection,res) {
     if (!isLoggedIn()) return unauthorized(res);
-    return ok(users, res);
+
+    var user_list = [];
+    var p = new Promise(function(resolve, reject) {
+      connection.query(
+        'SELECT * FROM account_info',
+        [],
+        (error, results) => {
+          if (error){
+            return reject(error);
+          }
+          if (results.length == 0) {
+            resolve();
+          } else {
+            resolve(JSON.parse(JSON.stringify(results[0])));
+          }
+        })
+      });
+
+      p.then(users => {
+        users.forEach(user => {
+          user_list.push(user.username);
+        })
+      })
+
+    return ok(user_list, res);
 }
 
 // helper functions
@@ -160,7 +161,7 @@ function ok(body, res) {
 }
 
 function error(res, message) {
-    return res.status(401).json({error: { message: message } })
+    return res.status(404).json({error: { message: message } })
 }
 
 function unauthorized(res) {
@@ -191,8 +192,8 @@ function generateRefreshToken(res) {
 
     // add token cookie that expires in 7 days
     const expires = new Date(Date.now() + 7*24*60*60*1000).toUTCString();
-    res.cookie = `refreshToken=${token}; expires=${expires}; path=/`;
-
+    document.cookie = `refreshToken=${token}; expires=${expires}; path=/`;
+    console.log(res.cookie)
     return token;
 }
 
