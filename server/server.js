@@ -3,11 +3,13 @@ const app = express();
 //require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const port = "3000";
 const www = "MYSQL DATABASE CONNECTION" || './';
 app.use(express.static(www));
 app.use(bodyParser.json())
+app.use(cookieParser());
 
 var allowedOrigins = ['http://localhost:3000',
                       'http://localhost:4200'];

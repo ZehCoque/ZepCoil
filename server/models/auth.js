@@ -68,6 +68,26 @@ function get_user(connection, req, res) {
 
 }
 
+function login_by_refresh_token(connection, refreshToken) {
+
+  return new Promise(function(resolve, reject) {
+    connection.query(
+      'SELECT * FROM account_info WHERE refreshToken = ?',
+      [refreshToken],
+      (error, results) => {
+        if (error){
+          return reject(error);
+        }
+        if (results.length == 0) {
+          resolve();
+        } else {
+          resolve(JSON.parse(JSON.stringify(results[0])));
+        }
+      })
+  	});
+
+}
+
 function update_user(connection, req, res, refreshToken) {
 
   return new Promise(function(resolve, reject) {
@@ -90,15 +110,14 @@ function update_user(connection, req, res, refreshToken) {
 
 function refreshToken(connection, req, res) {
     const refreshToken = getRefreshToken(req);
-    console.log(refreshToken);
     if (!refreshToken) return unauthorized(res);
 
-    get_user(connection, req, res).then((user) => {
-      if (user.length == 0) return unauthorized(res);
+    login_by_refresh_token(connection, refreshToken).then((user) => {
+      if (user === undefined) return unauthorized(res);
 
       // replace old refresh token with a new one and save
 
-      update_user(connection, req, res,generateRefreshToken(res)).then(() => {
+      update_user(connection, req, res,getRefreshToken(req)).then(() => {
         return ok({
           id: user.id,
           username: user.username,
@@ -191,15 +210,15 @@ function generateRefreshToken(res) {
     const token = new Date().getTime().toString();
 
     // add token cookie that expires in 7 days
-    const expires = new Date(Date.now() + 7*24*60*60*1000).toUTCString();
-    document.cookie = `refreshToken=${token}; expires=${expires}; path=/`;
-    console.log(res.cookie)
+    const expires = new Date(Date.now() + 7*24*60*60*1000).getTime().toString();
+    res.cookie('refreshToken', token);
+    res.cookie('expires', expires);
     return token;
 }
 
 function getRefreshToken(req) {
     // get refresh token from cookie
-    if (req.cookie !== undefined) return (req.cookie.split(';').find(x => x.includes('refreshToken')) || '=').split('=')[1];
+    if (req.cookies !== undefined) return req.cookies.refreshToken;
 }
 
 
