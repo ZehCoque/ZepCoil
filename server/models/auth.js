@@ -68,7 +68,7 @@ function get_user(connection, req, res) {
 
 }
 
-function login_by_refresh_token(connection, refreshToken) {
+function getUserByRefreshToken(connection, refreshToken) {
 
   return new Promise(function(resolve, reject) {
     connection.query(
@@ -89,7 +89,6 @@ function login_by_refresh_token(connection, refreshToken) {
 }
 
 function update_user(connection, req, res, refreshToken) {
-  console.log(req.body)
   return new Promise(function(resolve, reject) {
     connection.query(
       'UPDATE `account_info` SET `refreshToken` = ? WHERE `username` = ?;',
@@ -108,11 +107,30 @@ function update_user(connection, req, res, refreshToken) {
   });
 }
 
+function delete_token(connection, username, refreshToken) {
+  return new Promise(function(resolve, reject) {
+    connection.query(
+      'UPDATE `accounts`.`account_info` SET `refreshToken` = NULL WHERE (`refreshToken` = ?) and (`username` = ?);',
+      [refreshToken,username],
+      (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        if (results.affectedRows == 0) {
+          resolve('No rows affected');;
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+}
+
 function refreshToken(connection, req, res) {
     const refreshToken = getRefreshToken(req);
     if (!refreshToken) return unauthorized(res);
 
-    login_by_refresh_token(connection, refreshToken).then((user) => {
+    getUserByRefreshToken(connection, refreshToken).then((user) => {
       if (user === undefined) return unauthorized(res);
 
       // replace old refresh token with a new one and save
@@ -134,13 +152,13 @@ function refreshToken(connection, req, res) {
 function revokeToken(connection, req, res) {
     if (!isLoggedIn(req)) return unauthorized(res);
 
-    get_user(connection, req, res).then((user) => {
-      // revoke token and save
-      update_user(connection, req, res,0).then(() => {
-        return ok({}, res);
-      }).catch(err => console.log(err));
+    const refreshToken = getRefreshToken(req);
+    getUserByRefreshToken(connection,refreshToken).then((user) => {
+      delete_token(connection,user.username,refreshToken).then(() => {
+        return ok({}, res)
+      })
+    }).catch(err => console.log(err));;
 
-    }).catch(err => console.log(err));
 
 }
 
@@ -193,7 +211,6 @@ function isLoggedIn(req) {
     if (!authHeader.startsWith('Bearer jwt-token')) return false;
 
     // check if token is expired
-    console.log(authHeader)
     const jwtToken = JSON.parse(authHeader.split('.')[1]);
     const tokenExpired = Date.now() > (jwtToken.exp * 1000);
 
