@@ -7,6 +7,7 @@
   />
   <span>Bem vindo</span>
     <div class="spacer"></div>
+    <a *ngIf="user" style="cursor: pointer;" (click)="logout()">Logout</a>
     <a aria-label="Angular on twitter" target="_blank" rel="noopener" title="Notificações">
       <img style="filter: invert();" src="assets/icons8-bell-24.png">
     </a>

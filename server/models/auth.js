@@ -11,15 +11,15 @@ function auth_router(connection) {
     });
 
     router.post('/users/refresh-token', function(req, res) {
-      refreshToken(connection, req, res) ;
+      return refreshToken(connection, req, res) ;
     });
 
     router.post('/users/revoke-token', function(req, res) {
-      revokeToken(connection, req, res);
+      return revokeToken(connection, req, res);
     });
 
     router.get('/users', function(req, res) {
-      getUsers(connection, res);
+      return getUsers(connection,req, res);
     });
 
 
@@ -44,6 +44,7 @@ function auth_router(connection) {
       }).catch(err => console.log(err));
 
     }).catch(err => console.log(err));
+
 
 }
 
@@ -88,7 +89,7 @@ function login_by_refresh_token(connection, refreshToken) {
 }
 
 function update_user(connection, req, res, refreshToken) {
-
+  console.log(req.body)
   return new Promise(function(resolve, reject) {
     connection.query(
       'UPDATE `account_info` SET `refreshToken` = ? WHERE `username` = ?;',
@@ -131,11 +132,11 @@ function refreshToken(connection, req, res) {
 }
 
 function revokeToken(connection, req, res) {
-    if (!isLoggedIn()) return unauthorized(res);
+    if (!isLoggedIn(req)) return unauthorized(res);
 
     get_user(connection, req, res).then((user) => {
       // revoke token and save
-      update_user(connection, req, res,'').then(() => {
+      update_user(connection, req, res,0).then(() => {
         return ok({}, res);
       }).catch(err => console.log(err));
 
@@ -143,8 +144,8 @@ function revokeToken(connection, req, res) {
 
 }
 
-function getUsers(connection,res) {
-    if (!isLoggedIn()) return unauthorized(res);
+function getUsers(connection,req,res) {
+    if (!isLoggedIn(req)) return unauthorized(res);
 
     var user_list = [];
     var p = new Promise(function(resolve, reject) {
@@ -186,13 +187,14 @@ function unauthorized(res) {
     return res.status(401).json({error: { message: 'Unauthorized' } });
 }
 
-function isLoggedIn() {
+function isLoggedIn(req) {
     // check if jwt token is in auth header
-    const authHeader = headers.get('Authorization');
+    const authHeader = req.headers.authorization;
     if (!authHeader.startsWith('Bearer jwt-token')) return false;
 
     // check if token is expired
-    const jwtToken = JSON.parse(atob(authHeader.split('.')[1]));
+    console.log(authHeader)
+    const jwtToken = JSON.parse(authHeader.split('.')[1]);
     const tokenExpired = Date.now() > (jwtToken.exp * 1000);
 
     if (tokenExpired) return false;
