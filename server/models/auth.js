@@ -1,4 +1,3 @@
-const { RSA_PKCS1_OAEP_PADDING } = require('constants');
 const express = require('express');
 
 function auth_router(connection) {
@@ -195,6 +194,7 @@ function isLoggedIn() {
     // check if token is expired
     const jwtToken = JSON.parse(atob(authHeader.split('.')[1]));
     const tokenExpired = Date.now() > (jwtToken.exp * 1000);
+
     if (tokenExpired) return false;
 
     return true;
@@ -210,9 +210,7 @@ function generateRefreshToken(res) {
     const token = new Date().getTime().toString();
 
     // add token cookie that expires in 7 days
-    const expires = new Date(Date.now() + 7*24*60*60*1000).getTime().toString();
-    res.cookie('refreshToken', token);
-    res.cookie('expires', expires);
+    res.cookie('refreshToken', token, {maxAge: 7*24*60*60*1000});
     return token;
 }
 
@@ -220,6 +218,5 @@ function getRefreshToken(req) {
     // get refresh token from cookie
     if (req.cookies !== undefined) return req.cookies.refreshToken;
 }
-
 
 module.exports = auth_router;

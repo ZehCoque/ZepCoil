@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER  } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { MaterialModule } from './material.module'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -55,6 +55,10 @@ registerLocaleData(localePtBr);
     {
       provide: LOCALE_ID,
       useValue: "pt-BR"
+    },
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
     },
     CurrencyPipe,
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },

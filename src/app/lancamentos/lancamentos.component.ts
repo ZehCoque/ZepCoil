@@ -103,9 +103,11 @@ export class LancamentosComponent implements OnInit {
         this.cdk_empty = false;
       });
 
+      this.loading = false;
+
     });
 
-    this.loading = false;
+
 
 
   }

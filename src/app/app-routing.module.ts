@@ -8,12 +8,12 @@ const routes: Routes = [
   { path: 'lancamentos', component: LancamentosComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
 
-  // otherwise 
+  // otherwise
   { path: '**', redirectTo: 'lancamentos' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
