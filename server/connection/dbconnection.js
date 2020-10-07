@@ -1,31 +1,39 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
 
-var connection  = mysql.createConnection({
-  connectionLimit : 10,
-  host            : 'localhost',
-  user            : 'remote_access',
-  password        : 'supersecretpassword',
-  database        : 'zepcoil',
-});
+function create_connection(username,password) {
+      return new Promise((resolve, reject) => {
+        var connection  = mysql.createConnection({
+          connectionLimit : 10,
+          host            : 'localhost',
+          user            : username,
+          password        : password,
+          database        : 'zepcoil',
+        });
+
+        connection.connect(function(err) {
+          console.error('Trying connection to ' + connection.config.host + ' as ' + connection.config.user);
+          if (err) {
+              console.error('Error connecting to remote database: ' + err);
+              reject(err);
+          }
+          console.log('Connected to REMOTE DATABASE as ' + connection.config.user);
+          resolve(connection);
+        });
+
+        connection.on('error', function(err) {
+          console.log('db error normal;', err);
+          if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+              console.log('connect lost');
+              reject(err);
+          }
+          else {
+              throw err;
+          }
+        });
 
 
-connection.connect(function(err) {
-  console.error('Trying connection to ' + connection.config.host + ' as ' + connection.config.user);
-  if (err) {
-      console.error('Error connecting to remote database: ' + err);
+      })
+
   }
-  console.log('Connected to REMOTE DATABASE as ' + connection.config.user);
-});
 
-connection.on('error', function(err) {
-  console.log('db error normal;', err);
-  if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-      console.log('connect lost');
-  }
-  else {
-      throw err;
-  }
-});
-
-module.exports = connection;
-
+module.exports = create_connection;

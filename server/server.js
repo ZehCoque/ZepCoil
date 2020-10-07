@@ -29,14 +29,13 @@ app.use(cors({
 
 // connection auth with mysql
 const auth_connection = require('./connection/auth.connection.js');
-const connection = require('./connection/dbconnection.js');
 
 // server functions
 const main_table_query = require('./models/main_table_query.js');
 const auth = require('./models/auth.js');
 
-app.use(auth(auth_connection));
-app.use(main_table_query(connection));
+app.use(auth.auth_router(auth_connection));
+app.use(main_table_query());
 
 console.log(`serving ${www}`);
 app.get('*', (req, res) => {

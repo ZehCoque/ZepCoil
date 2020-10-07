@@ -14,7 +14,8 @@ export class ServerService {
     const result = this.http.request(method, url, {
       body: data,
       responseType: 'json',
-      observe: 'body'
+      observe: 'body',
+      withCredentials: true
     });
 
     return new Promise((resolve, reject) => {

@@ -1,4 +1,12 @@
 const express = require('express');
+const db_connection = require('../connection/dbconnection.js');
+// const main_table_query = require('./main_table_query.js');
+
+var db_connection_var;
+
+var db_connection_status = () => {
+  return db_connection_var;
+}
 
 function auth_router(connection) {
 
@@ -22,6 +30,14 @@ function auth_router(connection) {
       return getUsers(connection,req, res);
     });
 
+    router.get('/reconnect', function() {
+      db_connection(user.username,user.password).then(dbconnection => {
+
+        db_connection_var = dbconnection;
+        return;
+      })
+    });
+
 
   return router;
 
@@ -34,13 +50,21 @@ function auth_router(connection) {
       if (user === undefined) return error(res,'Username or password is incorrect');
       // add refresh token to user
       update_user(connection, req, res, generateRefreshToken(res)).then(() => {
-        return ok({
-          id: user.id,
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          jwtToken: generateJwtToken()
-      }, res)
+
+        db_connection(user.username,user.password).then(dbconnection => {
+
+          db_connection_var = dbconnection;
+
+          return ok({
+            id: user.id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            jwtToken: generateJwtToken()
+        }, res)
+
+        }).catch(err => console.log(err));
+
       }).catch(err => console.log(err));
 
     }).catch(err => console.log(err));
@@ -56,7 +80,7 @@ function get_user(connection, req, res) {
       [req.body.username, req.body.password],
       (error, results) => {
         if (error){
-          return reject(error);
+          reject(error);
         }
         if (results.length == 0) {
           resolve();
@@ -136,13 +160,21 @@ function refreshToken(connection, req, res) {
       // replace old refresh token with a new one and save
 
       update_user(connection, req, res,getRefreshToken(req)).then(() => {
-        return ok({
-          id: user.id,
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          jwtToken: generateJwtToken()
-      },res)
+
+        db_connection(user.username,user.password).then(dbconnection => {
+
+          db_connection_var = dbconnection;
+
+          return ok({
+            id: user.id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            jwtToken: generateJwtToken()
+        }, res)
+
+        }).catch(err => console.log(err));
+
       }).catch(err => console.log(err));
 
     }).catch(err => console.log(err));
@@ -238,4 +270,7 @@ function getRefreshToken(req) {
     if (req.cookies !== undefined) return req.cookies.refreshToken;
 }
 
-module.exports = auth_router;
+module.exports = {
+  auth_router: auth_router,
+  db_conn: db_connection_status
+};

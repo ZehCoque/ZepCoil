@@ -98,7 +98,7 @@ export class LancamentosComponent implements OnInit {
      this.server.get_List('main_table_query').then(async (response: any) => {
     // << TESTAR LOADING COM SETTIMEOUT >>
       await response.forEach( (element:Entrada) => {
-        console.log(element)
+        //console.log(element)
         this.Entradas = [...this.Entradas, element];
         this.cdk_empty = false;
       });

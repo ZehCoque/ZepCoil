@@ -1,9 +1,12 @@
 const express = require('express');
+const auth = require('../models/auth.js');
 
-function main_pn_info_router(connection) {
+function main_pn_info_router() {
+
   const router = express.Router();
     router.post('/main_table_query', (req, res, next) => {
-      connection.query(
+
+      auth.db_conn().query(
         'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
@@ -28,7 +31,8 @@ function main_pn_info_router(connection) {
     });
 
   router.get('/main_table_query', function (req, res, next) {
-    connection.query(
+
+    auth.db_conn().query(
       'SELECT * FROM lançamentos ORDER BY ID',
       [],
       (error, results) => {
@@ -43,7 +47,7 @@ function main_pn_info_router(connection) {
   });
 
   router.delete('/main_table_query/:ID', function (req, res, next) {
-    connection.query(
+    auth.db_conn().query(
       'DELETE FROM lançamentos WHERE ID=?',
       [req.body.ID],
       (error) => {
@@ -57,7 +61,7 @@ function main_pn_info_router(connection) {
   });
 
   router.put('/main_table_query/:ID', function (req, res, next) {
-    connection.query(
+    auth.db_conn().query(
       'UPDATE lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
       [req.body.Descricao,
         new Date(req.body.Data_Entrada),
@@ -72,6 +76,7 @@ function main_pn_info_router(connection) {
         req.body.Responsavel,
         req.body.ID],
       (error) => {
+        console.log(req.body)
         if (error) {
           res.status(500).json({status: 'error'});
         } else {
@@ -82,7 +87,7 @@ function main_pn_info_router(connection) {
   });
 
   router.post('/main_table_query_SF', function (req, res, next) {
-    connection.query(
+    auth.db_conn().query(
       'SELECT * FROM lançamentos ORDER BY ' + req.body.active_sorts + ' ' + req.body.sort_dir,
       [],
       (error, results) => {
