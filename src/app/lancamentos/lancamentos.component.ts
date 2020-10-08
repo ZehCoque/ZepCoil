@@ -11,6 +11,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
 import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
+import { isEmpty } from 'rxjs/operators';
 
 
 interface CC {
@@ -64,6 +65,7 @@ export class LancamentosComponent implements OnInit {
 
   editRowDialogRef: MatDialogRef<EditRowComponent>;
   currentActiveSort: string;
+  currentActiveFilter: string;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -114,7 +116,7 @@ export class LancamentosComponent implements OnInit {
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
-    console.log(numberValue)
+
     numberValue = [numberValue.slice(0, numberValue.length - 2), '.', numberValue.slice(numberValue.length - 2)].join('');
     if (numberValue.charAt(0) == '0'){
       numberValue = numberValue.slice(1);
@@ -219,7 +221,6 @@ export class LancamentosComponent implements OnInit {
   }
 
   editLine(item, row){
-    console.log("item",item);
     this.editRowDialogRef = this.dialog.open(EditRowComponent,{
       width: "50%",
       data: item
@@ -245,7 +246,7 @@ export class LancamentosComponent implements OnInit {
   deleteLine(item, row){
     this.Entradas = this.Entradas.filter((item, index) => index !== row)
     this.server.delete_List(item,'main_table_query').then(() =>{
-
+      if (this.Entradas.length == 0) this.cdk_empty = true;
     })
    }
 
@@ -261,7 +262,7 @@ export class LancamentosComponent implements OnInit {
     }
   }
 
-  sortBy(column: string, sort_dir: string, filter?){
+  sortBy(column: string, sort_dir: string){
 
     if (this.currentActiveSort){
       this.activeSorts[this.currentActiveSort].active = false;
@@ -276,7 +277,7 @@ export class LancamentosComponent implements OnInit {
 
     this.currentActiveSort = column;
 
-    this.server.get_List_CF('main_table_query_SF',filter,column,sort_dir).then((response: any) => {
+    this.server.get_List_CF('main_table_query_SF',this.activeFilters,column,sort_dir).then((response: any) => {
       this.Entradas = [];
       response.forEach( (element:Entrada) => {
         this.Entradas = [...this.Entradas, element];
@@ -284,6 +285,14 @@ export class LancamentosComponent implements OnInit {
       });
 
     });
+  }
+
+  filterBy(column: string, selected) {
+
+    this.activeFilters[column] = selected;
+
+    
+
   }
 
 }

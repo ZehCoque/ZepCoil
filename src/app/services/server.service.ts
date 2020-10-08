@@ -41,7 +41,6 @@ export class ServerService {
 
   get_List_CF(slash_url,active_filters,active_sorts, sort_dir){
     let json = {active_filters,active_sorts,sort_dir};
-    console.log(json)
     return this.request('POST', `${environment.serverUrl}/${slash_url}`,json);
   }
 

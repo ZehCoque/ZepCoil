@@ -9,16 +9,16 @@ interface dirMsgJson{
 }
 
 export class ActiveFilters {
-    Descricao: Boolean = false;
-    Data_Entrada: Boolean = false;
-    CC: Boolean = false;
-    Div_CC: Boolean = false;
-    Vencimento: Boolean = false;
-    Valor: Boolean = false;
-    Tipo:  Boolean = false;
-    N_Invest: Boolean = false;
-    Pessoa: Boolean = false;
-    Responsavel: Boolean = false;
+    Descricao: String = '';
+    Data_Entrada: String = '';
+    CC: String = '';
+    Div_CC: String = '';
+    Vencimento: String = '';
+    Valor: String = '';
+    Tipo:  String = '';
+    N_Invest: String = '';
+    Pessoa: String = '';
+    Responsavel: String = '';
   }
 
 export class ActiveSorts {

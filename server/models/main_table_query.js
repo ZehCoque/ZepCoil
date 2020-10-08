@@ -76,7 +76,6 @@ function main_pn_info_router() {
         req.body.Responsavel,
         req.body.ID],
       (error) => {
-        console.log(req.body)
         if (error) {
           res.status(500).json({status: 'error'});
         } else {
@@ -87,6 +86,21 @@ function main_pn_info_router() {
   });
 
   router.post('/main_table_query_SF', function (req, res, next) {
+
+    let query_string = 'WHERE 1=1';
+
+    let active_filters = req.body.active_filters;
+
+    for (var key in active_filters) {
+      if (active_filters.hasOwnProperty(key)) {
+          if (active_filters[key] != ''){
+            query_string = query_string + ' AND ' + key + ' = ' + active_filters[key];
+          }
+      }
+  }
+
+  console.log(query_string);
+
     auth.db_conn().query(
       'SELECT * FROM lançamentos ORDER BY ' + req.body.active_sorts + ' ' + req.body.sort_dir,
       [],

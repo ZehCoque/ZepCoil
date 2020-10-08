@@ -27,7 +27,6 @@ export class AuthenticationService {
     login(username: string, password: string) {
         return this.http.post<any>(`${environment.serverUrl}/users/authenticate`, { username, password }, { withCredentials: true })
             .pipe(map(user => {
-              console.log(user);
                 this.userSubject.next(user);
                 this.startRefreshTokenTimer();
                 return user;
@@ -44,7 +43,6 @@ export class AuthenticationService {
     refreshToken() {
         return this.http.post<any>(`${environment.serverUrl}/users/refresh-token`, {}, { withCredentials: true })
             .pipe(map((user) => {
-              console.log(user)
                 this.userSubject.next(user);
                 this.startRefreshTokenTimer();
                 return user;
