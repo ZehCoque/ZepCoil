@@ -11,7 +11,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
 import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
-import { isEmpty } from 'rxjs/operators';
 
 
 interface CC {
@@ -97,21 +96,31 @@ export class LancamentosComponent implements OnInit {
       }
     });
 
-     this.server.get_List('main_table_query').then(async (response: any) => {
-    // << TESTAR LOADING COM SETTIMEOUT >>
-      await response.forEach( (element:Entrada) => {
-        //console.log(element)
-        this.Entradas = [...this.Entradas, element];
-        this.cdk_empty = false;
-      });
-
+    this.loadData().then(() =>{
+      this.cdk_empty = false;
       this.loading = false;
-
-    });
-
+    })
 
 
+  }
 
+  loadData(){
+    let promise = new Promise((resolve, reject) => {
+      this.server.get_List('main_table_query').then(async (response: any) => {
+          await response.forEach( (element:Entrada) => {
+            //console.log(element)
+            this.Entradas = [...this.Entradas, element];
+          });
+
+        });
+      
+
+        resolve();
+    })
+
+
+
+    return promise;
   }
 
   getNumberValue(value){
@@ -291,7 +300,7 @@ export class LancamentosComponent implements OnInit {
 
     this.activeFilters[column] = selected;
 
-    
+
 
   }
 

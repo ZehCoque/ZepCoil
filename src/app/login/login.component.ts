@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
+import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 
 @Component({
   selector: 'app-login',
@@ -13,9 +14,9 @@ import { AuthenticationService } from '../services/authentication.service';
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
-    submitted = false;
     returnUrl: string;
     error = '';
+    errorMatcher: ErrorMatcherDirective;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -43,7 +44,6 @@ export class LoginComponent implements OnInit {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        this.submitted = true;
 
         // stop here if form is invalid
         if (this.loginForm.invalid) {
@@ -62,5 +62,9 @@ export class LoginComponent implements OnInit {
                     this.loading = false;
                 }
             });
+    }
+
+    signNewUser(){
+      
     }
 }

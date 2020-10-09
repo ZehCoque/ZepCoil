@@ -1,32 +1,52 @@
-<div class="col-md-6 offset-md-3 mt-5">
-  <div class="alert alert-info">
-      Username: test<br />
-      Password: test
-  </div>
-  <div class="card">
-      <h4 class="card-header">Angular 9 JWT Auth with Refresh Tokens</h4>
-      <div class="card-body">
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-              <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                  <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                      <div *ngIf="f.username.errors.required">Username is required</div>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                  <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                      <div *ngIf="f.password.errors.required">Password is required</div>
-                  </div>
-              </div>
-              <button [disabled]="loading" class="btn btn-primary">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                  Login
-              </button>
-              <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-          </form>
+<div class="content-fluid" role="main">
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="formulario">
+        <div class="el-tag--plain noselect" style="font-weight: bolder; font-size: 20px; margin-bottom: 15px;">
+          Faça login
+        </div>
+        <div class="input-forms">
+            <mat-form-field class="form-field">
+              <mat-label>Usuário</mat-label>
+              <input matInput formControlName="username" [errorStateMatcher]="errorMatcher">
+              <mat-error *ngIf="loginForm.get('username').hasError('required')" >
+                É necessário inserir um usuário.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="input-forms">
+          <mat-form-field class="form-field">
+            <mat-label>Senha</mat-label>
+            <input type="password"  matInput formControlName="password" [errorStateMatcher]="errorMatcher"   >
+
+            <mat-error *ngIf="loginForm.get('password').hasError('required')" >
+              É necessário inserir uma senha.
+            </mat-error>
+
+            <mat-hint> </mat-hint>
+          </mat-form-field>
+
+        </div>
+        <div *ngIf="error">
+          <mat-error style="font-size: 1.5vh; text-align: center;">
+            {{error}}
+          </mat-error>
+        </div>
+
+        <div class="button-row">
+          <button mat-raised-button color="primary" (click)='onSubmit()'>Entrar</button>
+        </div>
+
+        <div class="button-row">
+          <button mat-raised-button color="primary" (click)='signNewUser()'>Cadastrar Novo Usuário</button>
+        </div>
+
       </div>
-  </div>
+
+
+
+
+  </form>
+
+
 </div>
