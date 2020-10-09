@@ -11,9 +11,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
 import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
-import { promise } from 'protractor';
-import { rejects } from 'assert';
-import { resolve } from 'dns';
 
 @Component({
   selector: 'app-lancamentos',
@@ -34,9 +31,9 @@ export class LancamentosComponent implements OnInit {
   today = moment().toISOString();
 
   Entradas: Array<Entrada> = new Array();
-
+  filterValues: Array<string>;
   CC:Array<CC> = new Array();
-  div_CC:Array<div_CC> = new Array();
+  div_CC:Array<div_CC> = new Array<div_CC>();
   Pessoa:Array<Pessoa> = new Array();
 
   cdk_empty: boolean = true;
@@ -83,63 +80,74 @@ export class LancamentosComponent implements OnInit {
     this.loadData().then(() =>{
       this.cdk_empty = false;
       this.loading = false;
-    })
+      //PUT FUNCTION TO SCROLL TO LAST ELEMENT HERE
+    }).catch(err => console.log(err))
 
 
   }
 
   loadData(){
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise(async (resolve, reject) => {
 
       //GET ALL ENTRADAS
-      this.server.get_List('main_table_query').then(async (response: any) => {
+      await this.server.get_List('main_table_query').then(async (response: any) => {
           await response.forEach( (element:Entrada) => {
             this.Entradas = [...this.Entradas, element];
           });
-
         }).catch(err => reject(err));
 
         //GET ALL CC
-        this.server.get_List('cc_query').then(async (response: any) => {
+        await this.server.get_List('cc_query').then(async (response: any) => {
           await response.forEach( (CC:CC) => {
             this.CC = [...this.CC, CC];
           });
-
         }).catch(err => reject(err));
 
-        this.server.get_List('pessoa_query').then(async (response: any) => {
+        await this.server.get_List('pessoa_query').then(async (response: any) => {
           await response.forEach( (Pessoa:Pessoa) => {
             this.Pessoa = [...this.Pessoa, Pessoa];
           });
-
         }).catch(err => reject(err));
 
         resolve();
+
     })
 
     return promise;
   }
 
   get_div_cc(Nome_CC:string){
-    this.div_CC = new Array();
+    this.div_CC = new Array<div_CC>();
     let promise = new Promise((resolve,reject) => {
       this.server.get_Value({Nome: Nome_CC},'div_cc_query').then(async (response: any) => {
       await response.forEach( (div_CC:div_CC) => {
         this.div_CC = [...this.div_CC, div_CC];
       });
-
+      resolve(this.div_CC.length);
     }).catch(err => {
       this.div_cc_ready = false;
       reject(err);
     });
-
-    resolve(true);
-
     })
 
-    promise.then(() => this.div_cc_ready = true)
+    promise.then((div_cc_len) => {
+      if (div_cc_len > 0){
+        this.div_cc_ready = true;
+      } else {
+        this.div_cc_ready = false;
+      }
+    }).catch(() => this.div_cc_ready = false)
 
     return promise
+  }
+
+  async getColumnValues(column:string) {
+    this.filterValues = new Array<string>();
+    await this.Entradas.forEach((element: any) => {
+      this.filterValues = [...this.filterValues, element[column]];
+    })
+    console.log(this.filterValues)
+    return this.filterValues
   }
 
   getNumberValue(value){
@@ -290,8 +298,8 @@ export class LancamentosComponent implements OnInit {
     }
   }
 
-  sortBy(column: string, sort_dir: string){
-
+  async sortBy(column: string, sort_dir: string){
+    this.loading = true;
     if (this.currentActiveSort){
       this.activeSorts[this.currentActiveSort].active = false;
     }
@@ -305,14 +313,20 @@ export class LancamentosComponent implements OnInit {
 
     this.currentActiveSort = column;
 
-    this.server.get_List_CF('main_table_query_SF',this.activeFilters,column,sort_dir).then((response: any) => {
+    await this.server.get_List_CF('main_table_query_SF',this.activeFilters,column,sort_dir).then(async (response: any) => {
       this.Entradas = [];
-      response.forEach( (element:Entrada) => {
+      await response.forEach( (element:Entrada) => {
         this.Entradas = [...this.Entradas, element];
-        this.cdk_empty = false;
+
       });
 
     });
+
+    if (this.Entradas.length > 0) {
+      this.cdk_empty = false;
+    }
+
+    this.loading = false;
   }
 
   filterBy(column: string, selected) {

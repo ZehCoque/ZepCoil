@@ -221,7 +221,7 @@
 
       <mat-menu #dropdown_menu="matMenu">
         <ng-template  matMenuContent let-column="column" let-class_msg="class_msg">
-        <!-- <button [matMenuTriggerData]="{ 'column': column  }" [matMenuTriggerFor]="filtrar" mat-menu-item>Filtrar</button> -->
+        <button [matMenuTriggerData]="{ 'values': getColumnValues(column)  }" [matMenuTriggerFor]="filtrar" mat-menu-item>Filtrar</button>
         <button [matMenuTriggerData]="{ 'column': column, 'class_msg' : class_msg }" [matMenuTriggerFor]="classificar" mat-menu-item>Classificar</button>
       </ng-template>
       </mat-menu>
