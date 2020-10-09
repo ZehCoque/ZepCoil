@@ -29,13 +29,19 @@ app.use(cors({
 
 // connection auth with mysql
 const auth_connection = require('./connection/auth.connection.js');
+const auth = require('./models/auth.js');
 
 // server functions
 const main_table_query = require('./models/main_table_query.js');
-const auth = require('./models/auth.js');
+const CC_query = require('./models/cc_query.js');
+const div_CC_query = require('./models/div_cc_query.js');
+const pessoa_query = require('./models/pessoa_query.js');
 
 app.use(auth.auth_router(auth_connection));
 app.use(main_table_query());
+app.use(CC_query());
+app.use(div_CC_query());
+app.use(pessoa_query());
 
 console.log(`serving ${www}`);
 app.get('*', (req, res) => {

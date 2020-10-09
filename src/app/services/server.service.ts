@@ -27,7 +27,7 @@ export class ServerService {
     return this.request('GET', `${environment.serverUrl}/${slash_url}`);
   }
   get_Value(data,slash_url){
-    return this.request('POST', `${environment.serverUrl}/${slash_url}/${data}`, data);
+    return this.request('POST', `${environment.serverUrl}/${slash_url}/${data[0]}`, data);
   }
   add_List(data,slash_url) {
     return this.request('POST', `${environment.serverUrl}/${slash_url}`, data);

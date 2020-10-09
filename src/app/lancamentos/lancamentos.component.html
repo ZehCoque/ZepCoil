@@ -340,8 +340,8 @@
         <mat-form-field style="width: 45%;" class="form-field">
           <mat-label>Centro de Custo</mat-label>
           <mat-select formControlName="CC">
-          <mat-option *ngFor="let cc of CC.nomes" [value]="cc">
-           {{ cc }}
+          <mat-option (click)="get_div_cc(cc.Nome)" *ngFor="let cc of CC" [value]="cc">
+           {{ cc.Descricao }}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="newEntryForm.get('Div_CC').hasError('required')" >
@@ -349,11 +349,11 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field style="width: 45%;" class="form-field">
+      <mat-form-field  style="width: 45%;" class="form-field">
         <mat-label>Divisão Centro de Custo</mat-label>
-        <mat-select formControlName="Div_CC">
-        <mat-option *ngFor="let cc of CC.numero" [value]="cc">
-         {{ cc }}
+        <mat-select [disabled]="!div_cc_ready" formControlName="Div_CC">
+        <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
+         {{ div_CC.Divisao }}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="newEntryForm.get('Div_CC').hasError('required')" >
@@ -364,17 +364,17 @@
   <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0" style="width: 40%;" class="form-field">
       <mat-label>Origem</mat-label>
       <mat-select formControlName="Pessoa">
-      <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
-       {{ dest }}
-      </mat-option>
+        <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
+          {{ pessoa.Nome }}
+         </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 40%;" class="form-field">
       <mat-label>Destinatário</mat-label>
       <mat-select formControlName="Pessoa">
-      <mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
-       {{ dest }}
+      <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
+       {{ pessoa.Nome }}
       </mat-option>
     </mat-select>
   </mat-form-field>

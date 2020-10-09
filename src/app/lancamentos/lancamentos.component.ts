@@ -4,23 +4,16 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive'
 import { CurrencyPipe } from '@angular/common';
 import { ServerService } from '../services/server.service'
-import { Entrada } from '../classes/entrada'
+import { CC, div_CC, Entrada, Pessoa } from '../classes/tableColumns'
 
 import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
 import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
-
-
-interface CC {
-  numero: Array<number>;
-  nomes: Array<string>
-}
-
-interface Pessoa{
-  nomes: Array<string>;
-}
+import { promise } from 'protractor';
+import { rejects } from 'assert';
+import { resolve } from 'dns';
 
 @Component({
   selector: 'app-lancamentos',
@@ -29,12 +22,6 @@ interface Pessoa{
 })
 export class LancamentosComponent implements OnInit {
 
-  // key:any;
-
-//   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-//     this.key = event.key
-
-// }
   @ViewChild('contextMenuTrigger') contextMenu: MatMenuTrigger;
 
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -48,15 +35,12 @@ export class LancamentosComponent implements OnInit {
 
   Entradas: Array<Entrada> = new Array();
 
-  CC:CC ={
-    numero:[120, 150 ,22, 55],
-    nomes:['CJ', 'Uba']
-  } ;
+  CC:Array<CC> = new Array();
+  div_CC:Array<div_CC> = new Array();
+  Pessoa:Array<Pessoa> = new Array();
 
-  Destinatarios:Pessoa ={
-    nomes:['Dest1', 'Dest2', 'Dest3', 'Dest4']
-  } ;
   cdk_empty: boolean = true;
+  div_cc_ready: boolean = false;
 
   activeSorts: ActiveSorts = new ActiveSorts;
   activeFilters: ActiveFilters = new ActiveFilters;
@@ -106,21 +90,56 @@ export class LancamentosComponent implements OnInit {
 
   loadData(){
     let promise = new Promise((resolve, reject) => {
+
+      //GET ALL ENTRADAS
       this.server.get_List('main_table_query').then(async (response: any) => {
           await response.forEach( (element:Entrada) => {
-            //console.log(element)
             this.Entradas = [...this.Entradas, element];
           });
 
-        });
-      
+        }).catch(err => reject(err));
+
+        //GET ALL CC
+        this.server.get_List('cc_query').then(async (response: any) => {
+          await response.forEach( (CC:CC) => {
+            this.CC = [...this.CC, CC];
+          });
+
+        }).catch(err => reject(err));
+
+        this.server.get_List('pessoa_query').then(async (response: any) => {
+          await response.forEach( (Pessoa:Pessoa) => {
+            this.Pessoa = [...this.Pessoa, Pessoa];
+          });
+
+        }).catch(err => reject(err));
 
         resolve();
     })
 
-
-
     return promise;
+  }
+
+  get_div_cc(Nome_CC:string){
+    this.div_CC = new Array();
+    let promise = new Promise((resolve,reject) => {
+      this.server.get_Value({Nome: Nome_CC},'div_cc_query').then(async (response: any) => {
+      await response.forEach( (div_CC:div_CC) => {
+        this.div_CC = [...this.div_CC, div_CC];
+      });
+
+    }).catch(err => {
+      this.div_cc_ready = false;
+      reject(err);
+    });
+
+    resolve(true);
+
+    })
+
+    promise.then(() => this.div_cc_ready = true)
+
+    return promise
   }
 
   getNumberValue(value){
