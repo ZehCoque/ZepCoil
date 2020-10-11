@@ -80,7 +80,8 @@ export class LancamentosComponent implements OnInit {
     this.loadData().then(() =>{
       this.cdk_empty = false;
       this.loading = false;
-      //PUT FUNCTION TO SCROLL TO LAST ELEMENT HERE
+      this.viewport.scrollToIndex(this.Entradas.length)
+      // FUNCTION TO SCROLL TO LAST ELEMENT HERE
     }).catch(err => console.log(err))
 
 
@@ -179,19 +180,19 @@ export class LancamentosComponent implements OnInit {
     let input_json: Entrada = {
       Descricao: this.newEntryForm.get("Descricao").value,
       Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
-      CC: this.newEntryForm.get("CC").value,
-      Div_CC: this.newEntryForm.get("Div_CC").value,
+      CC: this.newEntryForm.get("CC").value.Nome,
+      Div_CC: this.newEntryForm.get("Div_CC").value.Divisao,
       Vencimento: moment(this.newEntryForm.get("Vencimento").value).toDate(),
       Valor:  this.getNumberValue(this.newEntryForm.get("Valor").value),
       Observacao: this.newEntryForm.get("Observacao").value,
       Tipo: this.newEntryForm.get("Tipo").value,
       Responsavel: this.newEntryForm.get("Responsavel").value,
       N_Invest: Number(this.newEntryForm.get("N_Invest").value),
-      Pessoa: this.newEntryForm.get("Pessoa").value
+      Pessoa: this.newEntryForm.get("Pessoa").value.Nome
     }
 
     this.onClear();
-
+    console.log(input_json)
     this.Entradas = [...this.Entradas, input_json]
     this.cdk_empty = false;
     if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
