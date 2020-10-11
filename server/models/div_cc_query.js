@@ -10,7 +10,6 @@ function div_CC_router() {
       'SELECT * FROM divisao_cc WHERE Nome = ?',
       [req.body.Nome],
       (error, results) => {
-        console.log(results)
         if (error) {
           console.log(error);
           res.status(500).json({status: 'error'});
