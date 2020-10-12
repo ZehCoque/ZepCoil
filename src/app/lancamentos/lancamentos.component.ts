@@ -316,7 +316,7 @@ export class LancamentosComponent implements OnInit {
 
     this.currentActiveSort = column;
 
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_SF').then(async (response: any) => {
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_CF').then(async (response: any) => {
       this.Entradas = [];
       await response.forEach( (element:Entrada) => {
         this.Entradas = [...this.Entradas, element];
@@ -335,10 +335,8 @@ export class LancamentosComponent implements OnInit {
   async filterBy(column: string, selected: string) {
     this.loading = true
     this.activeFilters[column] = selected;
-
-    console.log(this.activeFilters)
-
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_SF').then(async (element: any) => {
+    this.Entradas = [];
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_CF').then(async (element: any) => {
       await element.forEach(entrada => {
         this.Entradas = [...this.Entradas, entrada]
       });

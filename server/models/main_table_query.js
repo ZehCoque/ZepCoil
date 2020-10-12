@@ -108,16 +108,32 @@ function main_pn_info_router() {
 
     for (var key in active_filters) {
       if (active_filters.hasOwnProperty(key)) {
-          if (active_filters[key] != ''){
+          if (active_filters[key] !== ''){
             query_string = query_string + ' AND ' + key + ' = ' + active_filters[key];
           }
       }
-  }
+    }
+
+    let active_sorts = req.body.active_sorts;
+    let dir;
+    for (var key in active_sorts) {
+      if (active_sorts.hasOwnProperty(key)) {
+          if (active_sorts[key].active == true){
+            if (active_sorts[key].dir === "arrow_downward") {
+              dir = "ASC"
+            } else {
+              dir = "DESC"
+            }
+            query_string = query_string + ' ORDER BY ' + key + ' ' + dir;
+            break;
+          }
+      }
+    }
 
   console.log(query_string);
 
     auth.db_conn().query(
-      'SELECT * FROM lançamentos ORDER BY ' + req.body.active_sorts + ' ' + req.body.sort_dir,
+      'SELECT * FROM lançamentos ' + query_string,
       [],
       (error, results) => {
         if (error) {
