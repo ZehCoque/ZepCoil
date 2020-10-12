@@ -46,6 +46,9 @@ export class LancamentosComponent implements OnInit {
   editRowDialogRef: MatDialogRef<EditRowComponent>;
   currentActiveSort: string;
   currentActiveFilter: string;
+  totalReceitas: number;
+  totalDespesas: number;
+  totalInvestimentos: number;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -110,6 +113,8 @@ export class LancamentosComponent implements OnInit {
           });
         }).catch(err => reject(err));
 
+        await this.updateSoma()
+
         resolve();
 
     })
@@ -144,7 +149,7 @@ export class LancamentosComponent implements OnInit {
 
   async getColumnValues(column:string) {
     this.filterValues = new Array<string>();
-    await this.server.get_Value({column: column},'column_value').then(async (element: any) => {
+    await this.server.get_Value({column: column, active_filters: this.activeFilters},'column_value').then(async (element: any) => {
       await element.forEach(el => {
         this.filterValues = [...this.filterValues, el[column]]
       });
@@ -345,5 +350,69 @@ export class LancamentosComponent implements OnInit {
 
   }
 
+  async clearFilter(column: string){
+    this.loading = true
+    this.activeFilters[column] = '';
+    this.Entradas = [];
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_CF').then(async (element: any) => {
+      await element.forEach(entrada => {
+        this.Entradas = [...this.Entradas, entrada]
+      });
+    })
+    this.loading = false
+
+  }
+
+  async clearAllFilters(){
+    this.loading = true
+    this.activeFilters = new ActiveFilters;
+    console.log(this.activeFilters)
+    this.Entradas = [];
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_CF').then(async (element: any) => {
+      await element.forEach(entrada => {
+        this.Entradas = [...this.Entradas, entrada]
+      });
+    })
+    this.loading = false
+
+  }
+
+  updateSoma(){
+
+    let promise = new Promise(async (resolve, reject) => {
+
+      let DATAI, DATAF;
+
+      await this.server.get_List_CF({ active_filters: this.activeFilters},'max_min_dates').then(async (element: any) => {
+        DATAI = element[0].DATAI;
+        DATAF = element[0].DATAF;
+      });
+
+      console.log(DATAI,DATAF);
+
+      //Total Receitas
+      await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_receitas').then((total: any) => {
+        this.totalReceitas = total[0][0].TOTALR;
+      }).catch(err => reject(err));
+
+      //Total Despesas
+      await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_despesas').then((total: any) => {
+        this.totalDespesas = total[0][0].TOTALD;
+      }).catch(err => reject(err));
+
+      //Total Investimentos
+      await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_investimentos').then((total: number) => {
+        this.totalInvestimentos = total[0][0].TOTALI;
+      }).catch(err => reject(err));
+
+      if (this.totalInvestimentos === null) this.totalInvestimentos = 0;
+      if (this.totalDespesas === null) this.totalDespesas = 0;
+      if (this.totalReceitas === null) this.totalReceitas = 0;
+
+      resolve()
+    })
+
+    return promise;
+  }
 }
 

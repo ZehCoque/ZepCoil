@@ -40,7 +40,6 @@ export class ServerService {
   }
 
   get_List_CF(data,slash_url){
-    console.log(data)
     return this.request('POST', `${environment.serverUrl}/${slash_url}`,data);
   }
 

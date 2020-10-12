@@ -1,13 +1,15 @@
 const express = require('express');
 const auth = require('../models/auth.js');
 
+const database = 'zepcoil.'
+
 function main_pn_info_router() {
 
   const router = express.Router();
     router.post('/main_table_query', (req, res, next) => {
 
       auth.db_conn().query(
-        'INSERT INTO lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        'INSERT INTO ' + database + 'lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
           req.body.CC,
@@ -33,7 +35,7 @@ function main_pn_info_router() {
   router.get('/main_table_query', function (req, res, next) {
 
     auth.db_conn().query(
-      'SELECT * FROM lançamentos ORDER BY ID',
+      'SELECT * FROM ' + database + 'lançamentos ORDER BY ID',
       [],
       (error, results) => {
         if (error) {
@@ -48,7 +50,7 @@ function main_pn_info_router() {
 
   router.delete('/main_table_query/:ID', function (req, res, next) {
     auth.db_conn().query(
-      'DELETE FROM lançamentos WHERE ID=?',
+      'DELETE FROM ' + database + 'lançamentos WHERE ID=?',
       [req.body.ID],
       (error) => {
         if (error) {
@@ -62,7 +64,7 @@ function main_pn_info_router() {
 
   router.put('/main_table_query/:ID', function (req, res, next) {
     auth.db_conn().query(
-      'UPDATE lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
+      'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
       [req.body.Descricao,
         new Date(req.body.Data_Entrada),
         req.body.CC,
@@ -86,8 +88,27 @@ function main_pn_info_router() {
   });
 
   router.post('/column_value/:column', function (req, res, next) {
+
+    let query_string = 'WHERE 1=1';
+
+    let active_filters = req.body.active_filters;
+
+    for (var key in active_filters) {
+      if (active_filters.hasOwnProperty(key)) {
+          if (active_filters[key] !== ''){
+            let value;
+            if (key === 'Data_Entrada' || key === 'Vencimento'){
+              value = active_filters[key].substring(0,10);
+            }else {
+              value = active_filters[key];
+            }
+            query_string = query_string + ' AND ' + key + ' = \'' + value + '\'';
+          }
+      }
+    }
+
     auth.db_conn().query(
-      'SELECT DISTINCT ' + req.body.column + ' from zepcoil.lançamentos',
+      'SELECT DISTINCT ' + req.body.column + ' FROM ' + database + 'lançamentos ' + query_string,
       [],
       (error, results) => {
         if (error) {
@@ -101,7 +122,7 @@ function main_pn_info_router() {
   });
 
   router.post('/main_table_query_CF', function (req, res, next) {
-    console.log(req.body)
+
     let query_string = 'WHERE 1=1';
 
     let active_filters = req.body.active_filters;
@@ -109,7 +130,13 @@ function main_pn_info_router() {
     for (var key in active_filters) {
       if (active_filters.hasOwnProperty(key)) {
           if (active_filters[key] !== ''){
-            query_string = query_string + ' AND ' + key + ' = ' + active_filters[key];
+            let value;
+            if (key === 'Data_Entrada' || key === 'Vencimento'){
+              value = active_filters[key].substring(0,10);
+            }else {
+              value = active_filters[key];
+            }
+            query_string = query_string + ' AND ' + key + ' = \'' + value + '\'';
           }
       }
     }
@@ -130,10 +157,8 @@ function main_pn_info_router() {
       }
     }
 
-  console.log(query_string);
-
     auth.db_conn().query(
-      'SELECT * FROM lançamentos ' + query_string,
+      'SELECT * FROM ' + database + 'lançamentos ' + query_string,
       [],
       (error, results) => {
         if (error) {

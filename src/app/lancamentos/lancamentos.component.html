@@ -1,6 +1,6 @@
 <div class="content-fluid" role="main">
 
-  <div class="row">
+  <div>
 
     <div class="leftmost">
       <div class="header-padding">
@@ -187,20 +187,26 @@
 
       </cdk-virtual-scroll-viewport>
 
+      <button style=" margin-top: 20px;" (click)="clearAllFilters()" mat-raised-button color="warn" type="button"><mat-icon style="font-size: 20px;">delete</mat-icon>Excluir todos os filtros</button>
+      <div>{{totalDespesas | currency:'BRL'}}
+      {{totalInvestimentos | currency:'BRL'}}
+      {{totalReceitas | currency:'BRL'}}</div>
+
       <ng-template #elseBlock>
-        <div *ngIf="!loading" style="padding-top: 20px; display: flex;
-        justify-content: center;
-        align-items: center;">
-          <mat-card class="empty-results-disclaimer">
-            <mat-card-content>Nada para mostrar</mat-card-content>
+        <cdk-virtual-scroll-viewport itemSize="94">
+          <div *ngIf="!loading" style="padding-top: 20px; display: flex;
+          justify-content: center;
+          align-items: center;">
+            <mat-card class="empty-results-disclaimer">
+              <mat-card-content>Nada para mostrar</mat-card-content>
 
-          </mat-card>
-        </div>
-        <div *ngIf="loading" class="loading-indicator">
-          <mat-spinner></mat-spinner>
-          <div>Carregando...</div>
-        </div>
-
+            </mat-card>
+          </div>
+          <div *ngIf="loading" class="loading-indicator">
+            <mat-spinner></mat-spinner>
+            <div>Carregando...</div>
+          </div>
+        </cdk-virtual-scroll-viewport>
       </ng-template>
 
 
@@ -221,20 +227,38 @@
 
       <mat-menu #dropdown_menu="matMenu">
         <ng-template  matMenuContent let-column="column" let-class_msg="class_msg">
-        <button [matMenuTriggerData]="{ 'values': this.filterValues , 'column' : column}" [matMenuTriggerFor]="filtrar" mat-menu-item>Filtrar</button>
-        <button [matMenuTriggerData]="{ 'column': column, 'class_msg' : class_msg }" [matMenuTriggerFor]="classificar" mat-menu-item>Classificar</button>
+        <button [matMenuTriggerData]="{ 'values': this.filterValues , 'column' : column}" [matMenuTriggerFor]="filtrar" mat-menu-item>
+          <mat-icon>filter_alt</mat-icon>
+          Filtrar
+        </button>
+        <button [matMenuTriggerData]="{ 'column': column, 'class_msg' : class_msg }" [matMenuTriggerFor]="classificar" mat-menu-item>
+          <mat-icon>sort</mat-icon>
+          Classificar
+        </button>
+        <button *ngIf="activeFilters[column]" mat-menu-item (click)="clearFilter(column)">
+          <mat-icon>clear</mat-icon>
+          Excluir filtro
+        </button>
       </ng-template>
       </mat-menu>
 
       <mat-menu #filtrar="matMenu">
         <ng-template  matMenuContent let-values="values" let-column="column" let-class_msg="class_msg">
           <div (click)="filterBy(column, item)" *ngFor="let item of values">
-            <button *ngIf="column === 'Vencimento' || column === 'Data_Entrada'; else filtrarElseBlock" mat-menu-item>{{ item | amLocal | amDateFormat: 'DD/MM/YYYY' }}</button>
-            <ng-template #filtrarElseBlock>
-              <button  mat-menu-item>{{item}}</button>
+
+            <div *ngIf="(column === 'Vencimento' || column === 'Data_Entrada'); then filtrarElseBlock1; else filtrarElseBlock2"></div>
+            <ng-template #filtrarElseBlock1><button mat-menu-item>{{ item | amLocal | amDateFormat: 'DD/MM/YYYY' }}</button></ng-template>
+
+            <ng-template #filtrarElseBlock2>
+              <div *ngIf="column === 'Valor'; then filtrarElseBlock3; else filtrarElseBlock4">
+            </div>
+            <ng-template #filtrarElseBlock3><button mat-menu-item>{{ item | currency:'BRL'}}</button> </ng-template>
+            <ng-template #filtrarElseBlock4><button mat-menu-item>{{ item }}</button> </ng-template>
             </ng-template>
-          </div>
-        </ng-template>
+
+            </div>
+            </ng-template>
+
       </mat-menu>
 
       <mat-menu  #classificar="matMenu">
