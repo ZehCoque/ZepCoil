@@ -80,7 +80,7 @@ export class LancamentosComponent implements OnInit {
     this.loadData().then(() =>{
       this.cdk_empty = false;
       this.loading = false;
-      this.viewport.scrollToIndex(this.Entradas.length)
+      // this.viewport.scrollToIndex(this.Entradas.length)
       // FUNCTION TO SCROLL TO LAST ELEMENT HERE
     }).catch(err => console.log(err))
 
@@ -144,10 +144,12 @@ export class LancamentosComponent implements OnInit {
 
   async getColumnValues(column:string) {
     this.filterValues = new Array<string>();
-    await this.Entradas.forEach((element: any) => {
-      this.filterValues = [...this.filterValues, element[column]];
-    })
-    console.log(this.filterValues)
+    await this.server.get_Value({column: column},'column_value').then(async (element: any) => {
+      await element.forEach(el => {
+        this.filterValues = [...this.filterValues, el[column]]
+      });
+
+    });
     return this.filterValues
   }
 
@@ -314,7 +316,7 @@ export class LancamentosComponent implements OnInit {
 
     this.currentActiveSort = column;
 
-    await this.server.get_List_CF('main_table_query_SF',this.activeFilters,column,sort_dir).then(async (response: any) => {
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_SF').then(async (response: any) => {
       this.Entradas = [];
       await response.forEach( (element:Entrada) => {
         this.Entradas = [...this.Entradas, element];
@@ -330,11 +332,18 @@ export class LancamentosComponent implements OnInit {
     this.loading = false;
   }
 
-  filterBy(column: string, selected) {
-
+  async filterBy(column: string, selected: string) {
+    this.loading = true
     this.activeFilters[column] = selected;
 
+    console.log(this.activeFilters)
 
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_SF').then(async (element: any) => {
+      await element.forEach(entrada => {
+        this.Entradas = [...this.Entradas, entrada]
+      });
+    })
+    this.loading = false
 
   }
 

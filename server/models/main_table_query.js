@@ -85,8 +85,23 @@ function main_pn_info_router() {
     );
   });
 
-  router.post('/main_table_query_SF', function (req, res, next) {
+  router.post('/column_value/:column', function (req, res, next) {
+    auth.db_conn().query(
+      'SELECT DISTINCT ' + req.body.column + ' from zepcoil.lançamentos',
+      [],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
 
+  router.post('/main_table_query_CF', function (req, res, next) {
+    console.log(req.body)
     let query_string = 'WHERE 1=1';
 
     let active_filters = req.body.active_filters;
