@@ -187,10 +187,33 @@
 
       </cdk-virtual-scroll-viewport>
 
-      <button style=" margin-top: 20px;" (click)="clearAllFilters()" mat-raised-button color="warn" type="button"><mat-icon style="font-size: 20px;">delete</mat-icon>Excluir todos os filtros</button>
-      <div>{{totalDespesas | currency:'BRL'}}
-      {{totalInvestimentos | currency:'BRL'}}
-      {{totalReceitas | currency:'BRL'}}</div>
+      <span class="footer-row">
+        <span><button style=" margin-top: 20px;" (click)="clearAllFilters()" mat-raised-button color="warn" type="button"><mat-icon style="font-size: 20px;">delete</mat-icon>Excluir todos os filtros</button></span>
+        <div style="margin: auto 0; justify-self: center; width: 50%;display: flex; justify-content: space-evenly;">
+          <span>
+            <button class="mdb-30" mat-mini-fab color="success">
+              <mat-icon >add</mat-icon>
+            </button>
+            <span style="font-size: 22px;color: rgb(0,128,0); font-weight: bolder; margin-top: 15px;">{{totalReceitas | currency:'BRL'}}</span>
+          </span>
+
+          <span>
+            <button class="mdb-30" mat-mini-fab color="warn">
+              <mat-icon >remove</mat-icon>
+            </button>
+            <span style="font-size: 22px;color: rgb(244,67,54); font-weight: bolder; margin-top: 15px;">{{ totalDespesas | currency:'BRL'}}</span>
+
+          </span>
+
+          <span>
+            <button class="mdb-30" mat-mini-fab color="accent">
+              <mat-icon >show_chart</mat-icon>
+            </button>
+            <span style="font-size: 22px;color: rgb(255,215,64); font-weight: bolder; margin-top: 15px;">{{ totalInvestimentos | currency:'BRL'}}</span>
+          </span>
+        </div>
+      </span>
+
 
       <ng-template #elseBlock>
         <cdk-virtual-scroll-viewport itemSize="94">
@@ -253,7 +276,7 @@
               <div *ngIf="column === 'Valor'; then filtrarElseBlock3; else filtrarElseBlock4">
             </div>
             <ng-template #filtrarElseBlock3><button mat-menu-item>{{ item | currency:'BRL'}}</button> </ng-template>
-            <ng-template #filtrarElseBlock4><button mat-menu-item>{{ item }}</button> </ng-template>
+            <ng-template #filtrarElseBlock4><button mat-menu-item>{{ item | Tipo}}</button> </ng-template>
             </ng-template>
 
             </div>

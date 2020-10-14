@@ -24,6 +24,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { AuthenticationService } from './services/authentication.service';
 import { appInitializer } from './helpers/app.initializer';
+import { TipoPipe } from './lancamentos/pipes/tipo.pipe';
 
 
 registerLocaleData(localePtBr);
@@ -35,6 +36,7 @@ registerLocaleData(localePtBr);
     FocusNextDirective,
     LoginComponent,
     LancamentosComponent,
+    TipoPipe,
   ],
   imports: [
     CommonModule,

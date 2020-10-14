@@ -8,9 +8,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   justify-content: space-around;
 }
 
+.footer-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin change-button-size($btnsize,$fontsize) {
+  height: $btnsize;
+  width: $btnsize;
+  line-height: $btnsize;
+  span{
+      height: $btnsize;
+      padding: 0px !important;
+      i{
+          font-size: $fontsize;
+      }
+  }
+}
+.mat-mini-fab.mdb-25{
+  @include change-button-size(25px, 10px);
+}
+.mat-mini-fab.mdb-30{
+  @include change-button-size(30px, 15px);
+}
+.mat-mini-fab.mdb-40{
+  @include change-button-size(40px, 20px);
+}
+
 .center-and-align{
   padding-top: 20px;
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

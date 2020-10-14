@@ -46,9 +46,9 @@ export class LancamentosComponent implements OnInit {
   editRowDialogRef: MatDialogRef<EditRowComponent>;
   currentActiveSort: string;
   currentActiveFilter: string;
-  totalReceitas: number;
-  totalDespesas: number;
-  totalInvestimentos: number;
+  totalReceitas: number = 0;
+  totalDespesas: number = 0;
+  totalInvestimentos: number = 0;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -83,8 +83,7 @@ export class LancamentosComponent implements OnInit {
     this.loadData().then(() =>{
       this.cdk_empty = false;
       this.loading = false;
-      // this.viewport.scrollToIndex(this.Entradas.length)
-      // FUNCTION TO SCROLL TO LAST ELEMENT HERE
+
     }).catch(err => console.log(err))
 
 
@@ -205,7 +204,7 @@ export class LancamentosComponent implements OnInit {
     if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
 
     this.server.add_List(input_json,'main_table_query').then(res => {
-
+      this.updateSoma();
     });
 
   }
@@ -280,7 +279,7 @@ export class LancamentosComponent implements OnInit {
 
 
         this.server.update_List(this.Entradas[row],'main_table_query').then(() => {
-
+          this.updateSoma();
           sub.unsubscribe();
         });
       }
@@ -291,6 +290,7 @@ export class LancamentosComponent implements OnInit {
     this.Entradas = this.Entradas.filter((item, index) => index !== row)
     this.server.delete_List(item,'main_table_query').then(() =>{
       if (this.Entradas.length == 0) this.cdk_empty = true;
+      this.updateSoma();
     })
    }
 
@@ -339,12 +339,13 @@ export class LancamentosComponent implements OnInit {
 
   async filterBy(column: string, selected: string) {
     this.loading = true
-    this.activeFilters[column] = selected;
+    this.activeFilters[column] = String(selected);
     this.Entradas = [];
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_CF').then(async (element: any) => {
       await element.forEach(entrada => {
         this.Entradas = [...this.Entradas, entrada]
       });
+      this.updateSoma();
     })
     this.loading = false
 
@@ -358,6 +359,8 @@ export class LancamentosComponent implements OnInit {
       await element.forEach(entrada => {
         this.Entradas = [...this.Entradas, entrada]
       });
+      this.updateSoma();
+      this.viewport.scrollToIndex(9999)
     })
     this.loading = false
 
@@ -372,6 +375,7 @@ export class LancamentosComponent implements OnInit {
       await element.forEach(entrada => {
         this.Entradas = [...this.Entradas, entrada]
       });
+      this.updateSoma();
     })
     this.loading = false
 
@@ -387,8 +391,6 @@ export class LancamentosComponent implements OnInit {
         DATAI = element[0].DATAI;
         DATAF = element[0].DATAF;
       });
-
-      console.log(DATAI,DATAF);
 
       //Total Receitas
       await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_receitas').then((total: any) => {
