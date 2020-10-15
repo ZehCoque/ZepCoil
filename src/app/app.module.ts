@@ -24,10 +24,10 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { AuthenticationService } from './services/authentication.service';
 import { appInitializer } from './helpers/app.initializer';
-import { TipoPipe } from './lancamentos/pipes/tipo.pipe';
+import { TipoPipe } from './pipes/tipo.pipe';
 import { NovoCCComponent } from './novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
-
+import { UppercaseDirective } from './directives/uppercase.directive';
 
 registerLocaleData(localePtBr);
 
@@ -41,6 +41,7 @@ registerLocaleData(localePtBr);
     TipoPipe,
     NovoCCComponent,
     NovaPessoaComponent,
+    UppercaseDirective,
   ],
   imports: [
     CommonModule,
