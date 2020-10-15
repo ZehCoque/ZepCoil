@@ -18,6 +18,8 @@ import {MatGridListModule} from '@angular/material/grid-list'
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 
 
 export const MY_FORMATS = {
@@ -53,7 +55,9 @@ export const MY_FORMATS = {
     MatDividerModule,
     ScrollingModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSidenavModule,
+    MatListModule
   ],
   exports: [
     MatButtonModule,
@@ -71,7 +75,9 @@ export const MY_FORMATS = {
     MatDividerModule,
     ScrollingModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSidenavModule,
+    MatListModule
   ],
   providers: [
     {

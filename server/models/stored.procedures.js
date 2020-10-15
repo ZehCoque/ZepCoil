@@ -1,22 +1,19 @@
 const express = require('express');
 const auth = require('./auth.js');
-
-const database = 'zepcoil.'
+const query_builder = require('./query_builder.js')
 
 function views_router() {
 
   const router = express.Router();
 
   router.post('/total_receitas', function (req, res, next) {
-
-    let DATAI = req.body.DATAI.substring(0,10);
-    let DATAF = req.body.DATAF.substring(0,10);
-
-    console.log('CALL SOMAR(' + DATAI + ',' + DATAF + ')')
+    let database = auth.db_conn().config.database + '.'
+    req.body.active_filters.Tipo = '';
+    let query_string = query_builder.filter('WHERE Tipo = \'0\'',req.body.active_filters);
 
     auth.db_conn().query(
-      'CALL SOMAR(?,?)',
-      [DATAI, DATAF],
+      'Select SUM(Valor) AS TOTALR from ' + database + 'lançamentos ' + query_string,
+      [],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -29,13 +26,13 @@ function views_router() {
   });
 
   router.post('/total_despesas', function (req, res, next) {
-
-    let DATAI = req.body.DATAI.substring(0,10);
-    let DATAF = req.body.DATAF.substring(0,10);
+    let database = auth.db_conn().config.database + '.'
+    req.body.active_filters.Tipo = '';
+    let query_string = query_builder.filter('WHERE Tipo = \'1\'',req.body.active_filters);
 
     auth.db_conn().query(
-      'CALL SOMAD(?,?)',
-      [DATAI, DATAF],
+      'Select SUM(Valor) AS TOTALD from ' + database + 'lançamentos ' + query_string,
+      [],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -48,13 +45,13 @@ function views_router() {
   });
 
   router.post('/total_investimentos', function (req, res, next) {
-
-    let DATAI = req.body.DATAI.substring(0,10);
-    let DATAF = req.body.DATAF.substring(0,10);
+    let database = auth.db_conn().config.database + '.'
+    req.body.active_filters.Tipo = '';
+    let query_string = query_builder.filter('WHERE Tipo = \'2\'',req.body.active_filters);
 
     auth.db_conn().query(
-      'CALL SOMAI(?,?)',
-      [DATAI,DATAF],
+      'Select SUM(Valor) AS TOTALI from ' + database + 'lançamentos ' + query_string,
+      [],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -67,23 +64,9 @@ function views_router() {
   });
 
   router.post('/max_min_dates', function (req, res, next) {
-    let query_string = 'WHERE 1=1';
+    let database = auth.db_conn().config.database + '.';
 
-    let active_filters = req.body.active_filters;
-
-    for (var key in active_filters) {
-      if (active_filters.hasOwnProperty(key)) {
-          if (active_filters[key] !== ''){
-            let value;
-            if (key === 'Data_Entrada' || key === 'Vencimento'){
-              value = active_filters[key].substring(0,10);
-            }else {
-              value = active_filters[key];
-            }
-            query_string = query_string + ' AND ' + key + ' = \'' + value + '\'';
-          }
-      }
-    }
+    let query_string = query_builder.filter('WHERE 1=1',req.body.active_filters)
 
     auth.db_conn().query(
       'Select MAX(Data_Entrada) as DATAF, MIN(Data_Entrada) as DATAI from ' + database + 'lançamentos ' + query_string,

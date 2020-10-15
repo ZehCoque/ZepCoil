@@ -25,6 +25,8 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { AuthenticationService } from './services/authentication.service';
 import { appInitializer } from './helpers/app.initializer';
 import { TipoPipe } from './lancamentos/pipes/tipo.pipe';
+import { NovoCCComponent } from './novo.cc/novo.cc.component';
+import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
 
 
 registerLocaleData(localePtBr);
@@ -37,6 +39,8 @@ registerLocaleData(localePtBr);
     LoginComponent,
     LancamentosComponent,
     TipoPipe,
+    NovoCCComponent,
+    NovaPessoaComponent,
   ],
   imports: [
     CommonModule,

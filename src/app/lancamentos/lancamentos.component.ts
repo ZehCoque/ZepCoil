@@ -385,26 +385,20 @@ export class LancamentosComponent implements OnInit {
 
     let promise = new Promise(async (resolve, reject) => {
 
-      let DATAI, DATAF;
-
-      await this.server.get_List_CF({ active_filters: this.activeFilters},'max_min_dates').then(async (element: any) => {
-        DATAI = element[0].DATAI;
-        DATAF = element[0].DATAF;
-      });
-
       //Total Receitas
-      await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_receitas').then((total: any) => {
-        this.totalReceitas = total[0][0].TOTALR;
+      await this.server.get_List_CF({active_filters : this.activeFilters},'total_receitas').then((total: any) => {
+        console.log(total)
+        this.totalReceitas = total[0].TOTALR;
       }).catch(err => reject(err));
 
       //Total Despesas
-      await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_despesas').then((total: any) => {
-        this.totalDespesas = total[0][0].TOTALD;
+      await this.server.get_List_CF({active_filters : this.activeFilters},'total_despesas').then((total: any) => {
+        this.totalDespesas = total[0].TOTALD;
       }).catch(err => reject(err));
 
       //Total Investimentos
-      await this.server.get_List_CF({DATAI:DATAI, DATAF:DATAF},'total_investimentos').then((total: number) => {
-        this.totalInvestimentos = total[0][0].TOTALI;
+      await this.server.get_List_CF({active_filters : this.activeFilters},'total_investimentos').then((total: number) => {
+        this.totalInvestimentos = total[0].TOTALI;
       }).catch(err => reject(err));
 
       if (this.totalInvestimentos === null) this.totalInvestimentos = 0;
