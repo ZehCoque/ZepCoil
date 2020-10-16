@@ -4,6 +4,7 @@
 $my-app-primary: mat-palette($mat-blue,700,500,900);
 $my-app-accent:  mat-palette($mat-amber,A200);
 $my-app-warn:    mat-palette($mat-red);
+$my-app-grey:    mat-palette($mat-grey,500);
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 @include angular-material-theme($my-app-theme);
 
@@ -14,4 +15,8 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 .mat-darker-primary {
   color: mat-color($my-app-primary,darker);
+}
+
+.mat-grey {
+  color: mat-color($my-app-grey)
 }

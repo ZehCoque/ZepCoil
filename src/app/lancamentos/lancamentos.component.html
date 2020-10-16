@@ -109,7 +109,7 @@
 
         <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas, let i=index"  >
 
-          <mat-card class="card" (contextmenu)="onContextMenu($event, Entrada, i)">
+          <mat-card (contextmenu)="onContextMenu($event, Entrada, i)">
             <mat-card-content>
               <div class="unselectable-line display-flex" style=" align-items: center">
                 <div class="el-tag--plain el-col-1">

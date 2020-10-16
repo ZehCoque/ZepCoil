@@ -29,7 +29,7 @@ export class AppComponent {
 
   openCCDialog(): void {
     const dialogRef = this.dialog.open(NovoCCComponent, {
-      width: '250px',
+      width: '500px',
       data: {}
     });
 
@@ -41,7 +41,7 @@ export class AppComponent {
 
   openPessoaDialog(): void {
     const dialogRef = this.dialog.open(NovaPessoaComponent, {
-      width: '250px',
+      width: '1000px',
       data: {}
     });
 
