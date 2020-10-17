@@ -28,6 +28,7 @@ import { TipoPipe } from './pipes/tipo.pipe';
 import { NovoCCComponent } from './novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
 import { UppercaseDirective } from './directives/uppercase.directive';
+import { ErrormessagePipe } from './pipes/errormessage.pipe';
 
 registerLocaleData(localePtBr);
 
@@ -42,6 +43,7 @@ registerLocaleData(localePtBr);
     NovoCCComponent,
     NovaPessoaComponent,
     UppercaseDirective,
+    ErrormessagePipe,
   ],
   imports: [
     CommonModule,

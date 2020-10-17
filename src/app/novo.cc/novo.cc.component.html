@@ -1,7 +1,33 @@
 <form focusNext [formGroup]="novoCCForm">
+  <div class="header-padding">
+    <div class="unselectable-line display-flex header-row" style=" align-items: center; ">
 
+      <div class="el-tag--plain" style="width: 100%;">
+        Centro de Custo
+      </div>
+    </div>
+  </div>
 <div>
-    <mat-form-field style="width: 100%;text-align: center;" class="form-field">
+
+  <div style="text-align: center; padding-top: 10px;">
+    <mat-form-field style="width: 30%;text-align: center;" class="form-field noselect">
+      <mat-label>Abreviação</mat-label>
+      <input appUppercase class="noselect"  matInput formControlName="Abreviacao" [errorStateMatcher]="errorMatcher"   >
+
+      <mat-error *ngIf="novoCCForm.get('Abreviacao').hasError('required')" >
+        É necessário inserir uma abreviação.
+      </mat-error>
+
+      <mat-error *ngIf="novoCCForm.get('Abreviacao').hasError('pattern')" >
+        A abreviação deve ter apenas 3 caractéres.
+      </mat-error>
+
+      <mat-hint> </mat-hint>
+    </mat-form-field>
+
+    </div>
+
+    <mat-form-field style="width: 100%;text-align: center; " class="form-field">
       <mat-label>Descrição</mat-label>
       <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoCCForm.get('Descricao').hasError('required')" >
@@ -10,27 +36,14 @@
     </mat-form-field>
   </div>
 
-  <div style="text-align: center;">
-  <mat-form-field style="width: 30%;text-align: center;" class="form-field noselect">
-    <mat-label>Abreviação</mat-label>
-    <input appUppercase class="noselect"  matInput formControlName="Abreviacao" [errorStateMatcher]="errorMatcher"   >
-
-    <mat-error *ngIf="novoCCForm.get('Abreviacao').hasError('required')" >
-      É necessário inserir uma abreviação.
-    </mat-error>
-
-    <mat-error *ngIf="novoCCForm.get('Abreviacao').hasError('pattern')" >
-      A abreviação deve ter apenas 3 letras.
-    </mat-error>
-
-    <mat-hint> </mat-hint>
-  </mat-form-field>
-
+  <div *ngIf="error_CC" style="width: 100%;text-align: center; ">
+    <mat-error>{{error_CC | errorMessage }} </mat-error>
   </div>
+
   <mat-divider style="padding-bottom: 10px;"></mat-divider>
   <form focusNext [formGroup]="divCCForm">
     <div style="text-align: center;">
-      <mat-form-field style="width: 45%;text-align: center;" class="form-field noselect">
+      <mat-form-field style="text-align: center;" class="form-field noselect">
         <mat-label>Divisão de Custo</mat-label>
         <input appUppercase class="noselect"  matInput formControlName="Div_CC" [errorStateMatcher]="errorMatcher"   >
 
@@ -40,15 +53,6 @@
 
       </mat-form-field>
 
-      <mat-form-field style="width: 45%;text-align: center;" class="form-field noselect">
-        <mat-label>Descricão</mat-label>
-        <input appUppercase class="noselect"  matInput formControlName="DescricaoDivCC" [errorStateMatcher]="errorMatcher"   >
-
-        <mat-error *ngIf="divCCForm.get('DescricaoDivCC').hasError('required')" >
-          É necessário inserir uma descrição.
-        </mat-error>
-      </mat-form-field>
-
       </div>
       <div class="button-row">
       <button mat-mini-fab color="primary" [disabled]="!divCCForm.valid" (click)="addDivCC()">
@@ -56,29 +60,24 @@
       </button>
       </div>
   </form>
+
+
   <div class="header-padding">
     <div class="unselectable-line display-flex header-row" style=" align-items: center">
 
-      <div class="el-tag--plain" style="width: 30%;">
-        Abreviação
-      </div>
-
-      <div class="el-tag--plain" style="width: 60%;">
-        Descrição
+      <div class="el-tag--plain" style="width: 100%;">
+        Divisões de custo
       </div>
     </div>
   </div>
 
   <cdk-virtual-scroll-viewport itemSize="56">
-    <mat-list *cdkVirtualFor="let item of divCCAray, let i=index">
+    <mat-list *cdkVirtualFor="let item of divCCArray, let i=index">
       <mat-list-item class="unselectable-line" style="align-items: center;">
-          <div class="el-tag--plain" style="width: 30%;">
-            {{item.Abreviacao}}
+          <div class="el-tag--plain" style="width: 90%;">
+            {{item.Divisao}}
           </div>
-          <div class="el-tag--plain" style="width: 60%;">
-            {{item.Descricao}}
-          </div>
-          <button mat-icon-button color="grey" style="width: 10%;">
+          <button mat-icon-button color="grey" style="width: 10%;" (click)="removeDivCC(i)">
             <mat-icon >delete</mat-icon>
           </button>
       </mat-list-item>
@@ -86,11 +85,13 @@
 
    </cdk-virtual-scroll-viewport>
 
-  <mat-divider></mat-divider>
+   <div *ngIf="error_div_CC" style="width: 100%;text-align: center; ">
+    <mat-error>{{error_div_CC | errorMessage }} </mat-error>
+  </div>
 
 <div class="button-row">
-  <button mat-raised-button  (click)='onSubmit()' [disabled]="!novoCCForm.valid">Concluir</button>
-  <button mat-raised-button   (click)='onCancel()' type="button">Limpar</button>
+  <button mat-raised-button  (click)='onSubmit()' [disabled]="!novoCCForm.valid || divCCArray.length == 0 && !error_CC && !error_div_CC">Concluir</button>
+  <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
 </div>
 
 
