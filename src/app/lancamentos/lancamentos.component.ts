@@ -11,6 +11,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
 import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
+import { newDataTrackerService } from '../services/new-data-tracker.service';
 
 @Component({
   selector: 'app-lancamentos',
@@ -53,7 +54,8 @@ export class LancamentosComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     private server: ServerService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private newDataEmitter: newDataTrackerService) { }
 
   ngOnInit()  {
 
@@ -86,7 +88,9 @@ export class LancamentosComponent implements OnInit {
 
     }).catch(err => console.log(err))
 
-
+    this.newDataEmitter.currentData.subscribe(() => {
+      this.loadData();
+    })
   }
 
   loadData(){

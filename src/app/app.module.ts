@@ -23,6 +23,7 @@ import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { AuthenticationService } from './services/authentication.service';
+import { newDataTrackerService } from './services/new-data-tracker.service';
 import { appInitializer } from './helpers/app.initializer';
 import { TipoPipe } from './pipes/tipo.pipe';
 import { NovoCCComponent } from './novo.cc/novo.cc.component';
@@ -73,6 +74,7 @@ registerLocaleData(localePtBr);
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    newDataTrackerService
   ],
   bootstrap: [AppComponent]
 })

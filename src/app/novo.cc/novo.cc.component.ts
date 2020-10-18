@@ -4,11 +4,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef } from '@angular/material/dialog';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
-//import { UppercaseDirective } from '../directives/uppercase.directive'
-
-interface div_CC{
-  Divisao: string
-}
 
 @Component({
   selector: 'app-novo.cc',
@@ -20,7 +15,7 @@ export class NovoCCComponent implements OnInit {
   novoCCForm: FormGroup;
   divCCForm: FormGroup;
   errorMatcher: ErrorMatcherDirective;
-  divCCArray: Array<div_CC> = new Array();
+  divCCArray: Array<String> = new Array();
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
 
@@ -36,7 +31,7 @@ export class NovoCCComponent implements OnInit {
     this.novoCCForm = this.formBuilder.group({
       Abreviacao: new FormControl('', Validators.compose([
         Validators.required,
-        Validators.pattern("^[A-Z1-9]{3}$")
+        Validators.pattern("^[a-zA-Z1-9]{3}$")
       ])),
       Descricao: new FormControl('', Validators.required),
     });
@@ -48,17 +43,18 @@ export class NovoCCComponent implements OnInit {
   }
 
   addDivCC(){
-    let json: div_CC = {
-      Divisao: this.divCCForm.get('Div_CC').value
-    }
+
+    this.error_div_CC = '';
+
+    let Divisao = this.divCCForm.get('Div_CC').value
 
     this.divCCForm.reset();
     this.divCCForm.untouched;
 
-    let hasDuplicate = [...this.divCCArray,json].some((val, i) => [...this.divCCArray,json].indexOf(val) !== i);
-    console.log([...this.divCCArray,json])
+    let hasDuplicate = this.hasDupes([...this.divCCArray,Divisao]);
+
     if (!hasDuplicate){
-      this.divCCArray = [...this.divCCArray,json];
+      this.divCCArray = [...this.divCCArray,Divisao];
 
       setTimeout(() => {
         this.viewport.scrollToIndex(this.viewport.getDataLength());
@@ -69,6 +65,10 @@ export class NovoCCComponent implements OnInit {
 
     }
 
+  }
+
+  hasDupes(array) {
+    return new Set(array).size !== array.length
   }
 
   removeDivCC(id:number){
@@ -90,14 +90,14 @@ export class NovoCCComponent implements OnInit {
 
       await this.divCCArray.forEach(async element => {
         console.log(element)
-        await this.server.add_List({Nome: CC.Nome, Divisao: element.Divisao},'div_cc_query_add')
+        await this.server.add_List({Nome: CC.Nome, Divisao: element},'div_cc_query_add')
         .catch(error => {
           console.log(error);
           this.error_div_CC = error;
         });
       });
 
-      this.dialogRef.close();
+      this.dialogRef.close(CC.Descricao);
 
     }).catch(error => {
       console.log(error);

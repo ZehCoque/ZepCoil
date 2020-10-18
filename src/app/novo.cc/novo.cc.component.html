@@ -10,7 +10,7 @@
 <div>
 
   <div style="text-align: center; padding-top: 10px;">
-    <mat-form-field style="width: 30%;text-align: center;" class="form-field noselect">
+    <mat-form-field style="width: 30%;text-align: center;" class="noselect">
       <mat-label>Abreviação</mat-label>
       <input appUppercase class="noselect"  matInput formControlName="Abreviacao" [errorStateMatcher]="errorMatcher"   >
 
@@ -41,9 +41,9 @@
   </div>
 
   <mat-divider style="padding-bottom: 10px;"></mat-divider>
-  <form focusNext [formGroup]="divCCForm">
+  <form [formGroup]="divCCForm">
     <div style="text-align: center;">
-      <mat-form-field style="text-align: center;" class="form-field noselect">
+      <mat-form-field style="text-align: center;" class="noselect">
         <mat-label>Divisão de Custo</mat-label>
         <input appUppercase class="noselect"  matInput formControlName="Div_CC" [errorStateMatcher]="errorMatcher"   >
 
@@ -75,7 +75,7 @@
     <mat-list *cdkVirtualFor="let item of divCCArray, let i=index">
       <mat-list-item class="unselectable-line" style="align-items: center;">
           <div class="el-tag--plain" style="width: 90%;">
-            {{item.Divisao}}
+            {{item}}
           </div>
           <button mat-icon-button color="grey" style="width: 10%;" (click)="removeDivCC(i)">
             <mat-icon >delete</mat-icon>

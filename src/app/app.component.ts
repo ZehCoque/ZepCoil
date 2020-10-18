@@ -5,6 +5,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { User } from './classes/user';
 import { NovoCCComponent } from './novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
+import { newDataTrackerService } from './services/new-data-tracker.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent {
   user: User;
 
   constructor(private authenticationService: AuthenticationService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private newDataEmitter: newDataTrackerService) {
 
   }
 
@@ -33,10 +35,9 @@ export class AppComponent {
       data: {}
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.lengh !== 0) this.newDataEmitter.newDataEmit(result);
+    });
   }
 
   openPessoaDialog(): void {
