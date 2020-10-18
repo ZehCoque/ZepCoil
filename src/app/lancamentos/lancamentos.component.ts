@@ -12,6 +12,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
 import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
+import { NovoCCComponent } from '../novo.cc/novo.cc.component';
+import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
 
 @Component({
   selector: 'app-lancamentos',
@@ -89,36 +91,41 @@ export class LancamentosComponent implements OnInit {
     }).catch(err => console.log(err))
 
     this.newDataEmitter.currentData.subscribe(() => {
-      this.loadData();
+      this.loading = true;
+      this.loadData()
+      .then(() => this.loading = false)
+      .catch((error) => console.log(error));
     })
   }
 
   loadData(){
     let promise = new Promise(async (resolve, reject) => {
+    this.CC = new Array();
+    this.div_CC = new Array();
+    this.Pessoa = new Array();
+    //GET ALL ENTRADAS
+    await this.server.get_List('main_table_query').then(async (response: any) => {
+        await response.forEach( (element:Entrada) => {
+          this.Entradas = [...this.Entradas, element];
+        });
+      }).catch(err => reject(err));
 
-      //GET ALL ENTRADAS
-      await this.server.get_List('main_table_query').then(async (response: any) => {
-          await response.forEach( (element:Entrada) => {
-            this.Entradas = [...this.Entradas, element];
-          });
-        }).catch(err => reject(err));
+      //GET ALL CC
+      await this.server.get_List('cc_query').then(async (response: any) => {
+        await response.forEach( (CC:CC) => {
+          this.CC = [...this.CC, CC];
+        });
+      }).catch(err => reject(err));
 
-        //GET ALL CC
-        await this.server.get_List('cc_query').then(async (response: any) => {
-          await response.forEach( (CC:CC) => {
-            this.CC = [...this.CC, CC];
-          });
-        }).catch(err => reject(err));
+      await this.server.get_List('pessoa_query').then(async (response: any) => {
+        await response.forEach( (Pessoa:Pessoa) => {
+          this.Pessoa = [...this.Pessoa, Pessoa];
+        });
+      }).catch(err => reject(err));
 
-        await this.server.get_List('pessoa_query').then(async (response: any) => {
-          await response.forEach( (Pessoa:Pessoa) => {
-            this.Pessoa = [...this.Pessoa, Pessoa];
-          });
-        }).catch(err => reject(err));
+      await this.updateSoma()
 
-        await this.updateSoma()
-
-        resolve();
+      resolve();
 
     })
 
@@ -413,6 +420,29 @@ export class LancamentosComponent implements OnInit {
     })
 
     return promise;
+  }
+
+  openCCDialog(): void {
+    const dialogRef = this.dialog.open(NovoCCComponent, {
+      width: '500px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.lengh !== 0) this.newDataEmitter.newDataEmit(result);
+    });
+  }
+
+  openPessoaDialog(): void {
+    const dialogRef = this.dialog.open(NovaPessoaComponent, {
+      width: '1000px',
+      data: {}
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   this.animal = result;
+    // });
   }
 }
 

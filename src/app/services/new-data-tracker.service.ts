@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class newDataTrackerService {
 
-  private newDataSource = new BehaviorSubject({});
+  private newDataSource = new BehaviorSubject('default');
   currentData = this.newDataSource.asObservable();
 
   constructor() { }

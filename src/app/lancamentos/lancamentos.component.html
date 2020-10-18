@@ -377,7 +377,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field style="width: 35%;" class="form-field">
+        <mat-form-field style="width: 40%;" class="form-field">
           <mat-label>Data de vencimento</mat-label>
           <input matInput formControlName="Vencimento" [matDatepicker]="picker2">
           <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -387,7 +387,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field style="width: 45%;" class="form-field">
+        <mat-form-field style="width: 35%;" class="form-field">
           <mat-label>Centro de Custo</mat-label>
           <mat-select formControlName="CC">
           <mat-option (click)="get_div_cc(cc.Nome)" *ngFor="let cc of CC" [value]="cc">
@@ -399,7 +399,11 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field  style="width: 45%;" class="form-field">
+      <button type="button" mat-icon-button color="primary" (click)="openCCDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <mat-form-field  style="width: 40%;" class="form-field">
         <mat-label>Divisão Centro de Custo</mat-label>
         <mat-select [disabled]="!div_cc_ready" formControlName="Div_CC">
         <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
@@ -411,7 +415,7 @@
       </mat-error>
     </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0" style="width: 40%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0" style="width: 35%;" class="form-field">
       <mat-label>Origem</mat-label>
       <mat-select formControlName="Pessoa">
         <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
@@ -420,7 +424,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 40%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 35%;" class="form-field">
       <mat-label>Destinatário</mat-label>
       <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
@@ -428,6 +432,10 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <button *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 0" type="button" mat-icon-button color="primary" (click)="openPessoaDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
 
   <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 2" style="width: 40%;" class="form-field">
     <mat-label>Nº do Investimento</mat-label>

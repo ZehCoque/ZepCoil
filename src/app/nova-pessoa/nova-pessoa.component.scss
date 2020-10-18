@@ -1,0 +1,16 @@
+.header-row{
+
+  font-weight: bold;
+  font-size: 36px; /* Some tweener fallback that doesn't look awful */
+  font-size: 1.1vw;
+  padding-left: 16px;
+  padding-right: 27px;
+}
+
+.header-padding{
+  border: 1px solid #d1e5ef;
+  border-radius: 5px;
+  background-color: rgba(242,249,252,1);
+  padding-bottom: 7.5px;
+  padding-top: 7.5px;
+}

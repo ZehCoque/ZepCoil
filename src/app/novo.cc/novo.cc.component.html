@@ -27,7 +27,7 @@
 
     </div>
 
-    <mat-form-field style="width: 100%;text-align: center; " class="form-field">
+    <mat-form-field style="width: 100%;text-align: center; padding-top: 15px;" class="form-field">
       <mat-label>Descrição</mat-label>
       <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoCCForm.get('Descricao').hasError('required')" >

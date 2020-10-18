@@ -2,9 +2,15 @@
   <mat-sidenav #sidenav>
     <mat-nav-list>
 
-      <a mat-list-item (click)="openCCDialog();sidenav.toggle()"> <mat-icon>apartment</mat-icon> Novo Centro de Custo </a>
-      <a mat-list-item (click)="openPessoaDialog();sidenav.toggle()"> <mat-icon>person</mat-icon> Nova Pessoa </a>
-      <a mat-list-item (click)="sidenav.toggle()" mat-list-item><mat-icon>close</mat-icon> Fechar menu</a>
+      <a mat-list-item (click)="openCCDialog();sidenav.toggle()">
+        <mat-icon>apartment</mat-icon>
+        Gerenciar Centros de Custo </a>
+      <a mat-list-item (click)="openPessoaDialog();sidenav.toggle()">
+        <mat-icon>person</mat-icon>
+        Gerenciar Pessoas </a>
+      <a mat-list-item (click)="sidenav.toggle()" mat-list-item>
+        <mat-icon>close</mat-icon>
+        Fechar menu</a>
 
     </mat-nav-list>
   </mat-sidenav>

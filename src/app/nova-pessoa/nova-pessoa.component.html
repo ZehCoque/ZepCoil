@@ -1,1 +1,90 @@
-<p>nova-pessoa works!</p>
+<form focusNext [formGroup]="novaPessoaForm">
+  <div class="header-padding">
+    <div class="unselectable-line display-flex header-row" style=" align-items: center; ">
+
+      <div class="el-tag--plain" style="width: 100%;">
+        Nova Pessoa
+      </div>
+    </div>
+  </div>
+<div>
+  <div class="formulario">
+  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+    <mat-form-field style="width: 30%;text-align: center;" class="noselect form-field">
+      <mat-label>Nome</mat-label>
+      <input class="noselect"  matInput formControlName="Nome" [errorStateMatcher]="errorMatcher"   >
+
+      <mat-error *ngIf="novaPessoaForm.get('Nome').hasError('required')" >
+        É necessário inserir um nome.
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field style="width: 30%;text-align: center; padding-top: 10px;" class="form-field">
+      <mat-label>Sobrenome</mat-label>
+      <input matInput formControlName="Sobrenome" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novaPessoaForm.get('Sobrenome').hasError('required')" >
+        É necessário inserir um sobrenome.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 20%;" class="form-field">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="Tipo">
+        <mat-option *ngFor="let tipo of Tipos" [value]="tipo">
+          {{ tipo }}
+         </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novaPessoaForm.get('Tipo').hasError('required')" >
+      É necessário escolher um tipo.
+    </mat-error>
+  </mat-form-field>
+
+  </div>
+
+  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+    <mat-form-field style="width: 30%;text-align: center;" class="noselect form-field">
+      <mat-label>CPF/CNPJ</mat-label>
+      <input  class="noselect" matInput formControlName="CPF_CNPJ">
+      <mat-error *ngIf="novaPessoaForm.get('CPF_CNPJ').hasError('pattern')" >
+        Apenas números podem ser inseridos aqui.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 20%;text-align: center; padding-top: 10px;" class="form-field">
+      <mat-label>Banco</mat-label>
+      <input matInput formControlName="Banco">
+
+    </mat-form-field>
+
+    <mat-form-field style="width: 10%;text-align: center; padding-top: 10px;" class="form-field">
+      <mat-label>Agencia</mat-label>
+      <input matInput formControlName="Agencia">
+      <mat-error *ngIf="novaPessoaForm.get('CPF_CNPJ').hasError('pattern')" >
+        Apenas números podem ser inseridos aqui.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 10%;text-align: center; padding-top: 10px;" class="form-field">
+      <mat-label>Conta</mat-label>
+      <input matInput formControlName="Conta">
+      <mat-error *ngIf="novaPessoaForm.get('CPF_CNPJ').hasError('pattern')" >
+        Apenas números podem ser inseridos aqui.
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+</div>
+
+  <div *ngIf="error" style="width: 100%;text-align: center; ">
+    <mat-error>{{error | errorMessage }} </mat-error>
+  </div>
+</div>
+<div class="button-row">
+  <button mat-raised-button  (click)='onSubmit()' [disabled]="!novaPessoaForm.valid">Concluir</button>
+  <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
+</div>
+
+
+</form>
