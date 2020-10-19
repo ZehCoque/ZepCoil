@@ -22,7 +22,6 @@ function div_CC_router() {
   });
 
   router.post('/div_cc_query_add', function (req, res, next) {
-    console.log(req.body)
     let database = auth.db_conn().config.database + '.';
     auth.db_conn().query(
       'INSERT INTO ' + database + 'divisao_cc (`Nome`,`Divisao`) VALUES (?,?)',

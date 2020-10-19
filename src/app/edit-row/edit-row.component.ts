@@ -62,8 +62,6 @@ export class EditRowComponent implements OnInit {
       Pessoa: new FormControl(this.current_data.Pessoa)
     });
 
-    console.log(this.editedEntryForm.get("Data_Entrada").value);
-
     this.selectType(this.current_data.Tipo);
     this.selectResp(this.current_data.Responsavel);
 
@@ -145,7 +143,6 @@ export class EditRowComponent implements OnInit {
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
-    console.log(numberValue)
     numberValue = [numberValue.slice(0, numberValue.length - 2), '.', numberValue.slice(numberValue.length - 2)].join('');
     if (numberValue.charAt(0) == '0'){
       numberValue = numberValue.slice(1);

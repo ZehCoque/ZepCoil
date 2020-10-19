@@ -89,7 +89,6 @@ export class NovoCCComponent implements OnInit {
     this.server.add_List(CC,'cc_query_add').then(async() => {
 
       await this.divCCArray.forEach(async element => {
-        console.log(element)
         await this.server.add_List({Nome: CC.Nome, Divisao: element},'div_cc_query_add')
         .catch(error => {
           console.log(error);
