@@ -84,13 +84,9 @@ export class LancamentosComponent implements OnInit {
       }
     });
 
-    this.loadData().then(() =>{
-      this.cdk_empty = false;
-      this.loading = false;
-
-    }).catch(err => console.log(err))
-
     this.newDataEmitter.currentData.subscribe(() => {
+      this.onClear();
+      this.cdk_empty = false;
       this.loading = true;
       this.loadData()
       .then(() => this.loading = false)
@@ -221,6 +217,7 @@ export class LancamentosComponent implements OnInit {
   }
 
   onClear(){
+    this.div_cc_ready = false;
     this.newEntryForm.reset();
     this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
     this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());

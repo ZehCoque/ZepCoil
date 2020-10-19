@@ -1,6 +1,6 @@
 const express = require('express');
 const db_connection = require('../connection/dbconnection.js');
-// const main_table_query = require('./main_table_query.js');
+const mysql = require('mysql');
 
 var db_connection_var;
 
@@ -27,7 +27,7 @@ function auth_router(connection) {
     });
 
     router.get('/users', function(req, res) {
-      return getUsers(connection,req, res);
+      return getUsers(db_connection_var,req, res);
     });
 
     router.get('/reconnect', function() {
@@ -195,11 +195,32 @@ function revokeToken(connection, req, res) {
 }
 
 function getUsers(connection,req,res) {
+
+    var auth_connection = mysql.createConnection({
+      connectionLimit : 10,
+      host            : 'localhost',
+      user            : connection.config.username,
+      password        : connection.config.password,
+      database        : 'authenticator',
+    });
+
+    let promise = new Promise((resolve,reject) => {
+      auth_connection.connect(function(err) {
+      console.error('Trying connection to ' + auth_connection.config.host + ' as ' + auth_connection.config.user);
+      if (err) {
+      console.error('Error connecting to remote database: ' + err);
+      reject(err);
+      }
+      console.log('Connected to REMOTE DATABASE as ' + auth_connection.config.user);
+      resolve();
+    });
+    });
+
     if (!isLoggedIn(req)) return unauthorized(res);
 
     var user_list = [];
     var p = new Promise(function(resolve, reject) {
-      connection.query(
+      auth_connection.query(
         'SELECT * FROM account_info',
         [],
         (error, results) => {
@@ -214,11 +235,15 @@ function getUsers(connection,req,res) {
         })
       });
 
-      p.then(users => {
-        users.forEach(user => {
-          user_list.push(user.username);
+      promise.then(() => {
+        p.then(async (users) => {
+          await users.forEach(user => {
+            user_list.push(user.username);
+          })
+          auth_connection.destroy();
         })
-      })
+      }).catch(err => console.log(err))
+
 
     return ok(user_list, res);
 }

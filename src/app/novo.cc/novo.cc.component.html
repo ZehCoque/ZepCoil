@@ -12,7 +12,7 @@
   <div style="text-align: center; padding-top: 10px;">
     <mat-form-field style="width: 30%;text-align: center;" class="noselect">
       <mat-label>Abreviação</mat-label>
-      <input appUppercase class="noselect"  matInput formControlName="Abreviacao" [errorStateMatcher]="errorMatcher"   >
+      <input upperCase class="noselect"  matInput formControlName="Abreviacao" [errorStateMatcher]="errorMatcher"   >
 
       <mat-error *ngIf="novoCCForm.get('Abreviacao').hasError('required')" >
         É necessário inserir uma abreviação.
@@ -45,7 +45,7 @@
     <div style="text-align: center;">
       <mat-form-field style="text-align: center;" class="noselect">
         <mat-label>Divisão de Custo</mat-label>
-        <input appUppercase class="noselect"  matInput formControlName="Div_CC" [errorStateMatcher]="errorMatcher"   >
+        <input upperCase class="noselect"  matInput formControlName="Div_CC" [errorStateMatcher]="errorMatcher"   >
 
         <mat-error *ngIf="divCCForm.get('Div_CC').hasError('required')" >
           É necessário inserir uma divisão de custo.

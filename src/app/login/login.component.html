@@ -29,16 +29,12 @@
         </div>
         <div *ngIf="error">
           <mat-error style="font-size: 1.5vh; text-align: center;">
-            {{error}}
+            {{error | errorMessage}}
           </mat-error>
         </div>
 
         <div class="button-row">
           <button mat-raised-button color="primary" (click)='onSubmit()'>Entrar</button>
-        </div>
-
-        <div class="button-row">
-          <button mat-raised-button color="primary" (click)='signNewUser()'>Cadastrar Novo Usuário</button>
         </div>
 
       </div>
