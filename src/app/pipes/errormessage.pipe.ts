@@ -11,6 +11,10 @@ export class ErrormessagePipe implements PipeTransform {
       return 'Valor inserido já existe'
     }
 
+    if (error_code === 'Not Found'){
+      return 'Usuário e/ou senha inválidos'
+    }
+
     return 'Erro desconhecido';
   }
 

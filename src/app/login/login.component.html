@@ -2,11 +2,11 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="formulario">
-        <div class="el-tag--plain noselect" style="font-weight: bolder; font-size: 20px; margin-bottom: 15px;">
-          Faça login
+        <div class="el-tag--plain noselect" style="font-weight: bolder; font-size: 1.2vw; margin-bottom: 15px;">
+          Login
         </div>
         <div class="input-forms">
-            <mat-form-field class="form-field">
+            <mat-form-field style="width: 80%">
               <mat-label>Usuário</mat-label>
               <input matInput formControlName="username" [errorStateMatcher]="errorMatcher">
               <mat-error *ngIf="loginForm.get('username').hasError('required')" >
@@ -15,7 +15,7 @@
             </mat-form-field>
           </div>
           <div class="input-forms">
-          <mat-form-field class="form-field">
+          <mat-form-field style="width: 80%">
             <mat-label>Senha</mat-label>
             <input type="password"  matInput formControlName="password" [errorStateMatcher]="errorMatcher"   >
 
@@ -34,7 +34,7 @@
         </div>
 
         <div class="button-row">
-          <button mat-raised-button color="primary" (click)='onSubmit()'>Entrar</button>
+          <button mat-raised-button color="primary" style="font-size:1vw" (click)='onSubmit()'>Entrar</button>
         </div>
 
       </div>
