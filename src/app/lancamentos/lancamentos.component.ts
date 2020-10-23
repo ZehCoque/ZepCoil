@@ -85,11 +85,13 @@ export class LancamentosComponent implements OnInit {
     });
 
     this.newDataEmitter.currentData.subscribe(() => {
-      this.onClear();
       this.cdk_empty = false;
       this.loading = true;
       this.loadData()
-      .then(() => this.loading = false)
+      .then(() => {
+        console.log(this.Entradas),
+        this.loading = false;
+      })
       .catch((error) => console.log(error));
     })
   }
@@ -190,6 +192,10 @@ export class LancamentosComponent implements OnInit {
 
   onSubmit(){
 
+    if (this.newEntryForm.get("Pessoa").value == null) {
+      this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
+    }
+
     let input_json: Entrada = {
       Descricao: this.newEntryForm.get("Descricao").value,
       Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
@@ -205,7 +211,7 @@ export class LancamentosComponent implements OnInit {
     }
 
     this.onClear();
-    console.log(input_json)
+
     this.Entradas = [...this.Entradas, input_json]
     this.cdk_empty = false;
     if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
@@ -271,26 +277,14 @@ export class LancamentosComponent implements OnInit {
     }
   }
 
-  editLine(item, row){
+  editLine(row){
     this.editRowDialogRef = this.dialog.open(EditRowComponent,{
       width: "50%",
-      data: item
+      data: this.Entradas[row].ID
     });
 
-    let sub = this.editRowDialogRef.afterClosed().subscribe(editedData => {
-
-      if (editedData != item && editedData != undefined){
-
-        editedData = {...editedData, ...{['ID']: this.Entradas[row].ID}};
-        this.Entradas[row] = editedData;
-        this.Entradas = [...this.Entradas]
-
-
-        this.server.update_List(this.Entradas[row],'main_table_query').then(() => {
-          this.updateSoma();
-          sub.unsubscribe();
-        });
-      }
+    this.editRowDialogRef.afterClosed().subscribe(() => {
+      this.updateSoma();
     });
   }
 
@@ -436,10 +430,9 @@ export class LancamentosComponent implements OnInit {
       data: {}
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.lengh !== 0) this.newDataEmitter.newDataEmit(result);
+    });
   }
 }
 

@@ -3,17 +3,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { Entrada } from '../classes/tableColumns';
+import { CC, div_CC, Entrada, Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
-
-interface CC {
-  numero: Array<number>;
-  nomes: Array<string>
-}
-
-interface Pessoa{
-  nomes: Array<string>;
-}
+import { ServerService } from '../services/server.service';
 
 @Component({
   selector: 'app-edit-row',
@@ -24,55 +16,77 @@ export class EditRowComponent implements OnInit {
 
   Entradas: Array<Entrada> = new Array();
 
-  CC:CC ={
-    numero:[120, 150 ,22, 55],
-    nomes:['CJ', 'Uba']
-  } ;
-
-  Destinatarios:Pessoa ={
-    nomes:['Dest1', 'Dest2', 'Dest3', 'Dest4']
-  } ;
-
   editedEntryForm: FormGroup;
   errorMatcher: ErrorMatcherDirective;
   today = moment().toISOString();
+  CC:Array<CC> = new Array();
+  div_CC:Array<div_CC> = new Array<div_CC>();
+  Pessoa:Array<Pessoa> = new Array();
+  loading: boolean = true;
+  div_cc_ready: boolean;
+
+  current_data: Entrada;
+  error: string;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
-    @Inject(MAT_DIALOG_DATA) public current_data: Entrada,
-    public dialogRef: MatDialogRef<EditRowComponent>) { }
+    @Inject(MAT_DIALOG_DATA) public ID: number,
+    public dialogRef: MatDialogRef<EditRowComponent>,
+    private server: ServerService) { }
 
   ngOnInit()  {
 
-    if (this.current_data.N_Invest === 0) {
-      this.current_data.N_Invest = null;
-    }
-
     this.editedEntryForm = this.formBuilder.group({
-      Descricao: new FormControl(this.current_data.Descricao, Validators.required),
-      Valor: new FormControl(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'), Validators.required),
-      Data_Entrada: new FormControl(this.current_data.Data_Entrada, Validators.required),
-      CC: new FormControl(this.current_data.CC,Validators.required),
-      Div_CC: new FormControl(Number(this.current_data.Div_CC),Validators.required),
-      Vencimento: new FormControl(this.current_data.Vencimento, Validators.required),
-      Observacao: new FormControl(this.current_data.Observacao),
-      N_Invest: new FormControl(this.current_data.N_Invest, Validators.pattern("^[0-9]*$")),
-      Responsavel: new FormControl(this.current_data.Responsavel,Validators.required),
-      Tipo: new FormControl(this.current_data.Tipo,Validators.required),
-      Pessoa: new FormControl(this.current_data.Pessoa)
+      Descricao: new FormControl('', Validators.required),
+      Valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
+      Data_Entrada: new FormControl('', Validators.required),
+      CC: new FormControl('',Validators.required),
+      Div_CC: new FormControl(Number(''),Validators.required),
+      Vencimento: new FormControl('', Validators.required),
+      Observacao: new FormControl(''),
+      N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
+      Responsavel: new FormControl('',Validators.required),
+      Tipo: new FormControl('',Validators.required),
+      Pessoa: new FormControl('')
     });
 
-    this.selectType(this.current_data.Tipo);
-    this.selectResp(this.current_data.Responsavel);
+    this.loadData(this.ID).then(() => {
 
-    this.editedEntryForm.valueChanges.subscribe(val => {
-      if (val.Valor) {
-        let valor = this.getNumberValue(val.Valor);
-        this.editedEntryForm.patchValue({
-          Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
-          {emitEvent:false})
+      console.log(this.current_data)
+      if (this.current_data.N_Invest === 0) {
+        this.current_data.N_Invest = null;
       }
-    });
+
+      this.editedEntryForm.patchValue(this.current_data);
+
+      let current_CC = this.CC.find(value => value.Nome === this.current_data.CC)
+      this.get_div_cc(current_CC.Nome);
+      this.editedEntryForm.controls.CC.setValue(current_CC);
+
+      let current_div_CC: div_CC = {
+        Nome: current_CC.Nome,
+        Divisao: this.current_data.Div_CC
+      };
+
+      this.editedEntryForm.controls.Div_CC.setValue(current_div_CC);
+
+      this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'))
+
+      this.selectType(this.current_data.Tipo);
+      this.selectResp(this.current_data.Responsavel);
+
+      this.editedEntryForm.valueChanges.subscribe(val => {
+        if (val.Valor) {
+          let valor = this.getNumberValue(val.Valor);
+          this.editedEntryForm.patchValue({
+            Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+            {emitEvent:false})
+        }
+      });
+
+      this.loading = false
+    })
+
 
   }
 
@@ -109,7 +123,12 @@ export class EditRowComponent implements OnInit {
 
   onSubmit(){
 
+    if (this.editedEntryForm.get("Pessoa").value == null) {
+      this.editedEntryForm.controls.Pessoa.setValue(new Array(Entrada));
+    }
+
     let edited_json: Entrada = {
+      ID: this.ID,
       Descricao: this.editedEntryForm.get("Descricao").value,
       Data_Entrada: moment(this.editedEntryForm.get("Data_Entrada").value).toDate(),
       CC: this.editedEntryForm.get("CC").value,
@@ -120,10 +139,17 @@ export class EditRowComponent implements OnInit {
       Tipo: this.editedEntryForm.get("Tipo").value,
       Responsavel: this.editedEntryForm.get("Responsavel").value,
       N_Invest: Number(this.editedEntryForm.get("N_Invest").value),
-      Pessoa: this.editedEntryForm.get("Pessoa").value
+      Pessoa: this.editedEntryForm.get("Pessoa").value.Nome
     }
 
-    this.dialogRef.close(edited_json);
+    this.server.update_List(edited_json,'main_table_query').then(() => {
+
+      this.dialogRef.close();
+
+    }).catch((err) => {
+      console.log(err);
+      this.error = err;
+    })
 
   }
 
@@ -143,6 +169,7 @@ export class EditRowComponent implements OnInit {
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
+
     numberValue = [numberValue.slice(0, numberValue.length - 2), '.', numberValue.slice(numberValue.length - 2)].join('');
     if (numberValue.charAt(0) == '0'){
       numberValue = numberValue.slice(1);
@@ -151,6 +178,63 @@ export class EditRowComponent implements OnInit {
       numberValue = 0;
     }
     return numberValue;
+  }
+
+  loadData(ID:number){
+    let promise = new Promise(async (resolve, reject) => {
+    this.CC = new Array();
+    this.div_CC = new Array();
+    this.Pessoa = new Array();
+
+    await this.server.get_Value({ID: ID},'main_table_query_get').then(async (response: any) => {
+      await response.forEach( (Ëntrada:Entrada) => {
+        this.current_data = Ëntrada;
+      });
+    }).catch(err => reject(err));
+
+      //GET ALL CC
+      await this.server.get_List('cc_query').then(async (response: any) => {
+        await response.forEach( (CC:CC) => {
+          this.CC = [...this.CC, CC];
+        });
+      }).catch(err => reject(err));
+
+      await this.server.get_List('pessoa_query').then(async (response: any) => {
+        await response.forEach( (Pessoa:Pessoa) => {
+          this.Pessoa = [...this.Pessoa, Pessoa];
+        });
+      }).catch(err => reject(err));
+
+      resolve();
+
+    })
+
+    return promise;
+  }
+
+  get_div_cc(Nome_CC:String){
+    this.div_CC = new Array<div_CC>();
+    let promise = new Promise((resolve,reject) => {
+      this.server.get_Value({Nome: Nome_CC},'div_cc_query').then(async (response: any) => {
+      await response.forEach( (div_CC:div_CC) => {
+        this.div_CC = [...this.div_CC, div_CC];
+      });
+      resolve(this.div_CC.length);
+    }).catch(err => {
+      this.div_cc_ready = false;
+      reject(err);
+    });
+    })
+
+    promise.then((div_cc_len) => {
+      if (div_cc_len > 0){
+        this.div_cc_ready = true;
+      } else {
+        this.div_cc_ready = false;
+      }
+    }).catch(() => this.div_cc_ready = false)
+
+    return promise
   }
 
 }

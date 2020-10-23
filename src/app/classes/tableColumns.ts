@@ -5,33 +5,36 @@ export class Entrada {
   CC: String;
   Div_CC: String;
   Vencimento: Date;
-  Valor: Number;
+  Valor: String;
   Observacao: String;
   Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
   N_Invest: number;
   Pessoa: String;
   Responsavel: String;
+
 }
 
 export class CC {
-  Nome: string;
-  Descricao: string;
+  Nome: String;
+  Descricao: String;
 }
 
 export class div_CC{
-  Nome: string;
-  Divisao: string;
-  pZep: number;
-  pCoil: number;
-  pComissao: number;
+  Nome: String;
+  Divisao: String;
+  pZep?: number;
+  pCoil?: number;
+  pComissao?: number;
 }
 
 export class Pessoa{
-  Nome: string;
-  Sobrenome: string;
+  Nome: String;
+  Sobrenome: String;
   CPF_CNPJ: number;
-  Banco: string;
+  Banco: String;
   Agencia: number;
   Conta: number;
-  Tipo: string;
+  Tipo: String;
 }
+
+

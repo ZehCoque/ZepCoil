@@ -31,6 +31,22 @@ function main_pn_info_router() {
       );
     });
 
+    router.post('/main_table_query_get/:ID', function (req, res, next) {
+      let database = auth.db_conn().config.database + '.'
+      auth.db_conn().query(
+        'SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
+        [req.body.ID],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(500).json({status: 'error'});
+          } else {
+            res.status(200).json(results);
+          }
+        }
+      );
+    });
+
   router.get('/main_table_query', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
@@ -63,6 +79,7 @@ function main_pn_info_router() {
   });
 
   router.put('/main_table_query/:ID', function (req, res, next) {
+    console.log(req.body.ID)
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
       'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
@@ -80,6 +97,7 @@ function main_pn_info_router() {
         req.body.ID],
       (error) => {
         if (error) {
+          console.log(error)
           res.status(500).json({status: 'error'});
         } else {
           res.status(200).json({status: 'ok'});

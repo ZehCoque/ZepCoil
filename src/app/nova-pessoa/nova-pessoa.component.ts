@@ -17,7 +17,7 @@ export class NovaPessoaComponent implements OnInit {
 
   error: string;
 
-  Tipos = ['Funcionário','Fornecedor'];
+  Tipos = ['Funcionário','Fornecedor','Cliente'];
 
   errorMatcher: ErrorMatcherDirective;
 
@@ -43,6 +43,10 @@ export class NovaPessoaComponent implements OnInit {
 
     this.error = '';
 
+    if (this.novaPessoaForm.get('CPF_CNPJ').value == '') this.novaPessoaForm.controls.CPF_CNPJ.setValue(0);
+    if (this.novaPessoaForm.get('Agencia').value == '') this.novaPessoaForm.controls.Agencia.setValue(0);
+    if (this.novaPessoaForm.get('Conta').value == '') this.novaPessoaForm.controls.Conta.setValue(0);
+
     this.novaPessoa = {
       Nome: this.novaPessoaForm.get('Nome').value,
       Sobrenome: this.novaPessoaForm.get('Sobrenome').value,
@@ -64,7 +68,7 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   onCancel(){
-    this.dialogRef.close();
+    this.dialogRef.close(this.novaPessoa);
   }
 
   setTipo(tipo:string){

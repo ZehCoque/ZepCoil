@@ -39,10 +39,10 @@
     <div class="button-row button-container">
 
       <button name="CButton_edit" type="button" mat-mini-fab style="background-color: black; color: white;" class="selection-button" (click)="selectResp('Coil')">
-        <a style="font-size: 2vh; font-weight: bolder;">Coil</a>
+        <a style="font-size: 15px; font-weight: bolder;">Coil</a>
       </button>
       <button name="ZButton_edit"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Zep')">
-        <a style="font-size: 2vh; font-weight: bolder;">Zep</a>
+        <a style="font-size: 15px; font-weight: bolder;">Zep</a>
       </button>
 
     </div>
@@ -99,8 +99,8 @@
   <mat-form-field style="width: 45%;" class="form-field">
     <mat-label>Centro de Custo</mat-label>
     <mat-select formControlName="CC">
-    <mat-option *ngFor="let nomes of CC.nomes" [value]="nomes">
-     {{ nomes }}
+    <mat-option *ngFor="let cc of CC" [value]="cc" (click)="get_div_cc(cc.Nome)">
+     {{ cc.Descricao }}
     </mat-option>
   </mat-select>
   <mat-error *ngIf="editedEntryForm.get('Div_CC').hasError('required')" >
@@ -111,8 +111,8 @@
 <mat-form-field style="width: 45%;" class="form-field">
   <mat-label>Divisão Centro de Custo</mat-label>
   <mat-select formControlName="Div_CC">
-  <mat-option *ngFor="let numeros of CC.numero" [value]="numeros">
-   {{ numeros }}
+  <mat-option *ngFor="let div of div_CC" [value]="div">
+   {{ div.Divisao }}
   </mat-option>
 </mat-select>
 <mat-error *ngIf="editedEntryForm.get('Div_CC').hasError('required')" >
@@ -120,20 +120,11 @@
 </mat-error>
 </mat-form-field>
 
-<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0" style="width: 45%;" class="form-field">
+<mat-form-field *ngIf="editedEntryForm.get('Pessoa').value === 0" style="width: 45%;" class="form-field">
 <mat-label>Origem</mat-label>
 <mat-select formControlName="Pessoa">
-<mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
- {{ dest }}
-</mat-option>
-</mat-select>
-</mat-form-field>
-
-<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1" style="width: 45%;" class="form-field">
-<mat-label>Destinatário</mat-label>
-<mat-select formControlName="Pessoa">
-<mat-option *ngFor="let dest of Destinatarios.nomes" [value]="dest">
- {{ dest }}
+<mat-option *ngFor="let dest of Pessoa" [value]="dest">
+ {{ dest.Nome }}
 </mat-option>
 </mat-select>
 </mat-form-field>
@@ -153,6 +144,12 @@ O número de investimento deve ser um número.
   <textarea matInput formControlName="Observacao" [errorStateMatcher]="errorMatcher"></textarea>
 </mat-form-field>
 </div>
+</div>
+
+<div *ngIf="error">
+  <mat-error style="font-size: 1.5vh; text-align: center;">
+    {{error | errorMessage}}
+  </mat-error>
 </div>
 
 <div class="button-row">
