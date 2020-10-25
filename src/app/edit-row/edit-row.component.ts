@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
@@ -13,7 +13,7 @@ import { ServerService } from '../services/server.service';
   styleUrls: ['./edit-row.component.scss']
 })
 export class EditRowComponent implements OnInit {
-
+  @ViewChild('input') 
   Entradas: Array<Entrada> = new Array();
 
   editedEntryForm: FormGroup;

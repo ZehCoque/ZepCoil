@@ -17,12 +17,13 @@ export class FocusNextDirective {
 
   findNextTabStop(el) {
     var universe = document.querySelectorAll(
-      "input, button, select, textarea, a[href]"
+      "input, mat-select,mat-raised-button, textarea"
     );
     var list = Array.prototype.filter.call(universe, function(item) {
       return item.tabIndex >= "0";
     });
     var index = list.indexOf(el);
+    console.log(index)
     return list[index + 1] || list[0];
   }
 
