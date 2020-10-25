@@ -13,7 +13,7 @@ import { ServerService } from '../services/server.service';
   styleUrls: ['./edit-row.component.scss']
 })
 export class EditRowComponent implements OnInit {
-  @ViewChild('input') 
+  @ViewChild('input')
   Entradas: Array<Entrada> = new Array();
 
   editedEntryForm: FormGroup;
@@ -60,17 +60,20 @@ export class EditRowComponent implements OnInit {
       this.editedEntryForm.patchValue(this.current_data);
 
       let current_CC = this.CC.find(value => value.Nome === this.current_data.CC)
-      this.get_div_cc(current_CC.Nome);
-      this.editedEntryForm.controls.CC.setValue(current_CC);
+      this.get_div_cc(current_CC.Nome).then(() => {
+        this.editedEntryForm.controls.CC.setValue(current_CC);
 
-      let current_div_CC: div_CC = {
-        Nome: current_CC.Nome,
-        Divisao: this.current_data.Div_CC
-      };
+        let current_div_CC: div_CC = {
+          Nome: current_CC.Nome,
+          Divisao: this.current_data.Div_CC
+        };
+        console.log( this.editedEntryForm.controls.Div_CC.value)
+        this.editedEntryForm.controls.Div_CC.setValue(current_div_CC.Divisao);
+        console.log( this.editedEntryForm.controls.Div_CC.value)
 
-      this.editedEntryForm.controls.Div_CC.setValue(current_div_CC);
+      });
 
-      this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'))
+      this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'));
 
       this.selectType(this.current_data.Tipo);
       this.selectResp(this.current_data.Responsavel);

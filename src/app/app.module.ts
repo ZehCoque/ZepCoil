@@ -33,6 +33,7 @@ import { ErrormessagePipe } from './pipes/errormessage.pipe';
 import { UsersComponent } from './users/users.component';
 
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
+import { AdminCcComponent } from './admin-cc/admin-cc.component';
 
 registerLocaleData(localePtBr);
 
@@ -49,6 +50,7 @@ registerLocaleData(localePtBr);
     UppercaseDirective,
     ErrormessagePipe,
     UsersComponent,
+    AdminCcComponent,
   ],
   imports: [
     CommonModule,
