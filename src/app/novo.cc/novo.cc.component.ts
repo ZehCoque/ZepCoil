@@ -49,9 +49,7 @@ export class NovoCCComponent implements OnInit {
       this.novoCCForm.controls.Abreviacao.setValue(this.preloaded_cc.cc.Nome);
       this.novoCCForm.controls.Descricao.setValue(this.preloaded_cc.cc.Descricao);
 
-      console.log(this.novoCCForm.controls.Abreviacao.value)
-
-      this.get_div_cc(this.preloaded_cc.Nome).then(() => {
+      this.get_div_cc(this.preloaded_cc.cc.Nome).then(() => {
         this.div_CC.forEach(element => {
           console.log(element)
           this.divCCArray = [...this.divCCArray, element.Divisao ]

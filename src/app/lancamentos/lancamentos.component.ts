@@ -420,8 +420,9 @@ export class LancamentosComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    let sub = dialogRef.afterClosed().subscribe(() => {
       this.newDataEmitter.newDataEmit('novoCC');
+      sub.unsubscribe();
     });
   }
 
@@ -431,8 +432,9 @@ export class LancamentosComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    let sub = dialogRef.afterClosed().subscribe(() => {
       this.newDataEmitter.newDataEmit('novaPessoa');
+      sub.unsubscribe();
     });
   }
 }
