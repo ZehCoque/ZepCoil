@@ -1,7 +1,9 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { element } from 'protractor';
+import { CC, div_CC } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
 
@@ -21,17 +23,19 @@ export class NovoCCComponent implements OnInit {
 
   error_CC: string;
   error_div_CC: string;
+  div_CC: div_CC[];
 
   constructor(private formBuilder: FormBuilder,
               private server: ServerService,
-              public dialogRef: MatDialogRef<NovoCCComponent>) { }
+              public dialogRef: MatDialogRef<NovoCCComponent>,
+              @Inject(MAT_DIALOG_DATA) public preloaded_cc ) { }
 
   ngOnInit(): void {
 
     this.novoCCForm = this.formBuilder.group({
       Abreviacao: new FormControl('', Validators.compose([
         Validators.required,
-        Validators.pattern("^[a-zA-Z1-9]{3}$")
+        Validators.pattern("^[A-Z1-9]{1,3}$")
       ])),
       Descricao: new FormControl('', Validators.required),
     });
@@ -40,6 +44,38 @@ export class NovoCCComponent implements OnInit {
       Div_CC: new FormControl('',Validators.required),
     });
 
+    if (this.preloaded_cc.cc !== undefined) {
+      console.log(this.preloaded_cc)
+      this.novoCCForm.controls.Abreviacao.setValue(this.preloaded_cc.cc.Nome);
+      this.novoCCForm.controls.Descricao.setValue(this.preloaded_cc.cc.Descricao);
+
+      console.log(this.novoCCForm.controls.Abreviacao.value)
+
+      this.get_div_cc(this.preloaded_cc.Nome).then(() => {
+        this.div_CC.forEach(element => {
+          console.log(element)
+          this.divCCArray = [...this.divCCArray, element.Divisao ]
+        })
+      })
+    }
+
+  }
+
+  get_div_cc(Nome_CC:String){
+    this.div_CC = new Array<div_CC>();
+    let promise = new Promise((resolve,reject) => {
+      this.server.get_Value({Nome: Nome_CC},'div_cc_query').then(async (response: any) => {
+      await response.forEach( (div_CC:div_CC) => {
+        this.div_CC = [...this.div_CC, div_CC];
+      });
+      resolve(this.div_CC.length);
+    }).catch(err => {
+
+      reject(err);
+    });
+    })
+
+    return promise
   }
 
   addDivCC(){

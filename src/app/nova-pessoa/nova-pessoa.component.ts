@@ -68,7 +68,7 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   onCancel(){
-    this.dialogRef.close(this.novaPessoa);
+    this.dialogRef.close();
   }
 
   setTipo(tipo:string){

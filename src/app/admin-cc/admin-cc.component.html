@@ -1,1 +1,22 @@
-<p>admin-cc works!</p>
+<div class="header-padding">
+  <div class="unselectable-line display-flex header-row" style=" align-items: center; ">
+
+    <div class="el-tag--plain" style="width: 100%;">
+      Administrar Centros de Custo
+    </div>
+  </div>
+</div>
+<div>
+
+
+<cdk-virtual-scroll-viewport itemSize="56" style="height: 500px">
+  <mat-list *cdkVirtualFor="let cc of CC, let i=index">
+          <mat-card (click)="openCCDialog(cc)" style="text-align: center;">
+            <mat-card-content  class="el-tag--plain unselectable-line">
+              {{cc.Descricao}}
+            </mat-card-content>
+          </mat-card>
+  </mat-list>
+
+ </cdk-virtual-scroll-viewport>
+

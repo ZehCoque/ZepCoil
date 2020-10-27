@@ -114,6 +114,16 @@ input[readonly] {
   margin-bottom: 15px;
 }
 
+.unselectable-line{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
 .el-tag--mini {
   height: 20px;
   padding: 0 5px;

@@ -101,6 +101,7 @@ export class LancamentosComponent implements OnInit {
     this.CC = new Array();
     this.div_CC = new Array();
     this.Pessoa = new Array();
+    this.Entradas = new Array();
     //GET ALL ENTRADAS
     await this.server.get_List('main_table_query').then(async (response: any) => {
         await response.forEach( (element:Entrada) => {
@@ -420,7 +421,7 @@ export class LancamentosComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.newDataEmitter.newDataEmit('novaPessoa');
+      this.newDataEmitter.newDataEmit('novoCC');
     });
   }
 
