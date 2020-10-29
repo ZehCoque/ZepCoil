@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CC } from '../classes/tableColumns';
 import { NovoCCComponent } from '../novo.cc/novo.cc.component';
+import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { ServerService } from '../services/server.service';
 
 @Component({
@@ -12,12 +13,11 @@ import { ServerService } from '../services/server.service';
 export class AdminCcComponent implements OnInit {
 
   CC: Array<CC>;
-  newDataEmitter: any;
-
 
   constructor(
     private server: ServerService,
     private dialog: MatDialog,
+    private newDataEmitter: newDataTrackerService
     ) { }
 
   ngOnInit(): void {

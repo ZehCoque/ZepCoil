@@ -2,8 +2,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { element } from 'protractor';
-import { CC, div_CC } from '../classes/tableColumns';
+import { div_CC } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
 
@@ -50,8 +49,8 @@ export class NovoCCComponent implements OnInit {
       this.novoCCForm.controls.Descricao.setValue(this.preloaded_cc.cc.Descricao);
 
       this.get_div_cc(this.preloaded_cc.cc.Nome).then(() => {
+        console.log(this.div_CC)
         this.div_CC.forEach(element => {
-          console.log(element)
           this.divCCArray = [...this.divCCArray, element.Divisao ]
         })
       })
