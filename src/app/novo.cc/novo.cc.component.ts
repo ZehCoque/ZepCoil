@@ -24,12 +24,14 @@ export class NovoCCComponent implements OnInit {
   error_div_CC: string;
   div_CC: div_CC[];
 
+  loading: Boolean = true;
+
   constructor(private formBuilder: FormBuilder,
               private server: ServerService,
               public dialogRef: MatDialogRef<NovoCCComponent>,
               @Inject(MAT_DIALOG_DATA) public preloaded_cc ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
     this.novoCCForm = this.formBuilder.group({
       Abreviacao: new FormControl('', Validators.compose([
@@ -43,17 +45,17 @@ export class NovoCCComponent implements OnInit {
       Div_CC: new FormControl('',Validators.required),
     });
 
-    if (this.preloaded_cc.cc !== undefined) {
-      console.log(this.preloaded_cc)
+    if (this.preloaded_cc.cc) {
       this.novoCCForm.controls.Abreviacao.setValue(this.preloaded_cc.cc.Nome);
       this.novoCCForm.controls.Descricao.setValue(this.preloaded_cc.cc.Descricao);
 
-      this.get_div_cc(this.preloaded_cc.cc.Nome).then(() => {
-        console.log(this.div_CC)
+      await this.get_div_cc(this.preloaded_cc.cc.Nome).then(() => {
         this.div_CC.forEach(element => {
           this.divCCArray = [...this.divCCArray, element.Divisao ]
         })
-      })
+      });
+
+      this.loading = false;
     }
 
   }
@@ -109,10 +111,56 @@ export class NovoCCComponent implements OnInit {
 
   }
 
+  async onDelete(){
+    this.error_CC = '';
+    this.error_div_CC = '';
+    this.loading = true;
+    this.delete_cc()
+    .then(() => this.onCancel())
+    .catch((error) => this.error_div_CC = error)
+
+  }
+
+  delete_cc(){
+
+    this.loading = true;
+    let promise = new Promise((resolve,reject) => {
+      this.server.delete_Value({Nome: this.preloaded_cc.cc.Nome},'div_cc_query_delete').then(() => {
+        this.server.delete_Value({Nome: this.preloaded_cc.cc.Nome},'cc_query_delete').then(() => {
+          resolve();
+        }).catch(error => {
+          reject(error)
+          console.log(error);
+
+        })
+      }).catch(error => {
+        console.log(error);
+        reject(error);
+      })
+    })
+
+    return promise;
+  }
+
   onSubmit(){
 
     this.error_CC = '';
     this.error_div_CC = '';
+
+    console.log(this.preloaded_cc.cc)
+    if (this.preloaded_cc.cc) {
+      this.delete_cc().then(() => {
+        this.addNew();
+        return;
+      }).catch((error) => this.error_div_CC = error);
+
+    } else {
+      this.addNew();
+    }
+
+  }
+
+  addNew(){
 
     let CC = {
       Nome: this.novoCCForm.get('Abreviacao').value,
@@ -121,12 +169,12 @@ export class NovoCCComponent implements OnInit {
 
     this.server.add_List(CC,'cc_query_add').then(async() => {
 
-      await this.divCCArray.forEach(async element => {
-        await this.server.add_List({Nome: CC.Nome, Divisao: element},'div_cc_query_add')
-        .catch(error => {
-          console.log(error);
-          this.error_div_CC = error;
-        });
+      this.divCCArray.forEach(async (element) => {
+        await this.server.add_List({ Nome: CC.Nome, Divisao: element }, 'div_cc_query_add')
+          .catch(error => {
+            console.log(error);
+            this.error_div_CC = error;
+          });
       });
 
       this.dialogRef.close(CC.Descricao);

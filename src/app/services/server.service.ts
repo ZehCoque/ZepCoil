@@ -10,7 +10,7 @@ export class ServerService {
   constructor(private http: HttpClient) { }
 
   private async request(method: string, url: string, data?: any) {
-
+    console.log(url)
     const result = this.http.request(method, url, {
       body: data,
       responseType: 'json',
@@ -36,7 +36,11 @@ export class ServerService {
     return this.request('PUT', `${environment.serverUrl}/${slash_url}/${data.ID}`, data);
   }
   delete_List(data,slash_url) {
-    return this.request('DELETE', `${environment.serverUrl}/${slash_url}/${data}`, data);
+    return this.request('DELETE', `${environment.serverUrl}/${slash_url}`, data);
+  }
+
+  delete_Value(data,slash_url) {
+    return this.request('DELETE', `${environment.serverUrl}/${slash_url}`, data);
   }
 
   get_List_CF(data,slash_url){

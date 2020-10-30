@@ -63,7 +63,7 @@ function main_pn_info_router() {
     );
   });
 
-  router.delete('/main_table_query/:ID', function (req, res, next) {
+  router.delete('/main_table_query/', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
       'DELETE FROM ' + database + 'lançamentos WHERE ID=?',

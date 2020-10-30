@@ -22,11 +22,14 @@ export class AdminCcComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.loadData();
+    this.newDataEmitter.currentData.subscribe(() => {
+      this.loadData();
+    });
+
 
   }
 
-  openCCDialog(cc: CC): void {
+  openCCDialog(cc?: CC): void {
     const dialogRef = this.dialog.open(NovoCCComponent, {
       width: '500px',
       data: {cc}

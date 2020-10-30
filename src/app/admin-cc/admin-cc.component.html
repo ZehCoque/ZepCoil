@@ -1,8 +1,12 @@
 <div class="header-padding">
-  <div class="unselectable-line display-flex header-row" style=" align-items: center; ">
+  <div class="unselectable-line header-row" style=" align-items: center; ">
 
-    <div class="el-tag--plain" style="width: 100%;">
+    <div class="el-tag--plain" style="width: 100%; font-weight: bolder;">
       Administrar Centros de Custo
+    </div>
+
+    <div class="el-tag--plain" style="width: 100%; font-size: 15px;">
+      Clique em um Centro de Custo para editá-lo
     </div>
   </div>
 </div>
@@ -20,3 +24,6 @@
 
  </cdk-virtual-scroll-viewport>
 
+ <div class="button-row">
+  <button mat-raised-button  (click)='openCCDialog()'>Criar novo</button>
+</div>
