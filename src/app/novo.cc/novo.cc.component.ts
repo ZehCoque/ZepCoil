@@ -147,7 +147,6 @@ export class NovoCCComponent implements OnInit {
     this.error_CC = '';
     this.error_div_CC = '';
 
-    console.log(this.preloaded_cc.cc)
     if (this.preloaded_cc.cc) {
       this.delete_cc().then(() => {
         this.addNew();
@@ -183,6 +182,10 @@ export class NovoCCComponent implements OnInit {
       console.log(error);
       this.error_CC = error;
     })
+  }
+
+  updateLançamentos(old_var: any, new_var: any){
+    this.server.update_List({old: old_var, new: new_var}, '') //TODO
   }
 
   onCancel(){

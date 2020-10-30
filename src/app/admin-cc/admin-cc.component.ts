@@ -13,6 +13,7 @@ import { ServerService } from '../services/server.service';
 export class AdminCcComponent implements OnInit {
 
   CC: Array<CC>;
+  emitterSub: any;
 
   constructor(
     private server: ServerService,
@@ -22,11 +23,15 @@ export class AdminCcComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.newDataEmitter.currentData.subscribe(() => {
+    this.emitterSub = this.newDataEmitter.currentData.subscribe(() => {
       this.loadData();
     });
 
 
+  }
+
+  ngOnDestroy(){
+    this.emitterSub.unsubscribe();
   }
 
   openCCDialog(cc?: CC): void {
