@@ -38,7 +38,6 @@ function CC_router() {
   });
 
   router.delete('/cc_query_delete', function (req, res, next) {
-    console.log(req.body)
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
       'DELETE FROM ' + database + 'cc WHERE Nome=?',

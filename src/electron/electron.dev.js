@@ -2,6 +2,7 @@ const {app, BrowserWindow} = require('electron')
 const url = require("url");
 const path = require("path");
 const server = require("../../server/server")
+const auth = require('../../server/models/auth');
 
 let mainWindow
 
@@ -34,7 +35,10 @@ function createWindow () {
 app.on('ready', createWindow)
 
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
+  if (process.platform !== 'darwin') {
+    auth.db_conn().destroy();
+    app.quit();
+  }
 })
 
 app.on('activate', function () {

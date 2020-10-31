@@ -82,11 +82,15 @@ function get_user(connection, req, res) {
         if (error){
           reject(error);
         }
-        if (results.length == 0) {
-          resolve();
-        } else {
-          resolve(JSON.parse(JSON.stringify(results[0])));
+
+        if (results){
+          if (results.length == 0) {
+            resolve();
+          } else {
+            resolve(JSON.parse(JSON.stringify(results[0])));
+          }
         }
+
       })
   	});
 

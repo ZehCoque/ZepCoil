@@ -79,7 +79,6 @@ function main_pn_info_router() {
   });
 
   router.put('/main_table_query/:ID', function (req, res, next) {
-    console.log(req.body.ID)
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
       'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
