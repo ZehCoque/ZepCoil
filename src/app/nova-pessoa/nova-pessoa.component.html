@@ -2,8 +2,12 @@
   <div class="header-padding">
     <div class="unselectable-line display-flex header-row" style=" align-items: center; ">
 
-      <div class="el-tag--plain" style="width: 100%;">
+      <div *ngIf="!preloaded.pessoa" class="el-tag--plain" style="width: 100%;">
         Nova Pessoa
+      </div>
+
+      <div *ngIf="preloaded.pessoa" class="el-tag--plain" style="width: 100%;">
+        Editar Pessoa
       </div>
     </div>
   </div>
@@ -83,6 +87,7 @@
 </div>
 <div class="button-row">
   <button mat-raised-button  (click)='onSubmit()' [disabled]="!novaPessoaForm.valid">Concluir</button>
+  <button mat-raised-button *ngIf="preloaded.pessoa"  (click)='onDelete()' type="button">Excluir</button>
   <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
 </div>
 

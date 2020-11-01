@@ -29,7 +29,7 @@ export class NovoCCComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private server: ServerService,
               public dialogRef: MatDialogRef<NovoCCComponent>,
-              @Inject(MAT_DIALOG_DATA) public preloaded_cc ) { }
+              @Inject(MAT_DIALOG_DATA) public preloaded ) { }
 
   async ngOnInit(): Promise<void> {
 
@@ -45,11 +45,11 @@ export class NovoCCComponent implements OnInit {
       Div_CC: new FormControl('',Validators.required),
     });
 
-    if (this.preloaded_cc.cc) {
-      this.novoCCForm.controls.Abreviacao.setValue(this.preloaded_cc.cc.Nome);
-      this.novoCCForm.controls.Descricao.setValue(this.preloaded_cc.cc.Descricao);
+    if (this.preloaded.cc) {
+      this.novoCCForm.controls.Abreviacao.setValue(this.preloaded.cc.Nome);
+      this.novoCCForm.controls.Descricao.setValue(this.preloaded.cc.Descricao);
 
-      await this.get_div_cc(this.preloaded_cc.cc.Nome).then(() => {
+      await this.get_div_cc(this.preloaded.cc.Nome).then(() => {
         this.div_CC.forEach(element => {
           this.divCCArray = [...this.divCCArray, element.Divisao ]
         })
@@ -111,7 +111,7 @@ export class NovoCCComponent implements OnInit {
 
   }
 
-  async onDelete(){
+  onDelete(){
     this.error_CC = '';
     this.error_div_CC = '';
     this.loading = true;
@@ -125,8 +125,8 @@ export class NovoCCComponent implements OnInit {
 
     this.loading = true;
     let promise = new Promise((resolve,reject) => {
-      this.server.delete_Value({Nome: this.preloaded_cc.cc.Nome},'div_cc_query_delete').then(() => {
-        this.server.delete_Value({Nome: this.preloaded_cc.cc.Nome},'cc_query_delete').then(() => {
+      this.server.delete_Value({Nome: this.preloaded.cc.Nome},'div_cc_query_delete').then(() => {
+        this.server.delete_Value({Nome: this.preloaded.cc.Nome},'cc_query_delete').then(() => {
           resolve();
         }).catch(error => {
           reject(error)
@@ -147,49 +147,65 @@ export class NovoCCComponent implements OnInit {
     this.error_CC = '';
     this.error_div_CC = '';
 
-    if (this.preloaded_cc.cc) {
+    if (this.preloaded.cc) {
       this.delete_cc().then(() => {
-        this.addNew();
+        this.addNew().then(() => {
+
+                  //Update lançamentos
+        this.server.update_value({old: this.preloaded.cc.Nome, new: this.novoCCForm.get('Abreviacao').value}, 'main_table_query_update_CC')
+        .then(() => {
+          this.onCancel('novoCC');
+        })
+        .catch(error => console.log(error));
+        });
+
         return;
       }).catch((error) => this.error_div_CC = error);
 
     } else {
-      this.addNew();
+      this.addNew().then(() => {
+        this.onCancel('novoCC');
+      });
     }
 
   }
 
   addNew(){
 
-    let CC = {
-      Nome: this.novoCCForm.get('Abreviacao').value,
-      Descricao: this.novoCCForm.get('Descricao').value
-    }
+    let promise = new Promise((resolve,reject) => {
+      let CC = {
+        Nome: this.novoCCForm.get('Abreviacao').value,
+        Descricao: this.novoCCForm.get('Descricao').value
+      }
 
-    this.server.add_List(CC,'cc_query_add').then(async() => {
+      this.server.add_List(CC,'cc_query_add').then(async() => {
 
-      this.divCCArray.forEach(async (element) => {
-        await this.server.add_List({ Nome: CC.Nome, Divisao: element }, 'div_cc_query_add')
+        this.divCCArray.forEach(async (element) => {
+          await this.server.add_List({ Nome: CC.Nome, Divisao: element }, 'div_cc_query_add')
+          .then(() => {
+            resolve();
+          })
           .catch(error => {
             console.log(error);
             this.error_div_CC = error;
+            reject(error)
           });
-      });
+        });
 
-      this.dialogRef.close(CC.Descricao);
-
-    }).catch(error => {
-      console.log(error);
-      this.error_CC = error;
+      }).catch(error => {
+        console.log(error);
+        this.error_CC = error;
+        reject(error);
+      })
     })
+
+    return promise;
+
   }
 
-  updateLançamentos(old_var: any, new_var: any){
-    this.server.update_List({old: old_var, new: new_var}, '') //TODO
-  }
 
-  onCancel(){
-    this.dialogRef.close();
+  onCancel(data?){
+    this.dialogRef.close(data);
   }
 
 }

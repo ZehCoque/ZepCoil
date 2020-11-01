@@ -2,11 +2,11 @@
   <div class="unselectable-line header-row" style=" align-items: center; ">
 
     <div class="el-tag--plain" style="width: 100%; font-weight: bolder;">
-      Gerenciar Centros de Custo
+      Gerenciar Pessoas
     </div>
 
     <div class="el-tag--plain" style="width: 100%; font-size: 15px;">
-      Clique em um Centro de Custo para editá-lo
+      Clique em um item para editá-lo
     </div>
   </div>
 </div>
@@ -14,10 +14,10 @@
 
 
 <cdk-virtual-scroll-viewport itemSize="56" style="height: 500px">
-  <mat-list *cdkVirtualFor="let cc of CC, let i=index">
-          <mat-card (click)="openCCDialog(cc)" style="text-align: center;">
+  <mat-list *cdkVirtualFor="let pessoa of Pessoas, let i=index">
+          <mat-card (click)="openPessoaDialog(pessoa)" style="text-align: center;">
             <mat-card-content  class="el-tag--plain unselectable-line">
-              {{cc.Descricao}}
+              {{pessoa.Nome}}
             </mat-card-content>
           </mat-card>
   </mat-list>
@@ -25,5 +25,5 @@
  </cdk-virtual-scroll-viewport>
 
  <div class="button-row">
-  <button mat-raised-button  (click)='openCCDialog()'>Criar novo</button>
+  <button mat-raised-button  (click)='openPessoaDialog()'>Criar novo</button>
 </div>

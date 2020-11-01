@@ -9,7 +9,8 @@ export class newDataTrackerService {
 
   constructor() { }
 
-  newDataEmit(data) {
+  newDataEmit(data?) {
+    if (!data) return;
     this.newDataSource.next(data)
   }
 

@@ -78,6 +78,59 @@ function main_pn_info_router() {
     );
   });
 
+  router.put('/main_table_query_update_CC',function (req, res, next) {
+    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().query(
+      'UPDATE ' + database + 'lançamentos SET CC = ? WHERE CC = ?',
+      [req.body.new,
+       req.body.old],
+       (error) => {
+        if (error) {
+          console.log(error)
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json({status: 'ok'});
+        }
+       }
+
+  )});
+
+
+  router.put('/main_table_query_update_div_CC',function (req, res, next) {
+    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().query(
+      'UPDATE ' + database + 'lançamentos SET Div_CC = ? WHERE Div_CC = ?',
+      [req.body.new,
+       req.body.old],
+       (error) => {
+        if (error) {
+          console.log(error)
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json({status: 'ok'});
+        }
+       }
+
+  )});
+
+
+  router.put('/main_table_query_update_Pessoa',function (req, res, next) {
+    let database = auth.db_conn().config.database + '.';
+    auth.db_conn().query(
+      'UPDATE ' + database + 'lançamentos SET Pessoa = ? WHERE Pessoa = ?',
+      [req.body.new,
+       req.body.old],
+       (error) => {
+        if (error) {
+          console.log(error)
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json({status: 'ok'});
+        }
+       }
+
+  )});
+
   router.put('/main_table_query/:ID', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(

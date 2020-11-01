@@ -52,7 +52,6 @@ export class EditRowComponent implements OnInit {
 
     this.loadData(this.ID).then(() => {
 
-      console.log(this.current_data)
       if (this.current_data.N_Invest === 0) {
         this.current_data.N_Invest = null;
       }
@@ -67,9 +66,8 @@ export class EditRowComponent implements OnInit {
           Nome: current_CC.Nome,
           Divisao: this.current_data.Div_CC
         };
-        console.log( this.editedEntryForm.controls.Div_CC.value)
         this.editedEntryForm.controls.Div_CC.setValue(current_div_CC.Divisao);
-        console.log( this.editedEntryForm.controls.Div_CC.value)
+
 
       });
 

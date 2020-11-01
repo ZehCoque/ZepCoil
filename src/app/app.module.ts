@@ -35,6 +35,7 @@ import { UsersComponent } from './users/users.component';
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
 import { TerceirosComponent } from './terceiros/terceiros.component';
+import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 
 registerLocaleData(localePtBr);
 
@@ -53,6 +54,7 @@ registerLocaleData(localePtBr);
     UsersComponent,
     AdminCcComponent,
     TerceirosComponent,
+    AdminPessoasComponent,
   ],
   imports: [
     CommonModule,

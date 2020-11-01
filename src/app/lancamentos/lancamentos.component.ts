@@ -89,8 +89,10 @@ export class LancamentosComponent implements OnInit {
       this.loading = true;
       this.loadData()
       .then(() => {
-        console.log(this.Entradas),
         this.loading = false;
+        setTimeout(() => {
+          this.viewport.scrollToIndex(this.viewport.getDataLength());
+        }, 0);
       })
       .catch((error) => console.log(error));
     })
@@ -284,8 +286,8 @@ export class LancamentosComponent implements OnInit {
       data: this.Entradas[row].ID
     });
 
-    this.editRowDialogRef.afterClosed().subscribe(() => {
-      this.updateSoma();
+    this.editRowDialogRef.afterClosed().subscribe((results) => {
+      if (results) this.updateSoma();
     });
   }
 
@@ -298,7 +300,6 @@ export class LancamentosComponent implements OnInit {
    }
 
    moveCursorToEnd(el) {
-     console.log(el)
     if (typeof el.selectionStart == "number") {
         el.selectionStart = el.selectionEnd = el.value.length;
     } else if (typeof el.createTextRange != "undefined") {
@@ -372,7 +373,6 @@ export class LancamentosComponent implements OnInit {
   async clearAllFilters(){
     this.loading = true
     this.activeFilters = new ActiveFilters;
-    console.log(this.activeFilters)
     this.Entradas = [];
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'main_table_query_CF').then(async (element: any) => {
       await element.forEach(entrada => {
@@ -390,7 +390,6 @@ export class LancamentosComponent implements OnInit {
 
       //Total Receitas
       await this.server.get_List_CF({active_filters : this.activeFilters},'total_receitas').then((total: any) => {
-        console.log(total)
         this.totalReceitas = total[0].TOTALR;
       }).catch(err => reject(err));
 
@@ -420,8 +419,8 @@ export class LancamentosComponent implements OnInit {
       data: {}
     });
 
-    let sub = dialogRef.afterClosed().subscribe(() => {
-      this.newDataEmitter.newDataEmit('novoCC');
+    let sub = dialogRef.afterClosed().subscribe((results) => {
+      this.newDataEmitter.newDataEmit(results);
       sub.unsubscribe();
     });
   }
@@ -432,8 +431,8 @@ export class LancamentosComponent implements OnInit {
       data: {}
     });
 
-    let sub = dialogRef.afterClosed().subscribe(() => {
-      this.newDataEmitter.newDataEmit('novaPessoa');
+    let sub = dialogRef.afterClosed().subscribe((results) => {
+      this.newDataEmitter.newDataEmit(results);
       sub.unsubscribe();
     });
   }

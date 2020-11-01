@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CC } from '../classes/tableColumns';
-import { NovoCCComponent } from '../novo.cc/novo.cc.component';
+import { Pessoa } from '../classes/tableColumns';
+import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { ServerService } from '../services/server.service';
 
 @Component({
-  selector: 'app-admin-cc',
-  templateUrl: './admin-cc.component.html',
-  styleUrls: ['./admin-cc.component.scss']
+  selector: 'app-admin-pessoas',
+  templateUrl: './admin-pessoas.component.html',
+  styleUrls: ['./admin-pessoas.component.scss']
 })
-export class AdminCcComponent implements OnInit {
+export class AdminPessoasComponent implements OnInit {
 
-  CC: Array<CC>;
+  Pessoas: Array<Pessoa>
   emitterSub: any;
 
   constructor(
@@ -34,10 +34,10 @@ export class AdminCcComponent implements OnInit {
     this.emitterSub.unsubscribe();
   }
 
-  openCCDialog(cc?: CC): void {
-    const dialogRef = this.dialog.open(NovoCCComponent, {
-      width: '500px',
-      data: {cc}
+  openPessoaDialog(pessoa?: Pessoa): void {
+    const dialogRef = this.dialog.open(NovaPessoaComponent, {
+      width: '1000px',
+      data: {pessoa}
     });
 
     dialogRef.afterClosed().subscribe((results) => {
@@ -48,12 +48,12 @@ export class AdminCcComponent implements OnInit {
 
   loadData(){
     let promise = new Promise(async (resolve, reject) => {
-    this.CC = new Array();
+    this.Pessoas = new Array();
 
-      //GET ALL CC
-      await this.server.get_List('cc_query').then(async (response: any) => {
-        await response.forEach( (CC:CC) => {
-          this.CC = [...this.CC, CC];
+      //GET ALL PESSOA
+      await this.server.get_List('pessoa_query').then(async (response: any) => {
+        await response.forEach( (pessoa:Pessoa) => {
+          this.Pessoas = [...this.Pessoas, pessoa];
         });
       }).catch(err => reject(err));
 
@@ -65,3 +65,4 @@ export class AdminCcComponent implements OnInit {
   }
 
 }
+

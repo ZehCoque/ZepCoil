@@ -5,7 +5,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { User } from './classes/user';
 import { newDataTrackerService } from './services/new-data-tracker.service';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
-import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
+import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 
 @Component({
   selector: 'app-root',
@@ -35,20 +35,20 @@ export class AppComponent {
       data: {}
     });
 
-    let sub = dialogRef.afterClosed().subscribe(() => {
-      this.newDataEmitter.newDataEmit('novoCC');
+    let sub = dialogRef.afterClosed().subscribe((results) => {
+      this.newDataEmitter.newDataEmit(results);
       sub.unsubscribe();
     });
   }
 
   openPessoaDialog(): void {
-    const dialogRef = this.dialog.open(NovaPessoaComponent, {
-      width: '1000px',
+    const dialogRef = this.dialog.open(AdminPessoasComponent, {
+      width: '500px',
       data: {}
     });
 
-    let sub = dialogRef.afterClosed().subscribe(() => {
-      this.newDataEmitter.newDataEmit('novaPessoa');
+    let sub = dialogRef.afterClosed().subscribe((results) => {
+      this.newDataEmitter.newDataEmit(results);
       sub.unsubscribe();
     });
   }
