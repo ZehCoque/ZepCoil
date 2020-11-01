@@ -10,7 +10,6 @@ export class ServerService {
   constructor(private http: HttpClient) { }
 
   private async request(method: string, url: string, data?: any) {
-    console.log(url)
     const result = this.http.request(method, url, {
       body: data,
       responseType: 'json',
@@ -35,6 +34,7 @@ export class ServerService {
   update_List(data,slash_url) {
     return this.request('PUT', `${environment.serverUrl}/${slash_url}/${data.ID}`, data);
   }
+
   delete_List(data,slash_url) {
     return this.request('DELETE', `${environment.serverUrl}/${slash_url}`, data);
   }
@@ -45,6 +45,10 @@ export class ServerService {
 
   get_List_CF(data,slash_url){
     return this.request('POST', `${environment.serverUrl}/${slash_url}`,data);
+  }
+
+  update_value(data,slash_url){
+    return this.request('PUT', `${environment.serverUrl}/${slash_url}`, data);
   }
 
 }
