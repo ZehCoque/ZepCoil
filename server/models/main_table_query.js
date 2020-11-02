@@ -63,6 +63,22 @@ function main_pn_info_router() {
     );
   });
 
+  router.get('/max_id', function (req, res, next) {
+    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().query(
+      'SELECT MAX(ID) as max_id FROM ' + database + 'lançamentos',
+      [],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
+
   router.delete('/main_table_query/', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(

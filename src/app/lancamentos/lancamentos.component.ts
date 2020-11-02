@@ -195,39 +195,49 @@ export class LancamentosComponent implements OnInit {
 
   onSubmit(){
 
-    if (this.newEntryForm.get("Pessoa").value == null) {
-      this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
-    }
+    this.server.get_List('max_id').then((results) => {
+      let current_id = results[0].max_id + 1
 
-    let input_json: Entrada = {
-      Descricao: this.newEntryForm.get("Descricao").value,
-      Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
-      CC: this.newEntryForm.get("CC").value.Nome,
-      Div_CC: this.newEntryForm.get("Div_CC").value.Divisao,
-      Vencimento: moment(this.newEntryForm.get("Vencimento").value).toDate(),
-      Valor:  this.getNumberValue(this.newEntryForm.get("Valor").value),
-      Observacao: this.newEntryForm.get("Observacao").value,
-      Tipo: this.newEntryForm.get("Tipo").value,
-      Responsavel: this.newEntryForm.get("Responsavel").value,
-      N_Invest: Number(this.newEntryForm.get("N_Invest").value),
-      Pessoa: this.newEntryForm.get("Pessoa").value.Nome
-    }
+      if (this.newEntryForm.get("Pessoa").value == null) {
+        this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
+      }
 
-    this.onClear();
+      let input_json: Entrada = {
+        ID: current_id,
+        Descricao: this.newEntryForm.get("Descricao").value,
+        Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
+        CC: this.newEntryForm.get("CC").value.Nome,
+        Div_CC: this.newEntryForm.get("Div_CC").value.Divisao,
+        Vencimento: moment(this.newEntryForm.get("Vencimento").value).toDate(),
+        Valor:  this.getNumberValue(this.newEntryForm.get("Valor").value),
+        Observacao: this.newEntryForm.get("Observacao").value,
+        Tipo: this.newEntryForm.get("Tipo").value,
+        Responsavel: this.newEntryForm.get("Responsavel").value,
+        N_Invest: Number(this.newEntryForm.get("N_Invest").value),
+        Pessoa: this.newEntryForm.get("Pessoa").value.Nome
+      }
 
-    this.Entradas = [...this.Entradas, input_json]
-    this.cdk_empty = false;
-    if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
+      this.Entradas = [...this.Entradas, input_json]
+      this.cdk_empty = false;
+      if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
 
-    this.server.add_List(input_json,'main_table_query').then(res => {
-      this.updateSoma();
-    });
+      this.server.add_List(input_json,'main_table_query').then(() => {
+        this.onClear();
+        this.updateSoma();
+      });
+
+    })
 
   }
 
   onClear(){
+
     this.div_cc_ready = false;
     this.newEntryForm.reset();
+    this.newEntryForm.controls.Descricao.setErrors(null);
+    this.newEntryForm.controls.CC.setErrors(null);
+    this.newEntryForm.controls.Div_CC.setErrors(null);
+    this.newEntryForm.controls.Descricao.setErrors(null);
     this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
     this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
     this.newEntryForm.controls.Vencimento.patchValue(moment(this.today).add(1, 'M').toISOString());
@@ -236,7 +246,6 @@ export class LancamentosComponent implements OnInit {
     document.getElementsByName("investButton")[0].style.opacity = "0.4";
     document.getElementsByName("CButton")[0].style.opacity = "0.4";
     document.getElementsByName("ZButton")[0].style.opacity = "0.4";
-    this.newEntryForm.untouched;
   }
 
   onContextMenu(event: MouseEvent, item, index) {

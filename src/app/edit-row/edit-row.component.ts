@@ -23,7 +23,7 @@ export class EditRowComponent implements OnInit {
   div_CC:Array<div_CC> = new Array<div_CC>();
   Pessoa:Array<Pessoa> = new Array();
   loading: boolean = true;
-  div_cc_ready: boolean;
+  div_cc_ready: boolean = true;
 
   current_data: Entrada;
   error: string;
@@ -52,29 +52,7 @@ export class EditRowComponent implements OnInit {
 
     this.loadData(this.ID).then(() => {
 
-      if (this.current_data.N_Invest === 0) {
-        this.current_data.N_Invest = null;
-      }
-
-      this.editedEntryForm.patchValue(this.current_data);
-
-      let current_CC = this.CC.find(value => value.Nome === this.current_data.CC)
-      this.get_div_cc(current_CC.Nome).then(() => {
-        this.editedEntryForm.controls.CC.setValue(current_CC);
-
-        let current_div_CC: div_CC = {
-          Nome: current_CC.Nome,
-          Divisao: this.current_data.Div_CC
-        };
-        this.editedEntryForm.controls.Div_CC.setValue(current_div_CC.Divisao);
-
-
-      });
-
-      this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'));
-
-      this.selectType(this.current_data.Tipo);
-      this.selectResp(this.current_data.Responsavel);
+      this.insertData();
 
       this.editedEntryForm.valueChanges.subscribe(val => {
         if (val.Valor) {
@@ -89,6 +67,30 @@ export class EditRowComponent implements OnInit {
     })
 
 
+  }
+
+  insertData(){
+    if (this.current_data.N_Invest) {
+      if (this.current_data.N_Invest === 0) this.current_data.N_Invest = null;
+    }
+
+    this.editedEntryForm.patchValue(this.current_data);
+
+    let current_CC = this.CC.find(value => value.Nome === this.current_data.CC)
+
+    this.get_div_cc(current_CC.Nome).then(() => {
+
+      this.editedEntryForm.controls.CC.setValue(current_CC);
+
+      let current_div_CC = this.div_CC.find(value => value.Divisao === this.current_data.Div_CC)
+      this.editedEntryForm.controls.Div_CC.patchValue(current_div_CC);
+
+    });
+
+    this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'));
+
+    this.selectType(this.current_data.Tipo);
+    this.selectResp(this.current_data.Responsavel);
   }
 
   selectType(type:number){
@@ -154,17 +156,11 @@ export class EditRowComponent implements OnInit {
 
   }
 
-  onClear(){
-    this.editedEntryForm.reset();
-
-    let reset_data = this.current_data;
-
-    delete reset_data.ID;
-
-    this.editedEntryForm.setValue(reset_data);
+  onReset(){
+    this.insertData();
   }
 
-  Cancel(){
+  onCancel(){
     this.dialogRef.close();
   }
 
@@ -188,8 +184,8 @@ export class EditRowComponent implements OnInit {
     this.Pessoa = new Array();
 
     await this.server.get_Value({ID: ID},'main_table_query_get').then(async (response: any) => {
-      await response.forEach( (Ëntrada:Entrada) => {
-        this.current_data = Ëntrada;
+      await response.forEach( (Entrada:Entrada) => {
+        this.current_data = Entrada;
       });
     }).catch(err => reject(err));
 

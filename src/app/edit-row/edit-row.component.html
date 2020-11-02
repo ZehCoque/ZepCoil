@@ -6,7 +6,7 @@
   <div style="display: flex; justify-content: space-between;">
     <div class="button-selector" style="width: 45%; align-items: center;">
 
-      <div class="el-tag--plain">
+      <div class="el-tag--plain" style="padding-top: 10px;">
         Tipo
       </div>
 
@@ -32,7 +32,7 @@
 
     <div class="button-selector" style="width: 45%; align-items: center;">
 
-      <div class="el-tag--plain">
+      <div class="el-tag--plain" style="padding-top: 10px;">
         Responsável
       </div>
 
@@ -154,8 +154,8 @@ O número de investimento deve ser um número.
 
 <div class="button-row">
   <button mat-raised-button color="primary" (click)='onSubmit()' [disabled]="!editedEntryForm.valid">Concluir</button>
-  <button mat-raised-button color="primary" (click)='onClear()' type="button">Valores Originais</button>
-  <button mat-raised-button color="primary" (click)='Cancel()' type="button">Cancelar</button>
+  <button mat-raised-button color="primary" (click)='onReset()' type="button">Valores Originais</button>
+  <button mat-raised-button color="primary" (click)='onCancel()' type="button">Cancelar</button>
 </div>
 
 </form>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CC } from '../classes/tableColumns';
 import { NovoCCComponent } from '../novo.cc/novo.cc.component';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
@@ -18,7 +18,8 @@ export class AdminCcComponent implements OnInit {
   constructor(
     private server: ServerService,
     private dialog: MatDialog,
-    private newDataEmitter: newDataTrackerService
+    private newDataEmitter: newDataTrackerService,
+    public dialogRef: MatDialogRef<AdminCcComponent>,
     ) { }
 
   ngOnInit(): void {
@@ -62,6 +63,10 @@ export class AdminCcComponent implements OnInit {
     })
 
     return promise;
+  }
+
+  onCancel(){
+    this.dialogRef.close()
   }
 
 }
