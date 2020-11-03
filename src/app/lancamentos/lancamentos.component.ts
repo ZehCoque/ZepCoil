@@ -85,11 +85,14 @@ export class LancamentosComponent implements OnInit {
     });
 
     this.newDataEmitter.currentData.subscribe(() => {
-      this.cdk_empty = false;
+      if (this.Entradas.length > 0) {
+        this.cdk_empty = false;
+      } 
       this.loading = true;
       this.loadData()
       .then(() => {
         this.loading = false;
+
         setTimeout(() => {
           this.viewport.scrollToIndex(this.viewport.getDataLength());
         }, 0);
