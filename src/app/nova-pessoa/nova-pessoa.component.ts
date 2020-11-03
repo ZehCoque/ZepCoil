@@ -80,7 +80,7 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   add_pessoa(){
-
+    
     let promise = new Promise((resolve,reject) => {
       if (this.novaPessoaForm.get('CPF_CNPJ').value == '') this.novaPessoaForm.controls.CPF_CNPJ.setValue(0);
       if (this.novaPessoaForm.get('Agencia').value == '') this.novaPessoaForm.controls.Agencia.setValue(0);
