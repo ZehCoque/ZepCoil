@@ -2,7 +2,7 @@ const express = require('express');
 const db_connection = require('../connection/dbconnection.js');
 const mysql = require('mysql');
 
-var db_connection_var;
+var db_connection_var; 
 
 var db_connection_status = () => {
   return db_connection_var;

@@ -116,7 +116,7 @@ export class NovoCCComponent implements OnInit {
     this.error_div_CC = '';
     this.loading = true;
     this.delete_cc()
-    .then(() => this.onCancel())
+    .then(() => this.onCancel('CCExcluido'))
     .catch((error) => this.error_div_CC = error)
 
   }
