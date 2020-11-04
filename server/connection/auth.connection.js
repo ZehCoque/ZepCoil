@@ -3,10 +3,10 @@ require('dotenv').config();
 
 var connection  = mysql.createConnection({
   connectionLimit : 10,
-  host            : process.env.DB_HOST,
-  user            : process.env.DB_USERNAME,
-  password        : process.env.DB_PASSWORD,
-  database        : process.env.DB_NAME,
+  host            : 'localhost',
+  user            : 'authenticator',
+  password        : 'N99FrLuBDNPCqb58',
+  database        : 'accounts',
 });
 
 

@@ -5,13 +5,14 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const port = process.env.PORT;
+const port = '3000';
 const www = "MYSQL DATABASE CONNECTION" || './';
 app.use(express.static(www));
 app.use(bodyParser.json())
 app.use(cookieParser());
 
-var allowedOrigins = process.env.allowedOrigins;
+var allowedOrigins = ['http://localhost:3000',
+                      'http://localhost:4200'];
 
 app.use(cors({
   credentials: true,

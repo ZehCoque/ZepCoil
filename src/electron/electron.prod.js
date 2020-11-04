@@ -2,6 +2,7 @@ const {app, BrowserWindow} = require('electron')
 const url = require("url");
 const path = require("path");
 const server = require("../../server/server")
+const auth = require('../../server/models/auth');
 
 let mainWindow
 
