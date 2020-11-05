@@ -37,6 +37,7 @@ import { AdminCcComponent } from './admin-cc/admin-cc.component';
 import { TerceirosComponent } from './terceiros/terceiros.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { ContratosComponent } from './contratos/contratos.component';
 
 registerLocaleData(localePtBr);
 
@@ -57,6 +58,7 @@ registerLocaleData(localePtBr);
     TerceirosComponent,
     AdminPessoasComponent,
     ErrorModalComponent,
+    ContratosComponent,
   ],
   imports: [
     CommonModule,
