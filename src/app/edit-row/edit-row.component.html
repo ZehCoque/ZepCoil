@@ -120,14 +120,23 @@
 </mat-error>
 </mat-form-field>
 
-<mat-form-field *ngIf="editedEntryForm.get('Pessoa').value === 0" style="width: 45%;" class="form-field">
-<mat-label>Origem</mat-label>
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 45%;" class="form-field">
+<mat-label >Origem</mat-label>
 <mat-select formControlName="Pessoa">
 <mat-option *ngFor="let dest of Pessoa" [value]="dest">
  {{ dest.Nome }}
 </mat-option>
 </mat-select>
 </mat-form-field>
+
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1 " style="width: 45%;" class="form-field">
+  <mat-label >Origem</mat-label>
+  <mat-select formControlName="Pessoa">
+  <mat-option *ngFor="let dest of Pessoa" [value]="dest">
+   {{ dest.Nome }}
+  </mat-option>
+  </mat-select>
+  </mat-form-field>
 
 <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 2" style="width: 45%;" class="form-field">
 <mat-label>Nº do Investimento</mat-label>

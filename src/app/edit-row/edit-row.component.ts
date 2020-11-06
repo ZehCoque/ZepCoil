@@ -89,6 +89,9 @@ export class EditRowComponent implements OnInit {
       let current_div_CC = this.div_CC.find(value => value.Divisao === this.current_data.Div_CC)
       this.editedEntryForm.controls.Div_CC.patchValue(current_div_CC);
 
+      let current_Pessoa = this.Pessoa.find(value => value.Nome === this.current_data.Pessoa)
+      this.editedEntryForm.controls.Pessoa.patchValue(current_Pessoa);
+
     });
 
     this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'));
