@@ -56,7 +56,11 @@ export class EditRowComponent implements OnInit {
 
       this.editedEntryForm.valueChanges.subscribe(val => {
         if (val.Valor) {
-          let valor = this.getNumberValue(val.Valor);
+          let valor;
+          if (typeof val.Valor!= 'number'){
+            valor = this.getNumberValue(val.Valor);
+          }
+
           this.editedEntryForm.patchValue({
             Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
             {emitEvent:false})
@@ -134,8 +138,8 @@ export class EditRowComponent implements OnInit {
       ID: this.ID,
       Descricao: this.editedEntryForm.get("Descricao").value,
       Data_Entrada: moment(this.editedEntryForm.get("Data_Entrada").value).toDate(),
-      CC: this.editedEntryForm.get("CC").value,
-      Div_CC: this.editedEntryForm.get("Div_CC").value,
+      CC: this.editedEntryForm.get("CC").value.Nome,
+      Div_CC: this.editedEntryForm.get("Div_CC").value.Divisao,
       Vencimento: moment(this.editedEntryForm.get("Vencimento").value).toDate(),
       Valor:  this.getNumberValue(this.editedEntryForm.get("Valor").value),
       Observacao: this.editedEntryForm.get("Observacao").value,
@@ -147,7 +151,7 @@ export class EditRowComponent implements OnInit {
 
     this.server.update_List(edited_json,'main_table_query').then(() => {
 
-      this.dialogRef.close();
+      this.onCancel('editedRow');
 
     }).catch((err) => {
       console.log(err);
@@ -160,8 +164,8 @@ export class EditRowComponent implements OnInit {
     this.insertData();
   }
 
-  onCancel(){
-    this.dialogRef.close();
+  onCancel(data?){
+    this.dialogRef.close(data);
   }
 
   getNumberValue(value){

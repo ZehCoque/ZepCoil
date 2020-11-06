@@ -73,7 +73,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   ngOnInit()  {
 
     this.state = this.routingService.getRouteTitle();
-    console.log(this.state )
 
     this.routerEvents = this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
@@ -226,6 +225,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
       }
 
+      console.log(current_id)
+
       let input_json: Entrada = {
         ID: current_id,
         Descricao: this.newEntryForm.get("Descricao").value,
@@ -314,6 +315,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   }
 
   editLine(row){
+
     this.editRowDialogRef = this.dialog.open(EditRowComponent,{
       width: "50%",
       data: this.Entradas[row].ID
@@ -321,6 +323,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
     this.editRowDialogRef.afterClosed().subscribe((results) => {
       if (results) this.updateSoma();
+      this.newDataEmitter.newDataEmit(results);
     });
   }
 
