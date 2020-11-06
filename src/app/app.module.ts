@@ -31,10 +31,10 @@ import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
 import { UppercaseDirective } from './directives/uppercase.directive';
 import { ErrormessagePipe } from './pipes/errormessage.pipe';
 import { UsersComponent } from './users/users.component';
+import { AppRoutingService } from './services/app-routing-service.service'
 
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
-import { TerceirosComponent } from './terceiros/terceiros.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 
@@ -54,7 +54,6 @@ registerLocaleData(localePtBr);
     ErrormessagePipe,
     UsersComponent,
     AdminCcComponent,
-    TerceirosComponent,
     AdminPessoasComponent,
     ErrorModalComponent,
   ],
@@ -87,7 +86,8 @@ registerLocaleData(localePtBr);
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    newDataTrackerService
+    newDataTrackerService,
+    AppRoutingService
   ],
   bootstrap: [AppComponent]
 })

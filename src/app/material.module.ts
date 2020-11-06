@@ -20,6 +20,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 export const MY_FORMATS = {
@@ -57,7 +58,8 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatTooltipModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatButtonToggleModule
   ],
   exports: [
     MatButtonModule,
@@ -77,7 +79,8 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatTooltipModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatButtonToggleModule
   ],
   providers: [
     {

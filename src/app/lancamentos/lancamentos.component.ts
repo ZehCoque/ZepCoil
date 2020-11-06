@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive'
@@ -14,13 +14,16 @@ import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filt
 import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { NovoCCComponent } from '../novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
+import { NavigationEnd, Router } from '@angular/router';
+import { AppRoutingService } from '../services/app-routing-service.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lancamentos',
   templateUrl: './lancamentos.component.html',
   styleUrls: ['./lancamentos.component.scss']
 })
-export class LancamentosComponent implements OnInit {
+export class LancamentosComponent implements OnInit, OnDestroy {
 
   @ViewChild('contextMenuTrigger') contextMenu: MatMenuTrigger;
 
@@ -52,14 +55,32 @@ export class LancamentosComponent implements OnInit {
   totalReceitas: number = 0;
   totalDespesas: number = 0;
   totalInvestimentos: number = 0;
+  state: string;
+  routerEvents: any;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     private server: ServerService,
     private dialog: MatDialog,
-    private newDataEmitter: newDataTrackerService) { }
+    private newDataEmitter: newDataTrackerService,
+    private router: Router,
+    private routingService: AppRoutingService) { }
+
+  ngOnDestroy(): void {
+    this.routerEvents.unsubscribe();
+  }
 
   ngOnInit()  {
+
+    this.state = this.routingService.getRouteTitle();
+    console.log(this.state )
+
+    this.routerEvents = this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((event: NavigationEnd) => {
+      console.log(event)
+      this.state = this.routingService.getRouteTitle();
+    });
 
     this.newEntryForm = this.formBuilder.group({
       Descricao: new FormControl('', Validators.required),

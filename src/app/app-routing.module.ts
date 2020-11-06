@@ -5,7 +5,8 @@ import { LancamentosComponent } from './lancamentos/lancamentos.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: 'lancamentos', component: LancamentosComponent, canActivate: [AuthGuard] },
+  { path: 'lancamentos', component: LancamentosComponent, canActivate: [AuthGuard], data: {state: 1} },
+  { path: 'terceiros', component: LancamentosComponent, canActivate: [AuthGuard], data: {state: 2} },
   { path: 'login', component: LoginComponent },
 
   // otherwise
