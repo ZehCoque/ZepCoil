@@ -69,6 +69,12 @@ function main_pn_info_router() {
       'SELECT MAX(ID) as max_id FROM ' + database + 'lançamentos',
       [],
       (error, results) => {
+        console.log(results)
+        if (!results.max_id){
+          auth.db_conn().query(
+            'ALTER TABLE ' + database + 'lançamentos AUTO_INCREMENT = 1',
+            []);
+        }
         if (error) {
           console.log(error);
           res.status(500).json({status: 'error'});

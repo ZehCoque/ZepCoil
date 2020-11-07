@@ -30,7 +30,13 @@ export class AppComponent {
     this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
     .subscribe((event: NavigationEnd) => {
-      this.current_url = event.url;
+      if (event.url = "/") {
+        this.current_url = event.urlAfterRedirects;
+      } else {
+        this.current_url = event.url;
+      }
+      
+      console.log(this.current_url)
     });
   }
 
