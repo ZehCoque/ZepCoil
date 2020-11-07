@@ -31,3 +31,8 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
   color: white !important
 }
 
+.mat-black{
+  background-color: black;
+  color: white;
+}
+

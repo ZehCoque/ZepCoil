@@ -119,16 +119,31 @@
                   <button *ngIf="Entrada.Tipo == 0" mat-mini-fab color="success">
                     <mat-icon >add</mat-icon>
                   </button>
-                  <div>
                   <button *ngIf="Entrada.Tipo == 2" mat-mini-fab color="accent" style="color: white;">
                     <mat-icon >show_chart</mat-icon>
                   </button>
                   <span *ngIf="Entrada.Tipo == 2 && Entrada.N_Invest"  class="blue-dot">
                     {{Entrada.N_Invest}}
                   </span>
+
+                  <button *ngIf="Entrada.Tipo == 3  && !Entrada.Concluido" mat-mini-fab color="black" (click)="setDoneState(true,Entrada.ID,i)">
+                    <mat-icon >arrow_circle_down</mat-icon>
+                  </button>
+
+                  <button *ngIf="Entrada.Tipo == 4 && !Entrada.Concluido" mat-mini-fab color="black" (click)="setDoneState(true,Entrada.ID,i)">
+                    <mat-icon >arrow_circle_up</mat-icon>
+                  </button>
+
+                  <button *ngIf="Entrada.Tipo == 3  && Entrada.Concluido" mat-mini-fab color="success" (click)="setDoneState(false,Entrada.ID,i)">
+                    <mat-icon >arrow_circle_down</mat-icon>
+                  </button>
+
+                  <button *ngIf="Entrada.Tipo == 4 && Entrada.Concluido" mat-mini-fab color="success" (click)="setDoneState(false,Entrada.ID,i)">
+                    <mat-icon >arrow_circle_up</mat-icon>
+                  </button>
+
                 </div>
-                </div>
-                    
+
                 <div class="el-tag--plain el-col-3" style="align-items: center;">
                   <div style="font-size: 0.7vw; ">
                     <img src="assets/icons8-time-24.png" width="13vw" >
@@ -305,15 +320,23 @@
 
           <div class="button-row button-container">
 
-            <button name="addButton" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
+            <button *ngIf="state===1" name="addButton" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
               <mat-icon>add</mat-icon>
             </button>
-            <button name="removeButton"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
+            <button *ngIf="state===1" name="removeButton"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
               <mat-icon>remove</mat-icon>
             </button>
 
-            <button name="investButton" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
+            <button *ngIf="state===1" name="investButton" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
               <mat-icon>show_chart</mat-icon>
+            </button>
+
+            <button *ngIf="state===2" name="outButton" type="button" mat-mini-fab color="black" class="selection-button"(click)="selectType(3)">
+              <mat-icon>arrow_circle_up</mat-icon>
+            </button>
+
+            <button *ngIf="state===2" name="inButton" type="button" mat-mini-fab color="black" class="selection-button"(click)="selectType(4)">
+              <mat-icon>arrow_circle_down</mat-icon>
             </button>
           </div>
 
@@ -415,7 +438,7 @@
       </mat-error>
     </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0" style="width: 35%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0 || newEntryForm.get('Tipo').value === 4" style="width: 35%;" class="form-field">
       <mat-label>Origem</mat-label>
       <mat-select formControlName="Pessoa">
         <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
@@ -424,7 +447,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 35%;" class="form-field">
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 3" style="width: 35%;" class="form-field">
       <mat-label>Destinatário</mat-label>
       <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">

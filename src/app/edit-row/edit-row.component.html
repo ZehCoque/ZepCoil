@@ -12,15 +12,23 @@
 
       <div class="button-row button-container">
 
-        <button name="addButton_edit" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
+        <button *ngIf="state == 1" name="addButton_edit" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
           <mat-icon>add</mat-icon>
         </button>
-        <button name="removeButton_edit"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
+        <button *ngIf="state == 1" name="removeButton_edit"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
           <mat-icon>remove</mat-icon>
         </button>
 
-        <button name="investButton_edit" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
+        <button *ngIf="state == 1" name="investButton_edit" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
           <mat-icon>show_chart</mat-icon>
+        </button>
+
+        <button *ngIf="state == 2" name="outButton_edit" mat-mini-fab color="black" (click)="selectType(3)" >
+          <mat-icon >arrow_circle_down</mat-icon>
+        </button>
+
+        <button *ngIf="state == 2" name="inButton_edit" mat-mini-fab color="black" (click)="selectType(4)">
+          <mat-icon >arrow_circle_up</mat-icon>
         </button>
       </div>
 

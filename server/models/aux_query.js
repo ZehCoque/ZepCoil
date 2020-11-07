@@ -1,10 +1,26 @@
 const express = require('express');
-const auth = require('../models/auth.js');
-const query_builder = require('./query_builder.js')
+const auth = require('./auth.js');
 
-function main_pn_info_router() {
+function aux_query_router() {
 
   const router = express.Router();
+
+    router.post('/main_table_query_get/:ID', function (req, res, next) {
+      let database = auth.db_conn().config.database + '.'
+      auth.db_conn().query(
+        'SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
+        [req.body.ID],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(500).json({status: 'error'});
+          } else {
+            res.status(200).json(results);
+          }
+        }
+      );
+    });
+
     router.post('/main_table_query', (req, res, next) => {
       let database = auth.db_conn().config.database + '.'
       auth.db_conn().query(
@@ -31,45 +47,12 @@ function main_pn_info_router() {
       );
     });
 
-    router.post('/main_table_query_get/:ID', function (req, res, next) {
-      let database = auth.db_conn().config.database + '.'
-      auth.db_conn().query(
-        'SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
-        [req.body.ID],
-        (error, results) => {
-          if (error) {
-            console.log(error);
-            res.status(500).json({status: 'error'});
-          } else {
-            res.status(200).json(results);
-          }
-        }
-      );
-    });
-
-  router.get('/main_table_query', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
-      'SELECT * FROM ' + database + 'lançamentos ORDER BY ID',
-      [],
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          res.status(200).json(results);
-        }
-      }
-    );
-  });
-
   router.get('/max_id', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
       'SELECT MAX(ID) as max_id FROM ' + database + 'lançamentos',
       [],
       (error, results) => {
-        console.log(results)
         if (!results.max_id){
           auth.db_conn().query(
             'ALTER TABLE ' + database + 'lançamentos AUTO_INCREMENT = 1',
@@ -85,7 +68,7 @@ function main_pn_info_router() {
     );
   });
 
-  router.delete('/main_table_query/', function (req, res, next) {
+  router.delete('/main_table_query', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
       'DELETE FROM ' + database + 'lançamentos WHERE ID=?',
@@ -106,6 +89,24 @@ function main_pn_info_router() {
       'UPDATE ' + database + 'lançamentos SET CC = ? WHERE CC = ?',
       [req.body.new,
        req.body.old],
+       (error) => {
+        if (error) {
+          console.log(error)
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json({status: 'ok'});
+        }
+       }
+
+  )});
+
+  router.put('/update_done_state/:ID',function (req, res, next) {
+    let database = auth.db_conn().config.database + '.';
+    console.log(req.body.state)
+    auth.db_conn().query(
+      'UPDATE ' + database + 'lançamentos SET Concluido = ? WHERE ID = ?',
+      [req.body.Concluido,
+       req.body.ID],
        (error) => {
         if (error) {
           console.log(error)
@@ -180,44 +181,6 @@ function main_pn_info_router() {
     );
   });
 
-  router.post('/column_value/:column', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-
-    let query_string = query_builder.filter('WHERE 1=1',req.body.active_filters)
-
-    auth.db_conn().query(
-      'SELECT DISTINCT ' + req.body.column + ' FROM ' + database + 'lançamentos ' + query_string,
-      [],
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          res.status(200).json(results);
-        }
-      }
-    );
-  });
-
-  router.post('/main_table_query_CF', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-
-    let query_string = query_builder.sort(query_builder.filter('WHERE 1=1',req.body.active_filters),req.body.active_sorts,req.body.dir)
-
-    auth.db_conn().query(
-      'SELECT * FROM ' + database + 'lançamentos ' + query_string,
-      [],
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          res.status(200).json(results);
-        }
-      }
-    );
-  });
-
 return router;
 }
-module.exports = main_pn_info_router;
+module.exports = aux_query_router;

@@ -11,8 +11,15 @@ function views_router() {
     req.body.active_filters.Tipo = '';
     let query_string = query_builder.filter('WHERE Tipo = \'0\'',req.body.active_filters);
 
+    let query_view;
+    if (req.body.state == 1){
+      query_view = 'view_lançamentos'
+    } else {
+      query_view = 'view_terceiros'
+    }
+
     auth.db_conn().query(
-      'Select SUM(Valor) AS TOTALR from ' + database + 'lançamentos ' + query_string,
+      'Select SUM(Valor) AS TOTALR from ' + database + query_view + ' ' + query_string,
       [],
       (error, results) => {
         if (error) {
@@ -30,8 +37,15 @@ function views_router() {
     req.body.active_filters.Tipo = '';
     let query_string = query_builder.filter('WHERE Tipo = \'1\'',req.body.active_filters);
 
+    let query_view;
+    if (req.body.state == 1){
+      query_view = 'view_lançamentos'
+    } else {
+      query_view = 'view_terceiros'
+    }
+
     auth.db_conn().query(
-      'Select SUM(Valor) AS TOTALD from ' + database + 'lançamentos ' + query_string,
+      'Select SUM(Valor) AS TOTALD from ' + database + query_view + ' ' + query_string,
       [],
       (error, results) => {
         if (error) {
@@ -49,30 +63,19 @@ function views_router() {
     req.body.active_filters.Tipo = '';
     let query_string = query_builder.filter('WHERE Tipo = \'2\'',req.body.active_filters);
 
+    let query_view;
+    if (req.body.state == 1){
+      query_view = 'view_lançamentos'
+    } else {
+      query_view = 'view_terceiros'
+    }
+
     auth.db_conn().query(
-      'Select SUM(Valor) AS TOTALI from ' + database + 'lançamentos ' + query_string,
+      'Select SUM(Valor) AS TOTALI from ' + database + query_view + ' ' + query_string,
       [],
       (error, results) => {
         if (error) {
           console.log(error);
-          res.status(500).json({status: 'error'});
-        } else {
-          res.status(200).json(results);
-        }
-      }
-    );
-  });
-
-  router.post('/max_min_dates', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-
-    let query_string = query_builder.filter('WHERE 1=1',req.body.active_filters)
-
-    auth.db_conn().query(
-      'Select MAX(Data_Entrada) as DATAF, MIN(Data_Entrada) as DATAI from ' + database + 'lançamentos ' + query_string,
-      [],
-      (error, results) => {
-        if (error) {
           res.status(500).json({status: 'error'});
         } else {
           res.status(200).json(results);

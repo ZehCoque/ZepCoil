@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { CC, div_CC, Entrada, Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
+import { AppRoutingService } from '../services/app-routing-service.service';
 import { ServerService } from '../services/server.service';
 
 @Component({
@@ -27,14 +28,18 @@ export class EditRowComponent implements OnInit {
 
   current_data: Entrada;
   error: string;
+  state: any;
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     @Inject(MAT_DIALOG_DATA) public ID: number,
     public dialogRef: MatDialogRef<EditRowComponent>,
-    private server: ServerService) { }
+    private server: ServerService,
+    private routingService: AppRoutingService) { }
 
   ngOnInit()  {
+
+    this.state = this.routingService.getRouteTitle();
 
     this.editedEntryForm = this.formBuilder.group({
       Descricao: new FormControl('', Validators.required),
@@ -117,6 +122,14 @@ export class EditRowComponent implements OnInit {
       document.getElementsByName("removeButton_edit")[0].style.opacity = "0.4";
       document.getElementsByName("investButton_edit")[0].style.opacity = "1";
     }
+    if (type == 3){
+      document.getElementsByName("inButton_edit")[0].style.opacity = "0.4";
+      document.getElementsByName("outButton_edit")[0].style.opacity = "1";
+    }
+    if (type == 4){
+      document.getElementsByName("inButton_edit")[0].style.opacity = "1";
+      document.getElementsByName("outButton_edit")[0].style.opacity = "0.4";
+    }
   }
 
   selectResp(resp:String){
@@ -149,7 +162,8 @@ export class EditRowComponent implements OnInit {
       Tipo: this.editedEntryForm.get("Tipo").value,
       Responsavel: this.editedEntryForm.get("Responsavel").value,
       N_Invest: Number(this.editedEntryForm.get("N_Invest").value),
-      Pessoa: this.editedEntryForm.get("Pessoa").value.Nome
+      Pessoa: this.editedEntryForm.get("Pessoa").value.Nome,
+      Concluido: this.current_data.Concluido
     }
 
     this.server.update_List(edited_json,'main_table_query').then(() => {

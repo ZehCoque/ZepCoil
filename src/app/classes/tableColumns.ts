@@ -11,7 +11,7 @@ export class Entrada {
   N_Invest: number;
   Pessoa: String;
   Responsavel: String;
-
+  Concluido: Boolean;
 }
 
 export class CC {

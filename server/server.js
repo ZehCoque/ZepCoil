@@ -32,14 +32,18 @@ const auth_connection = require('./connection/auth.connection.js');
 const auth = require('./models/auth.js');
 
 // server functions
-const main_table_query = require('./models/main_table_query.js');
+const lancamentos_query = require('./models/lancamentos_query.js');
+const terceiros_query = require('./models/terceiros_query.js');
+const aux_query = require('./models/aux_query.js');
 const CC_query = require('./models/cc_query.js');
 const div_CC_query = require('./models/div_cc_query.js');
 const pessoa_query = require('./models/pessoa_query.js');
 const sp_query = require('./models/stored.procedures.js')
 
 app.use(auth.auth_router(auth_connection));
-app.use(main_table_query());
+app.use(lancamentos_query());
+app.use(terceiros_query());
+app.use(aux_query());
 app.use(CC_query());
 app.use(div_CC_query());
 app.use(pessoa_query());
