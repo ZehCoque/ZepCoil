@@ -102,17 +102,29 @@ function aux_query_router() {
 
   router.put('/update_done_state/:ID',function (req, res, next) {
     let database = auth.db_conn().config.database + '.';
-    console.log(req.body.state)
     auth.db_conn().query(
-      'UPDATE ' + database + 'lançamentos SET Concluido = ? WHERE ID = ?',
-      [req.body.Concluido,
-       req.body.ID],
+      'INSERT INTO ' + database + 'historico SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
+      [req.body.ID],
+
        (error) => {
         if (error) {
           console.log(error)
-          res.status(500).json({status: 'error'});
         } else {
-          res.status(200).json({status: 'ok'});
+          auth.db_conn().query(
+          'UPDATE ' + database + 'lançamentos SET Valor = ?,Data_Entrada = ?, Vencimento = ?, Concluido = ? WHERE ID = ?',
+          [req.body.Valor,
+           req.body.Data_Entrada,
+           req.body.Vencimento,
+           req.body.Concluido,
+           req.body.ID],
+           (error) => {
+            if (error) {
+              console.log(error)
+              res.status(500).json({status: 'error'});
+            } else {
+              res.status(200).json({status: 'ok'});
+            }
+          })
         }
        }
 

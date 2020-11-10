@@ -15,6 +15,12 @@ export class TipoPipe implements PipeTransform {
     if (tipo == "2") {
       return "Investimento"
     }
+    if (tipo == "3"){
+      return "Recebimento"
+    }
+    if (tipo == "4"){
+      return "Devolução"
+    }
     return tipo;
   }
 

@@ -38,8 +38,9 @@ export class SortMessages{
   forDates:dirMsgJson = {up: "Mais antigo para mais novo", down:"Mais novo para mais antigo"};
   forText:dirMsgJson = {up: "A - Z", down: "Z - A"};
   forNumber:dirMsgJson = {up: "Menor para o maior", down: "Maior para o menor"};
-  forType:dirMsgJson = {up: "Recebimentos primeiro" , down: "Investimentos primeiro"}
-  forExpire:dirMsgJson = {up: "Mais curto para o mais longo" , down: "Mais longo para o mais curto"}
+  forType:dirMsgJson = {up: "Recebimentos primeiro" , down: "Investimentos primeiro"};
+  forType2:dirMsgJson = {up: "Recebimentos primeiro" , down: "Devoluções primeiro"};
+  forExpire:dirMsgJson = {up: "Mais curto para o mais longo" , down: "Mais longo para o mais curto"};
 }
 
 

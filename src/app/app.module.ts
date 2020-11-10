@@ -37,6 +37,7 @@ import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { ConcluirDialogComponent } from './concluir-dialog/concluir-dialog.component';
 
 registerLocaleData(localePtBr);
 
@@ -56,6 +57,7 @@ registerLocaleData(localePtBr);
     AdminCcComponent,
     AdminPessoasComponent,
     ErrorModalComponent,
+    ConcluirDialogComponent,
   ],
   imports: [
     CommonModule,

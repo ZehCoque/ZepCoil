@@ -17,6 +17,7 @@ import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { AppRoutingService } from '../services/app-routing-service.service';
 import { filter } from 'rxjs/operators';
+import { ConcluirDialogComponent } from '../concluir-dialog/concluir-dialog.component';
 
 @Component({
   selector: 'app-lancamentos',
@@ -139,6 +140,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
     })
   }
+
+
 
   loadData(){
     let promise = new Promise(async (resolve, reject) => {
@@ -304,9 +307,24 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   }
 
   setDoneState(state,ID,row){
-    this.server.update_List({Concluido: state, ID: ID},'update_done_state').then(() => {
-      this.Entradas[row].Concluido = state;
-    })
+
+    const dialogRef = this.dialog.open(ConcluirDialogComponent, {
+      width: '1000px',
+      data: {ID,state}
+    });
+
+    let sub = dialogRef.afterClosed().subscribe((results) => {
+
+      if (results) {
+
+          this.Entradas[row].Concluido = state;
+      }
+
+      sub.unsubscribe();
+    });
+
+
+
   }
 
   selectType(type:number){
@@ -506,5 +524,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       sub.unsubscribe();
     });
   }
+
 }
 
