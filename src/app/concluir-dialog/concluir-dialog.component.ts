@@ -24,7 +24,7 @@ export class ConcluirDialogComponent implements OnInit {
               private currencyPipe : CurrencyPipe,
               private server: ServerService,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              public dialogRef: MatDialogRef<ConcluirDialogComponent>,) { }
+              public dialogRef: MatDialogRef<ConcluirDialogComponent>) { }
 
   ngOnInit(): void {
 
@@ -114,13 +114,13 @@ export class ConcluirDialogComponent implements OnInit {
 
     let json = {
       Valor: this.getNumberValue(this.doneForm.controls.Valor.value),
-      Data_Entrada: moment(this.doneForm.controls.Data_Entrada.value).toDate(),
-      Vencimento: moment(this.doneForm.controls.Vencimento.value).toDate(),
+      Data_Entrada: moment(this.doneForm.get("Data_Entrada").value).toDate(),
+      Vencimento: moment(this.doneForm.get("Vencimento").value).toDate(),
       Concluido: this.data.state,
       ID: this.data.ID,
     }
 
-    this.server.update_List(json,'update_done_state').then(() => {
+    this.server.update_List(json,'update_done_state_true').then(() => {
       this.onCancel('concluido')
     })
     .catch(error => {this.error = error})

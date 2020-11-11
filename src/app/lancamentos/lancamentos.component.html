@@ -132,19 +132,19 @@
                     {{Entrada.N_Invest}}
                   </span>
 
-                  <button *ngIf="Entrada.Tipo == 3  && !Entrada.Concluido" mat-mini-fab color="black" (click)="setDoneState(true,Entrada.ID,i)">
+                  <button *ngIf="Entrada.Tipo == 3  && !Entrada.Concluido" mat-mini-fab color="black" (click)="setDoneState(false,Entrada.ID,i)">
                     <mat-icon >arrow_downward</mat-icon>
                   </button>
 
-                  <button *ngIf="Entrada.Tipo == 4 && !Entrada.Concluido" mat-mini-fab color="black" (click)="setDoneState(true,Entrada.ID,i)">
+                  <button *ngIf="Entrada.Tipo == 4 && !Entrada.Concluido" mat-mini-fab color="black" (click)="setDoneState(false,Entrada.ID,i)">
                     <mat-icon >arrow_upward</mat-icon>
                   </button>
 
-                  <button *ngIf="Entrada.Tipo == 3  && Entrada.Concluido" mat-mini-fab color="success" (click)="setDoneState(false,Entrada.ID,i)">
+                  <button *ngIf="Entrada.Tipo == 3  && Entrada.Concluido" mat-mini-fab color="success" (click)="setDoneState(true,Entrada.ID,i)">
                     <mat-icon >arrow_downward</mat-icon>
                   </button>
 
-                  <button *ngIf="Entrada.Tipo == 4 && Entrada.Concluido" mat-mini-fab color="success" (click)="setDoneState(false,Entrada.ID,i)">
+                  <button *ngIf="Entrada.Tipo == 4 && Entrada.Concluido" mat-mini-fab color="success" (click)="setDoneState(true,Entrada.ID,i)">
                     <mat-icon >arrow_upward</mat-icon>
                   </button>
 
@@ -263,6 +263,7 @@
        </div>
       <mat-menu #contextMenu="matMenu" >
         <ng-template matMenuContent let-item="item" let-index = "index">
+          <button *ngIf="state == 2 && item.Concluido" mat-menu-item (click)="openHistoryDialog(index)">Ver Histórico</button>
           <button mat-menu-item (click)="editLine(index)">Editar</button>
           <button mat-menu-item (click)="deleteLine(item,index)">Deletar</button>
         </ng-template>

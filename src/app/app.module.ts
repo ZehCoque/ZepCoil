@@ -38,6 +38,8 @@ import { AdminCcComponent } from './admin-cc/admin-cc.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { ConcluirDialogComponent } from './concluir-dialog/concluir-dialog.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { HistoricoDialogComponent } from './historico-dialog/historico-dialog.component';
 
 registerLocaleData(localePtBr);
 
@@ -58,6 +60,8 @@ registerLocaleData(localePtBr);
     AdminPessoasComponent,
     ErrorModalComponent,
     ConcluirDialogComponent,
+    ConfirmationDialogComponent,
+    HistoricoDialogComponent,
   ],
   imports: [
     CommonModule,

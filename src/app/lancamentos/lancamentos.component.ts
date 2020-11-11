@@ -18,6 +18,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { AppRoutingService } from '../services/app-routing-service.service';
 import { filter } from 'rxjs/operators';
 import { ConcluirDialogComponent } from '../concluir-dialog/concluir-dialog.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { HistoricoDialogComponent } from '../historico-dialog/historico-dialog.component';
 
 @Component({
   selector: 'app-lancamentos',
@@ -247,8 +249,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
       }
 
-      console.log(current_id)
-
       let input_json: Entrada = {
         ID: current_id,
         Descricao: this.newEntryForm.get("Descricao").value,
@@ -308,22 +308,24 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   setDoneState(state,ID,row){
 
-    const dialogRef = this.dialog.open(ConcluirDialogComponent, {
-      width: '1000px',
-      data: {ID,state}
-    });
+    if (!state) {
 
-    let sub = dialogRef.afterClosed().subscribe((results) => {
+      const dialogRef = this.dialog.open(ConcluirDialogComponent, {
+        width: '1000px',
+        data: {ID,state:true}
+      });
 
-      if (results) {
+      let sub = dialogRef.afterClosed().subscribe((results) => {
 
-          this.Entradas[row].Concluido = state;
-      }
+        if (results) {
 
-      sub.unsubscribe();
-    });
+            this.Entradas[row].Concluido = true;
+        }
 
-
+        this.newDataEmitter.newDataEmit(results);
+        sub.unsubscribe();
+      });
+    }
 
   }
 
@@ -379,12 +381,31 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     });
   }
 
+  openHistoryDialog(row){
+    this.dialog.open(HistoricoDialogComponent,{
+      width: "50%",
+      data: this.Entradas[row].ID
+    });
+
+  }
+
   deleteLine(item, row){
-    this.Entradas = this.Entradas.filter((item, index) => index !== row)
-    this.server.delete_List(item,'main_table_query').then(() =>{
-      if (this.Entradas.length == 0) this.cdk_empty = true;
-      this.updateSoma();
+
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Tem certeza que deseja deletar?"
+    });
+
+    confirmationDialog.afterClosed().subscribe(result => {
+      if (result){
+        this.Entradas = this.Entradas.filter((item, index) => index !== row)
+        this.server.delete_List(item,'main_table_query').then(() =>{
+          if (this.Entradas.length == 0) this.cdk_empty = true;
+          this.updateSoma();
+        })
+      }
     })
+
    }
 
    moveCursorToEnd(el) {

@@ -21,6 +21,22 @@ function aux_query_router() {
       );
     });
 
+    router.post('/historico_query/:ID', function (req, res, next) {
+      let database = auth.db_conn().config.database + '.'
+      auth.db_conn().query(
+        'SELECT * FROM ' + database + 'historico WHERE ID = ?',
+        [req.body.ID],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(500).json({status: 'error'});
+          } else {
+            res.status(200).json(results);
+          }
+        }
+      );
+    });
+
     router.post('/main_table_query', (req, res, next) => {
       let database = auth.db_conn().config.database + '.'
       auth.db_conn().query(
@@ -100,7 +116,7 @@ function aux_query_router() {
 
   )});
 
-  router.put('/update_done_state/:ID',function (req, res, next) {
+  router.put('/update_done_state_true/:ID',function (req, res, next) {
     let database = auth.db_conn().config.database + '.';
     auth.db_conn().query(
       'INSERT INTO ' + database + 'historico SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
@@ -113,8 +129,8 @@ function aux_query_router() {
           auth.db_conn().query(
           'UPDATE ' + database + 'lançamentos SET Valor = ?,Data_Entrada = ?, Vencimento = ?, Concluido = ? WHERE ID = ?',
           [req.body.Valor,
-           req.body.Data_Entrada,
-           req.body.Vencimento,
+           new Date(req.body.Data_Entrada),
+           new Date(req.body.Vencimento),
            req.body.Concluido,
            req.body.ID],
            (error) => {
@@ -129,6 +145,46 @@ function aux_query_router() {
        }
 
   )});
+
+
+  //REDO
+  // router.put('/update_done_state_false/:ID',function (req, res, next) {
+  //   let database = auth.db_conn().config.database + '.';
+  //   auth.db_conn().query(
+  //     'INSERT INTO Tipo, Descricao, Data_Entrada, Vencimento, Div_CC, Observacao, N_Invest, Pessoa, CC, Responsavel, Valor, Concluido, Imposto ' + database + 'lançamentos SELECT Tipo, Descricao, Data_Entrada, Vencimento, Div_CC, Observacao, N_Invest, Pessoa, CC, Responsavel, Valor, Concluido, Imposto FROM ' + database + 'historico WHERE ID = ?',
+  //     [req.body.ID],
+
+  //      (error) => {
+  //       if (error) {
+  //         console.log(error)
+  //       } else {
+
+  //         auth.db_conn().query(
+  //           'DELETE FROM ' + database + 'lançamentos WHERE ID = ?',
+  //           [req.body.ID],
+  //           (error) => {
+  //             if (error){
+  //               console.log(error)
+  //             } else {
+  //               auth.db_conn().query(
+  //                 'UPDATE ' + database + 'lançamentos SET Concluido = ? WHERE ID = ?',
+  //                 [req.body.Concluido,
+  //                  req.body.ID],
+  //                  (error) => {
+  //                   if (error) {
+  //                     console.log(error)
+  //                     res.status(500).json({status: 'error'});
+  //                   } else {
+  //                     res.status(200).json({status: 'ok'});
+  //                   }
+  //                 })
+  //             }
+  //           }
+  //         )
+  //       }
+  //      }
+
+  // )});
 
 
   router.put('/main_table_query_update_div_CC',function (req, res, next) {
