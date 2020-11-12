@@ -53,7 +53,7 @@
             </button>
           </div>
 
-          <div class="el-tag--plain el-col-2">
+          <div class="el-tag--plain el-col-1">
             C.C.
             <button (click)="getColumnValues('CC')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.CC.active && !activeFilters.CC">arrow_drop_down</mat-icon>
@@ -63,7 +63,7 @@
             </button>
           </div>
 
-          <div class="el-tag--plain el-col-2">
+          <div class="el-tag--plain el-col-3">
             Div. C.C
             <button (click)="getColumnValues('Div_CC')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Div_CC', 'class_msg':sortMessages.forNumber }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Div_CC.active && !activeFilters.Div_CC">arrow_drop_down</mat-icon>
@@ -166,12 +166,12 @@
                   {{ Entrada.Valor | currency:'BRL'}}
                 </div>
 
-                <div class="el-tag--plain el-col-2">
+                <div class="el-tag--plain el-col-1">
                   {{Entrada.CC}}
                 </div>
 
 
-                <div class="el-tag--plain el-col-2">
+                <div class="el-tag--plain el-col-3">
                   {{Entrada.Div_CC}}
                 </div >
 

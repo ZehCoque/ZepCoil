@@ -31,7 +31,7 @@ import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
 import { UppercaseDirective } from './directives/uppercase.directive';
 import { ErrormessagePipe } from './pipes/errormessage.pipe';
 import { UsersComponent } from './users/users.component';
-import { AppRoutingService } from './services/app-routing-service.service'
+import { AppRoutingService } from './services/app-routing-service.service';
 
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
@@ -40,6 +40,10 @@ import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { ConcluirDialogComponent } from './concluir-dialog/concluir-dialog.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { HistoricoDialogComponent } from './historico-dialog/historico-dialog.component';
+
+import { NgBrazil } from 'ng-brazil';
+import { TextMaskModule } from 'angular2-text-mask';
+
 
 registerLocaleData(localePtBr);
 
@@ -64,6 +68,8 @@ registerLocaleData(localePtBr);
     HistoricoDialogComponent,
   ],
   imports: [
+    TextMaskModule,
+    NgBrazil,
     CommonModule,
     HttpClientModule,
     BrowserModule,

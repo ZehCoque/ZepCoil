@@ -16,6 +16,7 @@ function lancamentos_router() {
             console.log(error);
             res.status(500).json({status: 'error'});
           } else {
+
             res.status(200).json(results);
           }
         }

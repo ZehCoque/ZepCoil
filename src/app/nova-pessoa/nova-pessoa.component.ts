@@ -1,10 +1,10 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
+import { utilsBr } from 'js-brasil';
 
 @Component({
   selector: 'app-nova-pessoa',
@@ -12,13 +12,10 @@ import { ServerService } from '../services/server.service';
   styleUrls: ['./nova-pessoa.component.scss']
 })
 export class NovaPessoaComponent implements OnInit {
-
+  public MASKS = utilsBr.MASKS;
   novaPessoa: Pessoa;
   novaPessoaForm: FormGroup;
   loading: Boolean = true;
-
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport: CdkVirtualScrollViewport;
 
   error: string;
 
@@ -36,7 +33,7 @@ export class NovaPessoaComponent implements OnInit {
     this.novaPessoaForm = this.formBuilder.group({
       Nome: new FormControl('', Validators.required),
       Sobrenome: new FormControl('', Validators.required),
-      CPF_CNPJ: new FormControl('', Validators.pattern("^[0-9]*$")),
+      CPF_CNPJ: new FormControl(''),
       Banco: new FormControl(''),
       Agencia: new FormControl('',Validators.pattern("^[0-9]*$")),
       Conta: new FormControl('',Validators.pattern("^[0-9]*$")),
@@ -50,11 +47,17 @@ export class NovaPessoaComponent implements OnInit {
       if (this.novaPessoaForm.get('Agencia').value == 0) this.novaPessoaForm.controls.Agencia.setValue('');
       if (this.novaPessoaForm.get('Conta').value == 0) this.novaPessoaForm.controls.Conta.setValue('');
 
-      setTimeout(() => {
-        this.viewport.scrollToIndex(this.viewport.getDataLength());
-      }, 0);
-
     }
+
+    this.novaPessoaForm.valueChanges.subscribe(val => {
+      console.log(this.getNumberValue(this.novaPessoaForm.controls.CPF_CNPJ.value))
+      // if (val.CPF_CNPJ) {
+      //   let valor = this.getNumberValue(val.CPF_CNPJ);
+      //   this.novaPessoaForm.patchValue({
+      //     Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+      //     {emitEvent:false})
+      // }
+    });
 
     this.loading = false;
 
@@ -80,7 +83,7 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   add_pessoa(){
-    
+
     let promise = new Promise((resolve,reject) => {
       if (this.novaPessoaForm.get('CPF_CNPJ').value == '') this.novaPessoaForm.controls.CPF_CNPJ.setValue(0);
       if (this.novaPessoaForm.get('Agencia').value == '') this.novaPessoaForm.controls.Agencia.setValue(0);
@@ -89,7 +92,7 @@ export class NovaPessoaComponent implements OnInit {
       this.novaPessoa = {
         Nome: this.novaPessoaForm.get('Nome').value,
         Sobrenome: this.novaPessoaForm.get('Sobrenome').value,
-        CPF_CNPJ: this.novaPessoaForm.get('CPF_CNPJ').value,
+        CPF_CNPJ: this.getNumberValue(this.novaPessoaForm.get('CPF_CNPJ').value),
         Banco: this.novaPessoaForm.get('Banco').value,
         Agencia: this.novaPessoaForm.get('Agencia').value,
         Conta: this.novaPessoaForm.get('Conta').value,
@@ -136,6 +139,11 @@ export class NovaPessoaComponent implements OnInit {
 
   setTipo(tipo:string){
     this.novaPessoaForm.controls.Tipo.setValue(tipo);
+  }
+
+  getNumberValue(value){
+
+    return value.replace(/\D/g,"");
   }
 
 }
