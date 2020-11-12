@@ -117,6 +117,15 @@
 
           <mat-card (contextmenu)="onContextMenu($event, Entrada, i)">
             <mat-card-content>
+              <div *ngIf="Entrada.Imposto" class="unselectable-line imposto">
+                C/ IMPOSTO
+              </div>
+              <div *ngIf="Entrada.Tipo_despesa == 'F'" class="unselectable-line imposto">
+                FIXA
+              </div>
+              <div *ngIf="Entrada.Tipo_despesa == 'V'" class="unselectable-line imposto">
+                VARIÁVEL
+              </div>
               <div class="unselectable-line display-flex" style=" align-items: center">
                 <div class="el-tag--plain el-col-1">
                     <button *ngIf="Entrada.Tipo == 1" mat-mini-fab color="warn">

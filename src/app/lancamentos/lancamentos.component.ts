@@ -64,6 +64,9 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   query_url: string;
   column_url: string;
 
+  Imposto = ['Sem imposto', 'Com imposto'];
+  Tipo_despesa = ['Fixa', 'Variável'];
+
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     private server: ServerService,
@@ -111,7 +114,9 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
       Tipo: new FormControl('',Validators.required),
-      Pessoa: new FormControl('')
+      Pessoa: new FormControl(''),
+      Imposto: new FormControl(this.Imposto[0]),
+      Tipo_despesa: new FormControl(this.Tipo_despesa[0]),
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
@@ -262,7 +267,9 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         Responsavel: this.newEntryForm.get("Responsavel").value,
         N_Invest: Number(this.newEntryForm.get("N_Invest").value),
         Pessoa: this.newEntryForm.get("Pessoa").value.Nome,
-        Concluido: false
+        Concluido: false,
+        Imposto: this.newEntryForm.get("Imposto").value,
+        Tipo_despesa: this.newEntryForm.get("Tipo_despesa").value,
       }
 
       this.Entradas = [...this.Entradas, input_json]

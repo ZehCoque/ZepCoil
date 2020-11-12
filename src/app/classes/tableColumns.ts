@@ -12,6 +12,8 @@ export class Entrada {
   Pessoa: String;
   Responsavel: String;
   Concluido: Boolean;
+  Imposto: Boolean;
+  Tipo_despesa: String;
 }
 
 export class CC {

@@ -52,7 +52,9 @@ export class EditRowComponent implements OnInit {
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
       Tipo: new FormControl('',Validators.required),
-      Pessoa: new FormControl('')
+      Pessoa: new FormControl(''),
+      Imposto: new FormControl(''),
+      Tipo_despesa: new FormControl(''),
     });
 
     this.loadData(this.ID).then(() => {
@@ -163,7 +165,8 @@ export class EditRowComponent implements OnInit {
       Responsavel: this.editedEntryForm.get("Responsavel").value,
       N_Invest: Number(this.editedEntryForm.get("N_Invest").value),
       Pessoa: this.editedEntryForm.get("Pessoa").value.Nome,
-      Concluido: this.current_data.Concluido
+      Concluido: this.current_data.Concluido,
+
     }
 
     this.server.update_List(edited_json,'main_table_query').then(() => {
