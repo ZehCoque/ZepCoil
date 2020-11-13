@@ -484,6 +484,26 @@
       O número de investimento deve ser um número.
     </mat-error>
 </mat-form-field>
+<div>
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0 " style="width: 35%;" class="form-field">
+    <mat-label>Tem imposto?</mat-label>
+    <mat-select formControlName="Imposto">
+      <mat-option *ngFor="let imp of Imposto" [value]="imp">
+        {{ imp.text }}
+       </mat-option>
+  </mat-select>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 35%;" class="form-field">
+    <mat-label>Variável/Fixa</mat-label>
+    <mat-select formControlName="Tipo_despesa">
+    <mat-option *ngFor="let desp of Tipo_despesa" [value]="desp">
+     {{ desp.text }}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
+</div>
+
 
     <div>
       <mat-form-field style="width: 100%;" class="example-full-width">

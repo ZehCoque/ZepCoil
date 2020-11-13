@@ -142,8 +142,8 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   getNumberValue(value){
-
-    return value.replace(/\D/g,"");
+    if (typeof value == "number") return;
+    else return value.replace(/\D/g,"");
   }
 
 }

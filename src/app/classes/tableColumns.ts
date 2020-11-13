@@ -12,7 +12,7 @@ export class Entrada {
   Pessoa: String;
   Responsavel: String;
   Concluido: Boolean;
-  Imposto: Boolean;
+  Imposto: Boolean | Number;
   Tipo_despesa: String;
 }
 

@@ -40,7 +40,7 @@ function aux_query_router() {
     router.post('/main_table_query', (req, res, next) => {
       let database = auth.db_conn().config.database + '.'
       auth.db_conn().query(
-        'INSERT INTO ' + database + 'lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        'INSERT INTO ' + database + 'lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`,`Concluido`,`Imposto`,`Tipo_despesa`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
           req.body.CC,
@@ -51,7 +51,11 @@ function aux_query_router() {
           req.body.Tipo,
           req.body.N_Invest,
           req.body.Pessoa,
-          req.body.Responsavel],
+          req.body.Responsavel,
+          req.body.Concluido,
+          req.body.Imposto,
+          req.body.Tipo_despesa
+        ],
         (error) => {
           if (error) {
             console.error(error);
@@ -147,46 +151,6 @@ function aux_query_router() {
   )});
 
 
-  //REDO
-  // router.put('/update_done_state_false/:ID',function (req, res, next) {
-  //   let database = auth.db_conn().config.database + '.';
-  //   auth.db_conn().query(
-  //     'INSERT INTO Tipo, Descricao, Data_Entrada, Vencimento, Div_CC, Observacao, N_Invest, Pessoa, CC, Responsavel, Valor, Concluido, Imposto ' + database + 'lançamentos SELECT Tipo, Descricao, Data_Entrada, Vencimento, Div_CC, Observacao, N_Invest, Pessoa, CC, Responsavel, Valor, Concluido, Imposto FROM ' + database + 'historico WHERE ID = ?',
-  //     [req.body.ID],
-
-  //      (error) => {
-  //       if (error) {
-  //         console.log(error)
-  //       } else {
-
-  //         auth.db_conn().query(
-  //           'DELETE FROM ' + database + 'lançamentos WHERE ID = ?',
-  //           [req.body.ID],
-  //           (error) => {
-  //             if (error){
-  //               console.log(error)
-  //             } else {
-  //               auth.db_conn().query(
-  //                 'UPDATE ' + database + 'lançamentos SET Concluido = ? WHERE ID = ?',
-  //                 [req.body.Concluido,
-  //                  req.body.ID],
-  //                  (error) => {
-  //                   if (error) {
-  //                     console.log(error)
-  //                     res.status(500).json({status: 'error'});
-  //                   } else {
-  //                     res.status(200).json({status: 'ok'});
-  //                   }
-  //                 })
-  //             }
-  //           }
-  //         )
-  //       }
-  //      }
-
-  // )});
-
-
   router.put('/main_table_query_update_div_CC',function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
@@ -225,7 +189,7 @@ function aux_query_router() {
   router.put('/main_table_query/:ID', function (req, res, next) {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
-      'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?  WHERE `ID`=?',
+      'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?, `Concluido`=?, `Imposto`=?, `Tipo_despesa`=?  WHERE `ID`=?',
       [req.body.Descricao,
         new Date(req.body.Data_Entrada),
         req.body.CC,
@@ -237,6 +201,9 @@ function aux_query_router() {
         req.body.N_Invest,
         req.body.Pessoa,
         req.body.Responsavel,
+        req.body.Concluido,
+        req.body.Imposto,
+        req.body.Tipo_despesa,
         req.body.ID],
       (error) => {
         if (error) {

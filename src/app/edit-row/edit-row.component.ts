@@ -30,6 +30,27 @@ export class EditRowComponent implements OnInit {
   error: string;
   state: any;
 
+  Imposto = [
+    {
+      text: 'Sem imposto',
+      value: 0
+    },
+    {
+      text: 'Com imposto',
+      value: 1
+    },
+  ];
+  Tipo_despesa = [
+    {
+      text: 'Fixa',
+      value: 'F'
+    },
+    {
+      text: 'Variável',
+      value: 'V'
+    },
+  ];
+
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
     @Inject(MAT_DIALOG_DATA) public ID: number,
@@ -60,7 +81,7 @@ export class EditRowComponent implements OnInit {
     this.loadData(this.ID).then(() => {
 
       this.insertData();
-
+      console.log(this.current_data)
       this.editedEntryForm.valueChanges.subscribe(val => {
         if (val.Valor) {
           let valor;
@@ -100,6 +121,24 @@ export class EditRowComponent implements OnInit {
       this.editedEntryForm.controls.Pessoa.patchValue(current_Pessoa);
 
     });
+
+    if (this.current_data.Tipo_despesa != null) {
+      let current_Tipo_despesa = this.Tipo_despesa.find(value => value.value === this.current_data.Tipo_despesa);
+      this.editedEntryForm.controls.Tipo_despesa.patchValue(current_Tipo_despesa);
+    } else {
+      this.current_data.Tipo_despesa = "F"
+      let current_Tipo_despesa = this.Tipo_despesa.find(value => value.value === this.current_data.Tipo_despesa);
+      this.editedEntryForm.controls.Tipo_despesa.patchValue(current_Tipo_despesa);
+    }
+
+    if (this.current_data.Imposto) {
+      let current_Imposto = this.Imposto.find(value => value.value === this.current_data.Imposto);
+      this.editedEntryForm.controls.Imposto.patchValue(current_Imposto);
+    } else {
+      this.current_data.Imposto = 0;
+      let current_Imposto = this.Imposto.find(value => value.value === this.current_data.Imposto);
+      this.editedEntryForm.controls.Imposto.patchValue(current_Imposto);
+    }
 
     this.editedEntryForm.controls.Valor.setValue(this.currencyPipe.transform(this.current_data.Valor,'BRL','symbol','1.2-2'));
 
@@ -152,6 +191,18 @@ export class EditRowComponent implements OnInit {
       this.editedEntryForm.controls.Pessoa.setValue(new Array(Entrada));
     }
 
+    let imp;
+
+    if (this.editedEntryForm.get("Tipo").value == 0){
+      imp = this.editedEntryForm.get("Imposto").value.value;
+    }
+
+    let desp;
+
+    if (this.editedEntryForm.get("Tipo").value == 1){
+      desp = this.editedEntryForm.get("Tipo_despesa").value.value;
+    }
+
     let edited_json: Entrada = {
       ID: this.ID,
       Descricao: this.editedEntryForm.get("Descricao").value,
@@ -166,7 +217,8 @@ export class EditRowComponent implements OnInit {
       N_Invest: Number(this.editedEntryForm.get("N_Invest").value),
       Pessoa: this.editedEntryForm.get("Pessoa").value.Nome,
       Concluido: this.current_data.Concluido,
-
+      Imposto: imp,
+      Tipo_despesa: desp,
     }
 
     this.server.update_List(edited_json,'main_table_query').then(() => {

@@ -64,8 +64,26 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   query_url: string;
   column_url: string;
 
-  Imposto = ['Sem imposto', 'Com imposto'];
-  Tipo_despesa = ['Fixa', 'Variável'];
+  Imposto = [
+    {
+      text: 'Sem imposto',
+      value: 0
+    },
+    {
+      text: 'Com imposto',
+      value: 1
+    },
+  ];
+  Tipo_despesa = [
+    {
+      text: 'Fixa',
+      value: 'F'
+    },
+    {
+      text: 'Variável',
+      value: 'V'
+    },
+  ];
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -254,6 +272,18 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
       }
 
+      let imp;
+
+      if (this.newEntryForm.get("Tipo").value == 0){
+        imp = this.newEntryForm.get("Imposto").value.value;
+      }
+
+      let desp;
+
+      if (this.newEntryForm.get("Tipo").value == 1){
+        desp = this.newEntryForm.get("Tipo_despesa").value.value;
+      }
+
       let input_json: Entrada = {
         ID: current_id,
         Descricao: this.newEntryForm.get("Descricao").value,
@@ -268,8 +298,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         N_Invest: Number(this.newEntryForm.get("N_Invest").value),
         Pessoa: this.newEntryForm.get("Pessoa").value.Nome,
         Concluido: false,
-        Imposto: this.newEntryForm.get("Imposto").value,
-        Tipo_despesa: this.newEntryForm.get("Tipo_despesa").value,
+        Imposto: imp,
+        Tipo_despesa: desp,
       }
 
       this.Entradas = [...this.Entradas, input_json]
