@@ -39,4 +39,16 @@ export class Pessoa{
   Tipo: String;
 }
 
+export class Contratos {
+  ID?: Number;
+  Descricao: String;
+  Data_inicio: Date;
+  Data_termino: Date;
+  CC: String;
+  Div_CC: String;
+  Valor: String;
+  Pessoa: String;
+  Tipo: String;
+}
+
 

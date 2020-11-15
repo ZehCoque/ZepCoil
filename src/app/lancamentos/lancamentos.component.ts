@@ -188,6 +188,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         });
       }).catch(err => reject(err));
 
+      //GET ALL PESSOAS
       await this.server.get_List('pessoa_query').then(async (response: any) => {
         await response.forEach( (Pessoa:Pessoa) => {
           this.Pessoa = [...this.Pessoa, Pessoa];
