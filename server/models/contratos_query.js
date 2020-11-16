@@ -9,7 +9,7 @@ function contratos_router() {
     router.post('/contratos_query/:ID', function (req, res, next) {
       let database = auth.db_conn().config.database + '.'
       auth.db_conn().query(
-        'SELECT * FROM ' + database + 'view_contratos WHERE ID = ?',
+        'SELECT * FROM ' + database + 'contratos WHERE ID = ?',
         [req.body.ID],
         (error, results) => {
           if (error) {
@@ -29,7 +29,7 @@ function contratos_router() {
     let query_string = query_builder.filter('WHERE 1=1',req.body.active_filters)
 
     auth.db_conn().query(
-      'SELECT DISTINCT ' + req.body.column + ' FROM ' + database + 'view_contratos ' + query_string,
+      'SELECT DISTINCT ' + req.body.column + ' FROM ' + database + 'contratos ' + query_string,
       [],
       (error, results) => {
         if (error) {

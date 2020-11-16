@@ -44,6 +44,7 @@ import { HistoricoDialogComponent } from './historico-dialog/historico-dialog.co
 import { NgBrazil } from 'ng-brazil';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ContratosComponent } from './contratos/contratos.component';
+import { NovoContratoComponent } from './novo-contrato/novo-contrato.component';
 
 
 registerLocaleData(localePtBr);
@@ -68,6 +69,7 @@ registerLocaleData(localePtBr);
     ConfirmationDialogComponent,
     HistoricoDialogComponent,
     ContratosComponent,
+    NovoContratoComponent,
   ],
   imports: [
     TextMaskModule,

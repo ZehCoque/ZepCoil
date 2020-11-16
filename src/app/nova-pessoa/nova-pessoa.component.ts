@@ -49,16 +49,6 @@ export class NovaPessoaComponent implements OnInit {
 
     }
 
-    this.novaPessoaForm.valueChanges.subscribe(val => {
-      console.log(this.getNumberValue(this.novaPessoaForm.controls.CPF_CNPJ.value))
-      // if (val.CPF_CNPJ) {
-      //   let valor = this.getNumberValue(val.CPF_CNPJ);
-      //   this.novaPessoaForm.patchValue({
-      //     Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
-      //     {emitEvent:false})
-      // }
-    });
-
     this.loading = false;
 
   }

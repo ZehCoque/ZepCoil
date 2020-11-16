@@ -9,11 +9,11 @@ import { CC, div_CC, Contratos, Pessoa } from '../classes/tableColumns'
 import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { EditRowComponent } from '../edit-row/edit-row.component';
 import { SortMessages } from '../classes/active_filters_and_sorts';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { ContratosActiveFilters, ContratosActiveSorts } from '../classes/active_filters_and_sorts contratos';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { NovoContratoComponent } from '../novo-contrato/novo-contrato.component';
 
 @Component({
   selector: 'app-contratos',
@@ -45,7 +45,7 @@ export class ContratosComponent implements OnInit {
   activeFilters: ContratosActiveFilters = new ContratosActiveFilters;
   sortMessages: SortMessages = new SortMessages;
 
-  editRowDialogRef: MatDialogRef<EditRowComponent>;
+  editRowDialogRef: MatDialogRef<NovoContratoComponent>;
   currentActiveSort: string;
   currentActiveFilter: string;
   contratos: any[];
@@ -106,7 +106,7 @@ export class ContratosComponent implements OnInit {
 
         this.Contratos = new Array();
         //GET ALL Contratos
-        await this.server.get_List('contratos_query').then(async (response: any) => {
+        await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'contratos_query').then(async (response: any) => {
             await response.forEach( (element:Contratos) => {
               this.Contratos = [...this.Contratos, element];
             });
@@ -219,7 +219,7 @@ export class ContratosComponent implements OnInit {
 
   editLine(row){
 
-    this.editRowDialogRef = this.dialog.open(EditRowComponent,{
+    this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
       width: "50%",
       data: this.Contratos[row].ID
     });
@@ -319,5 +319,16 @@ export class ContratosComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  openContratosDialog(){
+
+    this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
+      width: "50%"
+    });
+
+    this.editRowDialogRef.afterClosed().subscribe((results) => {
+      this.newDataEmitter.newDataEmit(results);
+    });
   }
 }
