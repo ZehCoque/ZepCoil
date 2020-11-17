@@ -272,6 +272,7 @@ export class EditRowComponent implements OnInit {
         });
       }).catch(err => reject(err));
 
+      //GET ALL PESSOA
       await this.server.get_List('pessoa_query').then(async (response: any) => {
         await response.forEach( (Pessoa:Pessoa) => {
           this.Pessoa = [...this.Pessoa, Pessoa];

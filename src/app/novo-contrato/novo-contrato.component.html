@@ -1,33 +1,55 @@
-<form [formGroup]="novaPessoaForm">
-  <div class="header-padding">
-    <div class="unselectable-line display-flex header-row" style=" align-items: center; ">
+<form [formGroup]="novoContratoForm">
 
-      <div *ngIf="!preloaded.pessoa" class="el-tag--plain" style="width: 100%;">
-        Nova Pessoa
-      </div>
-
-      <div *ngIf="preloaded.pessoa" class="el-tag--plain" style="width: 100%;">
-        Editar Pessoa
-      </div>
-    </div>
+  <div *ngIf="preloaded" class="el-title" style="margin-bottom: 10px;">
+    Editar um contrato
   </div>
+
+  <div *ngIf="!preloaded" class="el-title" style="margin-bottom: 10px;">
+    Novo contrato
+  </div>
+
 <div>
   <div class="formulario">
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
-    <mat-form-field  style="width: 30%;text-align: center;" class="form-field">
-      <mat-label>Nome</mat-label>
-      <input matInput formControlName="Nome" [errorStateMatcher]="errorMatcher">
-      <mat-error *ngIf="novaPessoaForm.get('Nome').hasError('required')" >
-        É necessário inserir um nome.
+    <mat-form-field style="width: 25%;" class="form-field">
+      <mat-label>Contratante</mat-label>
+      <mat-select formControlName="Pessoa">
+      <mat-option *ngFor="let contratante of Pessoa" [value]="contratante">
+       {{ contratante.Nome }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novoContratoForm.get('Pessoa').hasError('required')" >
+      É necessário inserir um contratante.
+    </mat-error>
+  </mat-form-field>
+
+    <mat-form-field  style="width: 65%;text-align: center;" class="form-field">
+      <mat-label>Descrição</mat-label>
+      <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('Descricao').hasError('required')" >
+        É necessário inserir uma descrição.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field  style="width: 30%;text-align: center;" class="form-field">
-      <mat-label>Sobrenome</mat-label>
-      <input matInput formControlName="Sobrenome" [errorStateMatcher]="errorMatcher">
-      <mat-error *ngIf="novaPessoaForm.get('Sobrenome').hasError('required')" >
-        É necessário inserir um sobrenome.
+    <mat-form-field style="width: 20%;" class="form-field">
+      <mat-label>Data de Início</mat-label>
+      <input matInput formControlName="Data_inicio" [matDatepicker]="picker1">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+      <mat-error *ngIf="novoContratoForm.get('Data_inicio').hasError('required')" >
+        É necessário inserir uma data de início válida.
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field style="width: 20%;" class="form-field">
+      <mat-label>Data de Término</mat-label>
+      <input matInput formControlName="Data_termino" [matDatepicker]="picker2">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <mat-error *ngIf="novoContratoForm.get('Data_termino').hasError('required')" >
+        É necessário inserir uma data de término válida.
       </mat-error>
     </mat-form-field>
 
@@ -38,41 +60,42 @@
           {{ tipo }}
          </mat-option>
     </mat-select>
-    <mat-error *ngIf="novaPessoaForm.get('Tipo').hasError('required')" >
+    <mat-error *ngIf="novoContratoForm.get('Tipo').hasError('required')" >
       É necessário escolher um tipo.
     </mat-error>
   </mat-form-field>
 
-  </div>
-
-  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
-
-    <mat-form-field style="width: 30%;text-align: center;" class="form-field">
-      <mat-label>CPF</mat-label>
-      <input [textMask]="{mask: MASKS.cpf.textMask}" matInput formControlName="CPF_CNPJ">
-    </mat-form-field>
-
-    <mat-form-field style="width: 20%;text-align: center; padding-top: 10px;" class="form-field">
-      <mat-label>Banco</mat-label>
-      <input matInput formControlName="Banco">
-
-    </mat-form-field>
-
-    <mat-form-field  style="width: 20%;text-align: center; padding-top: 10px;" class="form-field">
-      <mat-label>Agencia</mat-label>
-      <input matInput formControlName="Agencia">
-      <mat-error *ngIf="novaPessoaForm.get('CPF_CNPJ').hasError('pattern')" >
-        Apenas números podem ser inseridos aqui.
+    <mat-form-field  style="width: 25%;text-align: center;" class="form-field">
+      <mat-label>Valor</mat-label>
+      <input matInput formControlName="Valor" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('Valor').hasError('required')" >
+        É necessário inserir um sobrenome.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field  style="width: 20%;text-align: center; padding-top: 10px;" class="form-field">
-      <mat-label>Conta</mat-label>
-      <input matInput formControlName="Conta">
-      <mat-error *ngIf="novaPessoaForm.get('CPF_CNPJ').hasError('pattern')" >
-        Apenas números podem ser inseridos aqui.
-      </mat-error>
-    </mat-form-field>
+    <mat-form-field style="width: 45%;" class="form-field">
+      <mat-label>Centro de Custo</mat-label>
+      <mat-select formControlName="CC">
+      <mat-option *ngFor="let cc of CC" [value]="cc" (click)="get_div_cc(cc.Nome)">
+       {{ cc.Descricao }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novoContratoForm.get('CC').hasError('required')" >
+      É necessário inserir um de centro de custo.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 45%;" class="form-field">
+    <mat-label>Divisão Centro de Custo</mat-label>
+    <mat-select [disabled]="!div_cc_ready" formControlName="Div_CC">
+    <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
+     {{ div_CC.Divisao }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="novoContratoForm.get('Div_CC').hasError('required')" >
+    É necessário inserir uma divisão de centro de custo.
+  </mat-error>
+</mat-form-field>
 
   </div>
 
@@ -83,8 +106,7 @@
   </div>
 </div>
 <div class="button-row">
-  <button mat-raised-button  (click)='onSubmit()' [disabled]="!novaPessoaForm.valid">Concluir</button>
-  <button mat-raised-button *ngIf="preloaded.pessoa"  (click)='onDelete()' type="button">Excluir</button>
+  <button mat-raised-button  (click)='onSubmit()' [disabled]="!novoContratoForm.valid">Concluir</button>
   <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
 </div>
 

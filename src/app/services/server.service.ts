@@ -29,6 +29,7 @@ export class ServerService {
     return this.request('POST', `${environment.serverUrl}/${slash_url}/${data[0]}`, data);
   }
   add_List(data,slash_url) {
+    console.log('POST', `${environment.serverUrl}/${slash_url}`)
     return this.request('POST', `${environment.serverUrl}/${slash_url}`, data);
   }
   update_List(data,slash_url) {

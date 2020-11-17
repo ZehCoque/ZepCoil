@@ -6,7 +6,7 @@ function contratos_router() {
 
   const router = express.Router();
 
-    router.post('/contratos_query/:ID', function (req, res, next) {
+    router.post('/contratos_query_get/:ID', function (req, res, next) {
       let database = auth.db_conn().config.database + '.'
       auth.db_conn().query(
         'SELECT * FROM ' + database + 'contratos WHERE ID = ?',
@@ -64,21 +64,16 @@ function contratos_router() {
   router.post('/contratos_query_insert', (req, res, next) => {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
-      'INSERT INTO ' + database + 'contratos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`,`Concluido`,`Imposto`,`Tipo_despesa`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-      [req.body.Descricao,
-        new Date(req.body.Data_Entrada),
+      'INSERT INTO ' + database + 'contratos (`Descricao`, `Pessoa`, `Data_inicio`, `Data_termino`, `Valor`, `CC`, `Div_CC`, `Tipo`) VALUES (?,?,?,?,?,?,?,?)',
+      [
+        req.body.Descricao,
+        req.body.Pessoa,
+        new Date(req.body.Data_inicio),
+        new Date(req.body.Data_termino),
+        req.body.Valor,
         req.body.CC,
         req.body.Div_CC,
-        new Date(req.body.Vencimento),
-        req.body.Valor,
-        req.body.Observacao,
-        req.body.Tipo,
-        req.body.N_Invest,
-        req.body.Pessoa,
-        req.body.Responsavel,
-        req.body.Concluido,
-        req.body.Imposto,
-        req.body.Tipo_despesa
+        req.body.Tipo
       ],
       (error) => {
         if (error) {
@@ -119,6 +114,32 @@ router.delete('/contratos_query', function (req, res, next) {
     [req.body.ID],
     (error) => {
       if (error) {
+        res.status(500).json({status: 'error'});
+      } else {
+        res.status(200).json({status: 'ok'});
+      }
+    }
+  );
+});
+
+router.put('/contratos_query/:ID', function (req, res, next) {
+  let database = auth.db_conn().config.database + '.'
+  auth.db_conn().query(
+    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?  WHERE `ID`=?',
+    [
+      req.body.Descricao,
+      req.body.Pessoa,
+      new Date(req.body.Data_inicio),
+      new Date(req.body.Data_termino),
+      req.body.Valor,
+      req.body.CC,
+      req.body.Div_CC,
+      req.body.Tipo,
+      req.body.ID
+    ],
+    (error) => {
+      if (error) {
+        console.log(error)
         res.status(500).json({status: 'error'});
       } else {
         res.status(200).json({status: 'ok'});
