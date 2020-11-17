@@ -16,6 +16,7 @@ function createWindow () {
 
   mainWindow.maximize();
   mainWindow.show();
+  mainWindow.removeMenu()
 
   mainWindow.loadURL(
     url.format({
