@@ -327,11 +327,20 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
     this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
     this.newEntryForm.controls.Vencimento.patchValue(moment(this.today).add(1, 'M').toISOString());
-    document.getElementsByName("addButton")[0].style.opacity = "0.4";
-    document.getElementsByName("removeButton")[0].style.opacity = "0.4";
-    document.getElementsByName("investButton")[0].style.opacity = "0.4";
+
+    if (document.getElementsByName("addButton")[0]) {
+      document.getElementsByName("addButton")[0].style.opacity = "0.4";
+      document.getElementsByName("removeButton")[0].style.opacity = "0.4";
+      document.getElementsByName("investButton")[0].style.opacity = "0.4";
+    }
+
+    if (document.getElementsByName("outButton")[0]){
+      document.getElementsByName("outButton")[0].style.opacity = "0.4";
+      document.getElementsByName("inButton")[0].style.opacity = "0.4";
+    }
     document.getElementsByName("CButton")[0].style.opacity = "0.4";
     document.getElementsByName("ZButton")[0].style.opacity = "0.4";
+
   }
 
   onContextMenu(event: MouseEvent, item, index) {
@@ -384,11 +393,11 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       document.getElementsByName("removeButton")[0].style.opacity = "0.4";
       document.getElementsByName("investButton")[0].style.opacity = "1";
     }
-    if (type == 3){
+    if (type == 4){
       document.getElementsByName("inButton")[0].style.opacity = "0.4";
       document.getElementsByName("outButton")[0].style.opacity = "1";
     }
-    if (type == 4){
+    if (type == 3){
       document.getElementsByName("inButton")[0].style.opacity = "1";
       document.getElementsByName("outButton")[0].style.opacity = "0.4";
     }
