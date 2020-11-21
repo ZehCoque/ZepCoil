@@ -17,6 +17,8 @@ export class NovaPessoaComponent implements OnInit {
   novaPessoaForm: FormGroup;
   loading: Boolean = true;
 
+  selected_document: string = 'CPF';
+
   error: string;
 
   Tipos = ['Funcionário','Fornecedor','Cliente'];
@@ -43,6 +45,10 @@ export class NovaPessoaComponent implements OnInit {
     if (this.preloaded.pessoa){
       this.novaPessoaForm.patchValue(this.preloaded.pessoa);
 
+      if (this.preloaded.pessoa.CPF_CNPJ){
+        if (this.preloaded.pessoa.CPF_CNPJ.toString().length > 11) this.selected_document = 'CNPJ'
+      }
+
       if (this.novaPessoaForm.get('CPF_CNPJ').value == 0) this.novaPessoaForm.controls.CPF_CNPJ.setValue('');
       if (this.novaPessoaForm.get('Agencia').value == 0) this.novaPessoaForm.controls.Agencia.setValue('');
       if (this.novaPessoaForm.get('Conta').value == 0) this.novaPessoaForm.controls.Conta.setValue('');
@@ -51,6 +57,11 @@ export class NovaPessoaComponent implements OnInit {
 
     this.loading = false;
 
+  }
+
+  changeDocument(radio_select: string){
+    this.novaPessoaForm.get('CPF_CNPJ').value == '';
+    this.selected_document = radio_select;
   }
 
   onSubmit(){
@@ -74,18 +85,36 @@ export class NovaPessoaComponent implements OnInit {
 
   add_pessoa(){
 
+    let given_cpj_cnpj;
+    let given_agencia;
+    let given_conta;
+
     let promise = new Promise((resolve,reject) => {
-      if (this.novaPessoaForm.get('CPF_CNPJ').value == '') this.novaPessoaForm.controls.CPF_CNPJ.setValue(0);
-      if (this.novaPessoaForm.get('Agencia').value == '') this.novaPessoaForm.controls.Agencia.setValue(0);
-      if (this.novaPessoaForm.get('Conta').value == '') this.novaPessoaForm.controls.Conta.setValue(0);
+      if (this.novaPessoaForm.get('CPF_CNPJ').value == '') {
+        given_cpj_cnpj = 0;
+      } else {
+        given_cpj_cnpj = this.novaPessoaForm.controls.CPF_CNPJ.value;
+      }
+
+      if (this.novaPessoaForm.get('Agencia').value == '') {
+        given_agencia = 0;
+      } else {
+        given_agencia = this.novaPessoaForm.controls.Agencia.value;
+      }
+
+      if (this.novaPessoaForm.get('Conta').value == '') {
+        given_conta = 0;
+      } else {
+        given_conta = this.novaPessoaForm.controls.Conta.value;
+      }
 
       this.novaPessoa = {
         Nome: this.novaPessoaForm.get('Nome').value,
         Sobrenome: this.novaPessoaForm.get('Sobrenome').value,
-        CPF_CNPJ: this.getNumberValue(this.novaPessoaForm.get('CPF_CNPJ').value),
+        CPF_CNPJ: this.getNumberValue(given_cpj_cnpj),
         Banco: this.novaPessoaForm.get('Banco').value,
-        Agencia: this.novaPessoaForm.get('Agencia').value,
-        Conta: this.novaPessoaForm.get('Conta').value,
+        Agencia: given_agencia,
+        Conta: given_conta,
         Tipo: this.novaPessoaForm.get('Tipo').value,
       }
 

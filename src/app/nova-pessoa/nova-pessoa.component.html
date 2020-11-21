@@ -47,9 +47,14 @@
 
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
-    <mat-form-field style="width: 30%;text-align: center;" class="form-field">
+    <mat-form-field *ngIf="selected_document === 'CPF'" style="width: 30%;text-align: center;" class="form-field">
       <mat-label>CPF</mat-label>
       <input [textMask]="{mask: MASKS.cpf.textMask}" matInput formControlName="CPF_CNPJ">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="selected_document === 'CNPJ'" style="width: 30%;text-align: center;" class="form-field">
+      <mat-label>CNPJ</mat-label>
+      <input [textMask]="{mask: MASKS.cnpj.textMask}" matInput formControlName="CPF_CNPJ">
     </mat-form-field>
 
     <mat-form-field style="width: 20%;text-align: center; padding-top: 10px;" class="form-field">
@@ -76,7 +81,23 @@
 
   </div>
 
+  <div style="padding-left: 10%;">
+
+    <mat-radio-group
+      aria-labelledby="example-radio-group-label"
+      class="example-radio-group" [value]="selected_document" >
+      <mat-radio-button value='CPF' (click)="changeDocument('CPF')">
+        CPF
+      </mat-radio-button>
+      <mat-radio-button value='CNPJ' (click)="changeDocument('CNPJ')" >
+        CNPJ
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
 </div>
+
+
 
   <div *ngIf="error" style="width: 100%;text-align: center; ">
     <mat-error>{{error | errorMessage }} </mat-error>

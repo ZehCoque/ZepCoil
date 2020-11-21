@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, PercentPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -37,7 +37,8 @@ export class NovoContratoComponent implements OnInit {
                 private server: ServerService,
                 public dialogRef: MatDialogRef<NovoContratoComponent>,
                 @Inject(MAT_DIALOG_DATA) public preloaded,
-                private currencyPipe : CurrencyPipe) { }
+                private currencyPipe: CurrencyPipe,
+                private percentPipe: PercentPipe) { }
 
     ngOnInit(): void {
 
@@ -49,7 +50,11 @@ export class NovoContratoComponent implements OnInit {
         CC: new FormControl('',Validators.required),
         Div_CC: new FormControl('',Validators.required),
         Data_termino: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
-        Tipo: new FormControl('',Validators.required)
+        Tipo: new FormControl('',Validators.required),
+        PZep: new FormControl(this.percentPipe.transform(0.00,'1.2-2'),Validators.pattern("^[0-9]*$")),
+        PCoil: new FormControl(this.percentPipe.transform(0.00,'1.2-2'),Validators.pattern("^[0-9]*$")),
+        PComissao: new FormControl(this.percentPipe.transform(0.00,'1.2-2'),Validators.pattern("^[0-9]*$")),
+
       });
 
 
@@ -60,6 +65,14 @@ export class NovoContratoComponent implements OnInit {
             Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
             {emitEvent:false})
         }
+
+        if (val.PZep) {
+          let valor = this.getNumberValue(val.PZep);
+          this.novoContratoForm.patchValue({
+            PZep: this.percentPipe.transform(valor,'1.2-2') },
+            {emitEvent:false})
+        }
+
       });
 
 
@@ -99,7 +112,7 @@ export class NovoContratoComponent implements OnInit {
     onSubmit(){
       this.error = '';
 
-      let json = {
+      let json: Contratos = {
         ID: this.preloaded,
         Descricao: this.novoContratoForm.controls.Descricao.value,
         Pessoa: this.novoContratoForm.controls.Pessoa.value.Nome,
@@ -108,7 +121,10 @@ export class NovoContratoComponent implements OnInit {
         Valor: this.getNumberValue(this.novoContratoForm.controls.Valor.value),
         CC: this.novoContratoForm.controls.CC.value.Nome,
         Div_CC: this.novoContratoForm.controls.Div_CC.value.Divisao,
-        Tipo: this.novoContratoForm.controls.Tipo.value
+        Tipo: this.novoContratoForm.controls.Tipo.value,
+        PCoil: this.novoContratoForm.controls.PCoil.value,
+        PZep: this.novoContratoForm.controls.PZep.value,
+        PComissao: this.novoContratoForm.controls.PComissao.value,
       }
 
       if (this.preloaded){

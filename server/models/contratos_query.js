@@ -64,7 +64,7 @@ function contratos_router() {
   router.post('/contratos_query_insert', (req, res, next) => {
     let database = auth.db_conn().config.database + '.'
     auth.db_conn().query(
-      'INSERT INTO ' + database + 'contratos (`Descricao`, `Pessoa`, `Data_inicio`, `Data_termino`, `Valor`, `CC`, `Div_CC`, `Tipo`) VALUES (?,?,?,?,?,?,?,?)',
+      'INSERT INTO ' + database + 'contratos (`Descricao`, `Pessoa`, `Data_inicio`, `Data_termino`, `Valor`, `CC`, `Div_CC`, `Tipo`, `PCoil`, `PZep`,`PComissao`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
       [
         req.body.Descricao,
         req.body.Pessoa,
@@ -73,7 +73,10 @@ function contratos_router() {
         req.body.Valor,
         req.body.CC,
         req.body.Div_CC,
-        req.body.Tipo
+        req.body.Tipo,
+        req.body.PCoil,
+        req.body.PZep,
+        req.body.PComissao
       ],
       (error) => {
         if (error) {
@@ -125,7 +128,7 @@ router.delete('/contratos_query', function (req, res, next) {
 router.put('/contratos_query/:ID', function (req, res, next) {
   let database = auth.db_conn().config.database + '.'
   auth.db_conn().query(
-    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?  WHERE `ID`=?',
+    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?,`PZep` = ?,`PCoil` = ?, `PComissao` = ?  WHERE `ID`=?',
     [
       req.body.Descricao,
       req.body.Pessoa,
@@ -135,6 +138,9 @@ router.put('/contratos_query/:ID', function (req, res, next) {
       req.body.CC,
       req.body.Div_CC,
       req.body.Tipo,
+      req.body.PCoil,
+      req.body.PZep,
+      req.body.PComissao,
       req.body.ID
     ],
     (error) => {

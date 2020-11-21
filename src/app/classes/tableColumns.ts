@@ -49,6 +49,9 @@ export class Contratos {
   Valor: String;
   Pessoa: String;
   Tipo: String;
+  PCoil: Number;
+  PZep: Number;
+  PComissao: Number;
 }
 
 

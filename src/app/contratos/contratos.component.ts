@@ -27,10 +27,8 @@ export class ContratosComponent implements OnInit {
   changeDetection: ChangeDetectionStrategy.OnPush;
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
-  contratosForm: FormGroup;
-  errorMatcher: ErrorMatcherDirective;
+
   loading = true;
-  today = moment().toISOString();
 
   Contratos: Array<Contratos>;
   filterValues: Array<string>;
@@ -50,34 +48,13 @@ export class ContratosComponent implements OnInit {
   currentActiveFilter: string;
   contratos: any[];
 
-  constructor(private formBuilder: FormBuilder,
-    private currencyPipe : CurrencyPipe,
+  constructor(
     private server: ServerService,
     private dialog: MatDialog,
-    private newDataEmitter: newDataTrackerService) { }
+    private newDataEmitter: newDataTrackerService
+    ) { }
 
   ngOnInit()  {
-
-    this.contratosForm = this.formBuilder.group({
-      Descricao: new FormControl('', Validators.required),
-      Pessoa: new FormControl('', Validators.required),
-      Valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
-      Data_inicio: new FormControl(moment().toISOString(), Validators.required),
-      CC: new FormControl('',Validators.required),
-      Div_CC: new FormControl('',Validators.required),
-      Data_termino: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
-      Tipo: new FormControl('',Validators.required)
-
-    });
-
-    this.contratosForm.valueChanges.subscribe(val => {
-      if (val.Valor) {
-        let valor = this.getNumberValue(val.Valor);
-        this.contratosForm.patchValue({
-          Valor: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
-          {emitEvent:false})
-      }
-    });
 
     this.newDataEmitter.currentData.subscribe(() => {
       this.loading = true;
@@ -157,51 +134,7 @@ export class ContratosComponent implements OnInit {
     });
     return this.filterValues
   }
-  onSubmit(){
 
-    this.server.get_List('max_id').then((results) => {
-      let current_id = results[0].max_id + 1
-
-      if (this.contratosForm.get("Pessoa").value == null) {
-        this.contratosForm.controls.Pessoa.setValue(new Array(Contratos));
-      }
-
-      let input_json: Contratos = {
-        ID: current_id,
-        Descricao: this.contratosForm.get("Descricao").value,
-        Data_inicio: moment(this.contratosForm.get("Data_inicio").value).toDate(),
-        CC: this.contratosForm.get("CC").value.Nome,
-        Div_CC: this.contratosForm.get("Div_CC").value.Divisao,
-        Data_termino: moment(this.contratosForm.get("Data_termino").value).toDate(),
-        Valor:  this.getNumberValue(this.contratosForm.get("Valor").value),
-        Tipo: this.contratosForm.get("Tipo").value,
-        Pessoa: this.contratosForm.get("Nome").value.Nome
-      }
-
-      this.Contratos = [...this.Contratos, input_json]
-      this.cdk_empty = false;
-      if (this.Contratos.length > 1) this.viewport.scrollToIndex(this.Contratos.length + 1);
-
-      this.server.add_List(input_json,'contratos_query_insert').then(() => {
-        this.onClear();
-
-      });
-
-    })
-
-  }
-  onClear(){
-
-    this.div_cc_ready = false;
-    this.contratosForm.reset();
-    this.contratosForm.controls.Descricao.setErrors(null);
-    this.contratosForm.controls.CC.setErrors(null);
-    this.contratosForm.controls.Div_CC.setErrors(null);
-    this.contratosForm.controls.Descricao.setErrors(null);
-    this.contratosForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
-    this.contratosForm.controls.Data_inicio.patchValue(moment().toISOString());
-    this.contratosForm.controls.Data_termino.patchValue(moment(this.today).add(1, 'M').toISOString());
-  }
 
   onContextMenu(event: MouseEvent, item, index) {
 

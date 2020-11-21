@@ -17,6 +17,9 @@ export class ContratosActiveFilters {
   Valor: String;
   Pessoa: String;
   Tipo: String;
+  PCoil: String;
+  PZep: String;
+  PComissao: String;
   }
 
 export class ContratosActiveSorts {
@@ -28,6 +31,9 @@ export class ContratosActiveSorts {
   Valor: sortJson = {active: false, dir: 'arrow_downward'};
   Tipo:  sortJson = {active: false, dir: 'arrow_downward'};
   Pessoa: sortJson = {active: false, dir: 'arrow_downward'};
+  PZep: sortJson = {active: false, dir: 'arrow_downward'};
+  PCoil: sortJson = {active: false, dir: 'arrow_downward'};
+  PComissao: sortJson = {active: false, dir: 'arrow_downward'};
 }
 
 

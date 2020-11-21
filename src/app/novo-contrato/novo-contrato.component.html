@@ -13,14 +13,14 @@
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
     <mat-form-field style="width: 25%;" class="form-field">
-      <mat-label>Contratante</mat-label>
+      <mat-label>Locatário</mat-label>
       <mat-select formControlName="Pessoa">
-      <mat-option *ngFor="let contratante of Pessoa" [value]="contratante">
-       {{ contratante.Nome }}
+      <mat-option *ngFor="let locatario of Pessoa" [value]="locatario">
+       {{ locatario.Nome }}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="novoContratoForm.get('Pessoa').hasError('required')" >
-      É necessário inserir um contratante.
+      É necessário inserir um locatário.
     </mat-error>
   </mat-form-field>
 
@@ -97,7 +97,36 @@
   </mat-error>
 </mat-form-field>
 
+  </div >
+
+  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+
+    <mat-form-field  style="width: 20%;" class="form-field">
+      <mat-label>% Zep</mat-label>
+      <input matInput formControlName="PZep" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('pattern')" >
+        Valor inserido deve ser um número
+      </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 20%;" class="form-field">
+    <mat-label>% Coil</mat-label>
+    <input matInput formControlName="PCoil" [errorStateMatcher]="errorMatcher">
+    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('pattern')" >
+      Valor inserido deve ser um número
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 20%;" class="form-field">
+    <mat-label>% Comissão</mat-label>
+    <input matInput formControlName="PComissao" [errorStateMatcher]="errorMatcher">
+    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('pattern')" >
+      Valor inserido deve ser um número
+    </mat-error>
+  </mat-form-field>
+
   </div>
+
 
 </div>
 
