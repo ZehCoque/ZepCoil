@@ -23,12 +23,12 @@
           <mat-icon>show_chart</mat-icon>
         </button>
 
-        <button *ngIf="state == 2" name="outButton_edit" mat-mini-fab color="black" (click)="selectType(3)" >
-          <mat-icon >arrow_circle_down</mat-icon>
+        <button *ngIf="state == 2" name="outButton_edit" mat-mini-fab color="success" (click)="selectType(3)" >
+          <mat-icon >arrow_downward</mat-icon>
         </button>
 
-        <button *ngIf="state == 2" name="inButton_edit" mat-mini-fab color="black" (click)="selectType(4)">
-          <mat-icon >arrow_circle_up</mat-icon>
+        <button *ngIf="state == 2" name="inButton_edit" mat-mini-fab color="warn" (click)="selectType(4)">
+          <mat-icon >arrow_upward</mat-icon>
         </button>
       </div>
 

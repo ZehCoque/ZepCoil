@@ -5,7 +5,7 @@
 
 
         <div class="el-tag--plain el-col-4">
-            Contratante
+            Locatário
             <button (click)="getColumnValues('Pessoa')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Pessoa.active && !activeFilters.Pessoa">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Pessoa">filter_alt</mat-icon>
