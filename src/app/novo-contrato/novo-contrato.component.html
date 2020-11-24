@@ -12,7 +12,7 @@
   <div class="formulario">
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
-    <mat-form-field style="width: 25%;" class="form-field">
+    <mat-form-field style="width: 30%;" class="form-field">
       <mat-label>Locatário</mat-label>
       <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let locatario of Pessoa" [value]="locatario">
@@ -24,7 +24,7 @@
     </mat-error>
   </mat-form-field>
 
-    <mat-form-field  style="width: 65%;text-align: center;" class="form-field">
+    <mat-form-field  style="width: 60%;text-align: center;" class="form-field">
       <mat-label>Descrição</mat-label>
       <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoContratoForm.get('Descricao').hasError('required')" >
@@ -107,21 +107,33 @@
       <mat-error *ngIf="novoContratoForm.get('PZep').hasError('pattern')" >
         Valor inserido deve ser um número
       </mat-error>
+      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('max')" >
+        Porcentagem maior que 100%.
+      </mat-error>
+      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('min')" >
+        Porcentagem menor que 0%.
+      </mat-error>
   </mat-form-field>
 
   <mat-form-field  style="width: 20%;" class="form-field">
     <mat-label>% Coil</mat-label>
     <input matInput formControlName="PCoil" [errorStateMatcher]="errorMatcher">
-    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('pattern')" >
-      Valor inserido deve ser um número
+    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('max')" >
+      Porcentagem maior que 100%.
+    </mat-error>
+    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('min')" >
+      Porcentagem menor que 0%.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field  style="width: 20%;" class="form-field">
     <mat-label>% Comissão</mat-label>
     <input matInput formControlName="PComissao" [errorStateMatcher]="errorMatcher">
-    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('pattern')" >
-      Valor inserido deve ser um número
+    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('max')" >
+      Porcentagem maior que 100%.
+    </mat-error>
+    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('min')" >
+      Porcentagem menor que 0%.
     </mat-error>
   </mat-form-field>
 

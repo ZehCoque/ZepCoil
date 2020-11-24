@@ -292,7 +292,11 @@
           <div (click)="filterBy(column, item)" *ngFor="let item of values">
 
             <div *ngIf="(column === 'Vencimento' || column === 'Data_Entrada'); then filtrarElseBlock1; else filtrarElseBlock2"></div>
-            <ng-template #filtrarElseBlock1><button mat-menu-item>{{ item | amLocal | amDateFormat: 'DD/MM/YYYY' }}</button></ng-template>
+            <ng-template #filtrarElseBlock1>
+
+              <button mat-menu-item>{{ item | amLocal | amDateFormat: 'DD/MM/YYYY' }}</button>
+
+            </ng-template>
 
             <ng-template #filtrarElseBlock2>
               <div *ngIf="column === 'Valor'; then filtrarElseBlock3; else filtrarElseBlock4">

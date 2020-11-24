@@ -9,30 +9,19 @@ function create_connection(username,password) {
           database        : 'zepcoil',
         });
 
-        connection.connect(function(err) {
-          console.error('Trying connection to ' + connection.config.host + ' as ' + connection.config.user);
-          if (err) {
-              console.error('Error connecting to remote database: ' + err);
-              reject(err);
+        connection.on('connect', function(err) {
+
+          if (err){
+            console.error('Error connecting to remote database: ' + err);
+            reject (err);
           }
+
           console.log('Connected to REMOTE DATABASE as ' + connection.config.user);
-          resolve(connection);
-        });
+        })
 
-        connection.on('error', function(err) {
-          console.log('db error normal;', err);
-          if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-              console.log('connect lost');
-              reject(err);
-          }
-          else {
-              throw err;
-          }
-        });
+        resolve(connection);
 
-
-      })
-
-  }
+  })
+}
 
 module.exports = create_connection;

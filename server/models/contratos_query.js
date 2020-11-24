@@ -48,7 +48,7 @@ function contratos_router() {
     let query_string = query_builder.sort(query_builder.filter('WHERE 1=1',req.body.active_filters),req.body.active_sorts,req.body.dir)
 
     auth.db_conn().query(
-      'SELECT * FROM ' + database + 'contratos ' + query_string,
+      'SELECT * FROM ' + database + 'contratos ' + query_string + ' LIMIT 100',
       [],
       (error, results) => {
         if (error) {

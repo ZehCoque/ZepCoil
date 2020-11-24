@@ -2,7 +2,7 @@ const express = require('express');
 const db_connection = require('../connection/dbconnection.js');
 const mysql = require('mysql');
 
-var db_connection_var; 
+var db_connection_var;
 
 var db_connection_status = () => {
   return db_connection_var;
@@ -13,7 +13,6 @@ function auth_router(connection) {
   const router = express.Router();
 
     router.post('/users/authenticate', function(req, res) {
-
      return authenticate(connection, req, res);
 
     });

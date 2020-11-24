@@ -1,4 +1,4 @@
-import { CurrencyPipe, PercentPipe } from '@angular/common';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -38,7 +38,7 @@ export class NovoContratoComponent implements OnInit {
                 public dialogRef: MatDialogRef<NovoContratoComponent>,
                 @Inject(MAT_DIALOG_DATA) public preloaded,
                 private currencyPipe: CurrencyPipe,
-                private percentPipe: PercentPipe) { }
+                private decimalPipe: DecimalPipe) { }
 
     ngOnInit(): void {
 
@@ -51,10 +51,9 @@ export class NovoContratoComponent implements OnInit {
         Div_CC: new FormControl('',Validators.required),
         Data_termino: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
         Tipo: new FormControl('',Validators.required),
-        PZep: new FormControl(this.percentPipe.transform(0.00,'1.2-2'),Validators.pattern("^[0-9]*$")),
-        PCoil: new FormControl(this.percentPipe.transform(0.00,'1.2-2'),Validators.pattern("^[0-9]*$")),
-        PComissao: new FormControl(this.percentPipe.transform(0.00,'1.2-2'),Validators.pattern("^[0-9]*$")),
-
+        PZep: new FormControl(this.decimalPipe.transform(0.00,'1.2-2')),
+        PCoil: new FormControl(this.decimalPipe.transform(0.00,'1.2-2')),
+        PComissao: new FormControl(this.decimalPipe.transform(0.00,'1.2-2'))
       });
 
 
@@ -69,7 +68,21 @@ export class NovoContratoComponent implements OnInit {
         if (val.PZep) {
           let valor = this.getNumberValue(val.PZep);
           this.novoContratoForm.patchValue({
-            PZep: this.percentPipe.transform(valor,'1.2-2') },
+            PZep: this.decimalPipe.transform(valor,'1.2-2') },
+            {emitEvent:false})
+        }
+
+        if (val.PCoil) {
+          let valor = this.getNumberValue(val.PCoil);
+          this.novoContratoForm.patchValue({
+            PCoil: this.decimalPipe.transform(valor,'1.2-2') },
+            {emitEvent:false})
+        }
+
+        if (val.PComissao) {
+          let valor = this.getNumberValue(val.PComissao);
+          this.novoContratoForm.patchValue({
+            PComissao: this.decimalPipe.transform(valor,'1.2-2') },
             {emitEvent:false})
         }
 
@@ -122,9 +135,9 @@ export class NovoContratoComponent implements OnInit {
         CC: this.novoContratoForm.controls.CC.value.Nome,
         Div_CC: this.novoContratoForm.controls.Div_CC.value.Divisao,
         Tipo: this.novoContratoForm.controls.Tipo.value,
-        PCoil: this.novoContratoForm.controls.PCoil.value,
-        PZep: this.novoContratoForm.controls.PZep.value,
-        PComissao: this.novoContratoForm.controls.PComissao.value,
+        PCoil: this.getNumberValue(this.novoContratoForm.controls.PCoil.value),
+        PZep: this.getNumberValue(this.novoContratoForm.controls.PZep.value),
+        PComissao: this.getNumberValue(this.novoContratoForm.controls.PComissao.value),
       }
 
       if (this.preloaded){
@@ -239,7 +252,6 @@ export class NovoContratoComponent implements OnInit {
       if (typeof value == 'number') return value;
 
       let numberValue = value.replace(/\D/g,"");
-
       numberValue = [numberValue.slice(0, numberValue.length - 2), '.', numberValue.slice(numberValue.length - 2)].join('');
       if (numberValue.charAt(0) == '0'){
         numberValue = numberValue.slice(1);
@@ -247,6 +259,7 @@ export class NovoContratoComponent implements OnInit {
       if (numberValue.charAt(0) == '.'){
         numberValue = 0;
       }
+      console.log(numberValue)
       return numberValue;
     }
 
