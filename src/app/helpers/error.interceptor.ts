@@ -19,8 +19,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout();
             }
 
-            if ([400].includes(err.status)) {
-              this.openErrorDialog(err.status);
+            if ([404].includes(err.status)) {
+              this.openErrorDialog(err);
           }
 
             const error = (err && err.error && err.error.message) || err.statusText;

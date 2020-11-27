@@ -8,10 +8,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ErrorModalComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public error: any) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public err: any) { }
 
   ngOnInit(): void {
-    console.log(this.error)
+    console.log(this.err.err);
   }
 
 }

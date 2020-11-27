@@ -6,8 +6,15 @@ function div_CC_router() {
   const router = express.Router();
 
   router.post('/div_cc_query/:Nome', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'SELECT * FROM ' + database + 'divisao_cc WHERE Nome = ?',
       [req.body.Nome],
       (error, results) => {
@@ -19,11 +26,20 @@ function div_CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.post('/div_cc_query_add', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'INSERT INTO ' + database + 'divisao_cc (`Nome`,`Divisao`) VALUES (?,?)',
       [req.body.Nome,req.body.Divisao],
       (error, results) => {
@@ -35,11 +51,20 @@ function div_CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.delete('/div_cc_query_delete', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'DELETE FROM ' + database + 'divisao_cc WHERE Nome=?',
       [req.body.Nome],
       (error) => {
@@ -52,6 +77,8 @@ function div_CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
 return router;

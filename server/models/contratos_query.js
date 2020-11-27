@@ -7,8 +7,15 @@ function contratos_router() {
   const router = express.Router();
 
     router.post('/contratos_query_get/:ID', function (req, res, next) {
-      let database = auth.db_conn().config.database + '.'
-      auth.db_conn().query(
+      auth.db_conn().getConnection((err,connection) => {
+
+        if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+        let database = connection.config.database + '.';
+        connection.query(
         'SELECT * FROM ' + database + 'contratos WHERE ID = ?',
         [req.body.ID],
         (error, results) => {
@@ -21,14 +28,22 @@ function contratos_router() {
           }
         }
       );
+      connection.release();
+    });
     });
 
   router.post('/contratos_query_column/:column', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
 
     let query_string = query_builder.filter('WHERE 1=1',req.body.active_filters)
 
-    auth.db_conn().query(
+    let database = connection.config.database + '.';
+    connection.query(
       'SELECT DISTINCT ' + req.body.column + ' FROM ' + database + 'contratos ' + query_string,
       [],
       (error, results) => {
@@ -40,14 +55,23 @@ function contratos_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.post('/contratos_query', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
 
     let query_string = query_builder.sort(query_builder.filter('WHERE 1=1',req.body.active_filters),req.body.active_sorts,req.body.dir)
 
-    auth.db_conn().query(
+    connection.query(
       'SELECT * FROM ' + database + 'contratos ' + query_string + ' LIMIT 100',
       [],
       (error, results) => {
@@ -59,11 +83,20 @@ function contratos_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.post('/contratos_query_insert', (req, res, next) => {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'INSERT INTO ' + database + 'contratos (`Descricao`, `Pessoa`, `Data_inicio`, `Data_termino`, `Valor`, `CC`, `Div_CC`, `Tipo`, `PCoil`, `PZep`,`PComissao`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
       [
         req.body.Descricao,
@@ -87,11 +120,20 @@ function contratos_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
 router.get('/max_id_contratos', function (req, res, next) {
-  let database = auth.db_conn().config.database + '.'
-  auth.db_conn().query(
+  auth.db_conn().getConnection((err,connection) => {
+
+    if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
     'SELECT MAX(ID) as max_id FROM ' + database + 'contratos',
     [],
     (error, results) => {
@@ -108,11 +150,20 @@ router.get('/max_id_contratos', function (req, res, next) {
       }
     }
   );
+  connection.release();
+});
 });
 
 router.delete('/contratos_query', function (req, res, next) {
-  let database = auth.db_conn().config.database + '.'
-  auth.db_conn().query(
+  auth.db_conn().getConnection((err,connection) => {
+
+    if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
     'DELETE FROM ' + database + 'contratos WHERE ID=?',
     [req.body.ID],
     (error) => {
@@ -123,11 +174,20 @@ router.delete('/contratos_query', function (req, res, next) {
       }
     }
   );
+  connection.release();
+});
 });
 
 router.put('/contratos_query/:ID', function (req, res, next) {
-  let database = auth.db_conn().config.database + '.'
-  auth.db_conn().query(
+  auth.db_conn().getConnection((err,connection) => {
+
+    if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
     'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?,`PZep` = ?,`PCoil` = ?, `PComissao` = ?  WHERE `ID`=?',
     [
       req.body.Descricao,
@@ -152,6 +212,8 @@ router.put('/contratos_query/:ID', function (req, res, next) {
       }
     }
   );
+  connection.release();
+});
 });
 
 return router;

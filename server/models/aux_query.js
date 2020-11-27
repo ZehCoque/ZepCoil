@@ -6,8 +6,15 @@ function aux_query_router() {
   const router = express.Router();
 
     router.post('/main_table_query_get/:ID', function (req, res, next) {
-      let database = auth.db_conn().config.database + '.'
-      auth.db_conn().query(
+      auth.db_conn().getConnection((err,connection) => {
+
+        if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+        let database = connection.config.database + '.';
+        connection.query(
         'SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
         [req.body.ID],
         (error, results) => {
@@ -19,11 +26,20 @@ function aux_query_router() {
           }
         }
       );
+      connection.release();
+    });
     });
 
     router.post('/historico_query/:ID', function (req, res, next) {
-      let database = auth.db_conn().config.database + '.'
-      auth.db_conn().query(
+      auth.db_conn().getConnection((err,connection) => {
+
+        if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+        let database = connection.config.database + '.';
+        connection.query(
         'SELECT * FROM ' + database + 'historico WHERE ID = ?',
         [req.body.ID],
         (error, results) => {
@@ -35,11 +51,20 @@ function aux_query_router() {
           }
         }
       );
+      connection.release();
+    });
     });
 
     router.post('/main_table_query', (req, res, next) => {
-      let database = auth.db_conn().config.database + '.'
-      auth.db_conn().query(
+      auth.db_conn().getConnection((err,connection) => {
+
+        if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+        let database = connection.config.database + '.';
+        connection.query(
         'INSERT INTO ' + database + 'lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`,`Concluido`,`Imposto`,`Tipo_despesa`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
@@ -65,11 +90,20 @@ function aux_query_router() {
           }
         }
       );
+      connection.release();
+    });
     });
 
   router.get('/max_id', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'SELECT MAX(ID) as max_id FROM ' + database + 'lançamentos',
       [],
       (error, results) => {
@@ -86,11 +120,20 @@ function aux_query_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.delete('/main_table_query', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'DELETE FROM ' + database + 'lançamentos WHERE ID=?',
       [req.body.ID],
       (error) => {
@@ -101,11 +144,20 @@ function aux_query_router() {
         }
       }
     );
+    connection.release();
+    });
   });
 
   router.put('/main_table_query_update_CC',function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'UPDATE ' + database + 'lançamentos SET CC = ? WHERE CC = ?',
       [req.body.new,
        req.body.old],
@@ -117,12 +169,21 @@ function aux_query_router() {
           res.status(200).json({status: 'ok'});
         }
        }
-
-  )});
+    )
+    connection.release();
+  });
+  });
 
   router.put('/update_done_state_true/:ID',function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'INSERT INTO ' + database + 'historico SELECT * FROM ' + database + 'lançamentos WHERE ID = ?',
       [req.body.ID],
 
@@ -130,7 +191,7 @@ function aux_query_router() {
         if (error) {
           console.log(error)
         } else {
-          auth.db_conn().query(
+          connection.query(
           'UPDATE ' + database + 'lançamentos SET Valor = ?,Data_Entrada = ?, Vencimento = ?, Concluido = ? WHERE ID = ?',
           [req.body.Valor,
            new Date(req.body.Data_Entrada),
@@ -144,16 +205,26 @@ function aux_query_router() {
             } else {
               res.status(200).json({status: 'ok'});
             }
-          })
+          });
         }
        }
 
-  )});
+      )
+      connection.release();
+    });
+    });
 
 
   router.put('/main_table_query_update_div_CC',function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'UPDATE ' + database + 'lançamentos SET Div_CC = ? WHERE Div_CC = ?',
       [req.body.new,
        req.body.old],
@@ -166,12 +237,22 @@ function aux_query_router() {
         }
        }
 
-  )});
+    );
+    connection.release();
+  });
+  });
 
 
   router.put('/main_table_query_update_Pessoa',function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'UPDATE ' + database + 'lançamentos SET Pessoa = ? WHERE Pessoa = ?',
       [req.body.new,
        req.body.old],
@@ -183,12 +264,21 @@ function aux_query_router() {
           res.status(200).json({status: 'ok'});
         }
        }
-
-  )});
+      )
+      connection.release();
+    });
+  });
 
   router.put('/main_table_query/:ID', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
       'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?, `Concluido`=?, `Imposto`=?, `Tipo_despesa`=?  WHERE `ID`=?',
       [req.body.Descricao,
         new Date(req.body.Data_Entrada),
@@ -214,6 +304,8 @@ function aux_query_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
 return router;

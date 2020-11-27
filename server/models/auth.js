@@ -1,6 +1,5 @@
 const express = require('express');
 const db_connection = require('../connection/dbconnection.js');
-const mysql = require('mysql');
 
 var db_connection_var;
 
@@ -8,21 +7,21 @@ var db_connection_status = () => {
   return db_connection_var;
 }
 
-function auth_router(connection) {
+function auth_router(auth_connection) {
 
   const router = express.Router();
 
     router.post('/users/authenticate', function(req, res) {
-     return authenticate(connection, req, res);
+     return authenticate(auth_connection, req, res);
 
     });
 
     router.post('/users/refresh-token', function(req, res) {
-      return refreshToken(connection, req, res) ;
+      return refreshToken(auth_connection, req, res) ;
     });
 
     router.post('/users/revoke-token', function(req, res) {
-      return revokeToken(connection, req, res);
+      return revokeToken(auth_connection, req, res);
     });
 
     router.get('/users', function(req, res) {
@@ -42,13 +41,13 @@ function auth_router(connection) {
 
   }
 
-  function authenticate(connection, req, res) {
+  function authenticate(auth_connection, req, res) {
 
-    get_user(connection, req, res).then((user) => {
+    get_user(auth_connection, req, res).then((user) => {
 
       if (user === undefined) return error(res,'Username or password is incorrect');
       // add refresh token to user
-      update_user(connection, req, res, generateRefreshToken(res)).then(() => {
+      update_user(auth_connection, req, res, generateRefreshToken(res)).then(() => {
 
         db_connection(user.username,user.password).then(dbconnection => {
 
@@ -71,11 +70,19 @@ function auth_router(connection) {
 
 }
 
-function get_user(connection, req, res) {
+function get_user(auth_connection, req, res) {
 
   return new Promise(function(resolve, reject) {
-    connection.query(
-      'SELECT * FROM account_info WHERE username = ? AND password = ?',
+    auth_connection.getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+      let database = connection.config.database + '.';
+      connection.query(
+      'SELECT * FROM ' + database + 'account_info WHERE username = ? AND password = ?',
       [req.body.username, req.body.password],
       (error, results) => {
         if (error){
@@ -90,16 +97,26 @@ function get_user(connection, req, res) {
           }
         }
 
-      })
+      });
+      connection.release();
+    });
   	});
 
 }
 
-function getUserByRefreshToken(connection, refreshToken) {
+function getUserByRefreshToken(auth_connection, refreshToken,res) {
 
   return new Promise(function(resolve, reject) {
-    connection.query(
-      'SELECT * FROM account_info WHERE refreshToken = ?',
+    auth_connection.getConnection((err,connection) => {
+
+      if (err) {
+          res.status(404).json((err));
+          return
+          }
+
+      let database = connection.config.database + '.';
+      connection.query(
+      'SELECT * FROM ' + database + 'account_info WHERE refreshToken = ?',
       [refreshToken],
       (error, results) => {
         if (error){
@@ -110,15 +127,25 @@ function getUserByRefreshToken(connection, refreshToken) {
         } else {
           resolve(JSON.parse(JSON.stringify(results[0])));
         }
-      })
+      });
+      connection.release();
+    });
   	});
 
 }
 
-function update_user(connection, req, res, refreshToken) {
+function update_user(auth_connection, req, res, refreshToken) {
   return new Promise(function(resolve, reject) {
-    connection.query(
-      'UPDATE `account_info` SET `refreshToken` = ? WHERE `username` = ?;',
+    auth_connection.getConnection((err,connection) => {
+
+      if (err) {
+        res.status(404).json((err));
+        return
+        }
+
+      let database = connection.config.database + '.';
+      connection.query(
+      'UPDATE ' + database + 'account_info SET `refreshToken` = ? WHERE `username` = ?;',
       [refreshToken,req.body.username],
       (error, results) => {
         if (error) {
@@ -131,13 +158,23 @@ function update_user(connection, req, res, refreshToken) {
         }
       }
     );
+    connection.release();
+  });
   });
 }
 
-function delete_token(connection, username, refreshToken) {
+function delete_token(auth_connection, username, refreshToken) {
   return new Promise(function(resolve, reject) {
-    connection.query(
-      'UPDATE `accounts`.`account_info` SET `refreshToken` = NULL WHERE (`refreshToken` = ?) and (`username` = ?);',
+    auth_connection.getConnection((err,connection) => {
+
+      if (err) {
+          res.status(404).json((err));
+          return
+          }
+
+      let database = connection.config.database + '.';
+      connection.query(
+      'UPDATE ' + database + 'account_info SET `refreshToken` = NULL WHERE (`refreshToken` = ?) and (`username` = ?);',
       [refreshToken,username],
       (error, results) => {
         if (error) {
@@ -150,19 +187,21 @@ function delete_token(connection, username, refreshToken) {
         }
       }
     );
+    connection.release();
+  });
   });
 }
 
-function refreshToken(connection, req, res) {
+function refreshToken(auth_connection, req, res) {
     const refreshToken = getRefreshToken(req);
     if (!refreshToken) return unauthorized(res);
 
-    getUserByRefreshToken(connection, refreshToken).then((user) => {
+    getUserByRefreshToken(auth_connection, refreshToken,res).then((user) => {
       if (user === undefined) return unauthorized(res);
 
       // replace old refresh token with a new one and save
 
-      update_user(connection, req, res,getRefreshToken(req)).then(() => {
+      update_user(auth_connection, req, res,getRefreshToken(req)).then(() => {
 
         db_connection(user.username,user.password).then(dbconnection => {
 
@@ -187,12 +226,12 @@ function refreshToken(connection, req, res) {
 
 }
 
-function revokeToken(connection, req, res) {
+function revokeToken(auth_connection, req, res) {
     if (!isLoggedIn(req)) return unauthorized(res);
 
     const refreshToken = getRefreshToken(req);
-    getUserByRefreshToken(connection,refreshToken).then((user) => {
-      delete_token(connection,user.username,refreshToken).then(() => {
+    getUserByRefreshToken(auth_connection,refreshToken,res).then((user) => {
+      delete_token(auth_connection,user.username,refreshToken).then(() => {
         return ok({}, res)
       })
     }).catch(err => console.log(err));;
@@ -200,34 +239,22 @@ function revokeToken(connection, req, res) {
 
 }
 
-function getUsers(connection,req,res) {
-
-    var auth_connection = mysql.createConnection({
-      connectionLimit : 10,
-      host            : 'localhost',
-      user            : connection.config.username,
-      password        : connection.config.password,
-      database        : 'authenticator',
-    });
-
-    let promise = new Promise((resolve,reject) => {
-      auth_connection.connect(function(err) {
-      console.error('Trying connection to ' + auth_connection.config.host + ' as ' + auth_connection.config.user);
-      if (err) {
-      console.error('Error connecting to remote database: ' + err);
-      reject(err);
-      }
-      console.log('Connected to REMOTE DATABASE as ' + auth_connection.config.user);
-      resolve();
-    });
-    });
+function getUsers(auth_connection,req,res) {
 
     if (!isLoggedIn(req)) return unauthorized(res);
 
     var user_list = [];
     var p = new Promise(function(resolve, reject) {
-      auth_connection.query(
-        'SELECT * FROM account_info',
+      auth_connection.getConnection((err,connection) => {
+
+        if (err) {
+        res.status(404).json((err));
+        return
+        }
+
+        let database = connection.config.database + '.';
+        connection.query(
+        'SELECT * FROM ' + database + 'account_info',
         [],
         (error, results) => {
           if (error){
@@ -238,7 +265,9 @@ function getUsers(connection,req,res) {
           } else {
             resolve(JSON.parse(JSON.stringify(results[0])));
           }
-        })
+        });
+        connection.release();
+      });
       });
 
       promise.then(() => {

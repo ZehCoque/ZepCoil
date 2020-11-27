@@ -7,7 +7,15 @@ function views_router() {
   const router = express.Router();
 
   router.post('/total_receitas', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+
     req.body.active_filters.Tipo = '';
     let query_string = query_builder.filter('WHERE Tipo = \'0\'',req.body.active_filters);
 
@@ -18,7 +26,7 @@ function views_router() {
       query_view = 'view_terceiros'
     }
 
-    auth.db_conn().query(
+    connection.query(
       'Select SUM(Valor) AS TOTALR from ' + database + query_view + ' ' + query_string,
       [],
       (error, results) => {
@@ -30,10 +38,19 @@ function views_router() {
         }
       }
     );
+    connection.release();
+    });
   });
 
   router.post('/total_despesas', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
     req.body.active_filters.Tipo = '';
     let query_string = query_builder.filter('WHERE Tipo = \'1\'',req.body.active_filters);
 
@@ -44,7 +61,7 @@ function views_router() {
       query_view = 'view_terceiros'
     }
 
-    auth.db_conn().query(
+    connection.query(
       'Select SUM(Valor) AS TOTALD from ' + database + query_view + ' ' + query_string,
       [],
       (error, results) => {
@@ -56,10 +73,19 @@ function views_router() {
         }
       }
     );
+    connection.release();
+    });
   });
 
   router.post('/total_investimentos', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
     req.body.active_filters.Tipo = '';
     let query_string = query_builder.filter('WHERE Tipo = \'2\'',req.body.active_filters);
 
@@ -70,7 +96,7 @@ function views_router() {
       query_view = 'view_terceiros'
     }
 
-    auth.db_conn().query(
+    connection.query(
       'Select SUM(Valor) AS TOTALI from ' + database + query_view + ' ' + query_string,
       [],
       (error, results) => {
@@ -82,6 +108,8 @@ function views_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
 return router;
