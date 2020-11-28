@@ -110,8 +110,7 @@ export class ConcluirDialogComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.data.state)
-
+    this.loading = true;
     let json = {
       Valor: this.getNumberValue(this.doneForm.controls.Valor.value),
       Data_Entrada: moment(this.doneForm.get("Data_Entrada").value).toDate(),
@@ -123,7 +122,10 @@ export class ConcluirDialogComponent implements OnInit {
     this.server.update_List(json,'update_done_state_true').then(() => {
       this.onCancel('concluido')
     })
-    .catch(error => {this.error = error})
+    .catch(error => {
+      this.error = error;
+      this.loading = false;
+    })
    }
 
 }

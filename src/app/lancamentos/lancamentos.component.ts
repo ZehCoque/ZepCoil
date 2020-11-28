@@ -17,7 +17,6 @@ import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { AppRoutingService } from '../services/app-routing-service.service';
 import { filter } from 'rxjs/operators';
-import { ConcluirDialogComponent } from '../concluir-dialog/concluir-dialog.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { HistoricoDialogComponent } from '../historico-dialog/historico-dialog.component';
 
@@ -353,28 +352,28 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   }
 
-  setDoneState(state,ID,row){
+  // setDoneState(state,ID,row){
 
-    if (!state) {
+  //   if (!state) {
 
-      const dialogRef = this.dialog.open(ConcluirDialogComponent, {
-        width: '1000px',
-        data: {ID,state:true}
-      });
+  //     const dialogRef = this.dialog.open(ConcluirDialogComponent, {
+  //       width: '1000px',
+  //       data: {ID,state:true}
+  //     });
 
-      let sub = dialogRef.afterClosed().subscribe((results) => {
+  //     let sub = dialogRef.afterClosed().subscribe((results) => {
 
-        if (results) {
+  //       if (results) {
 
-            this.Entradas[row].Concluido = true;
-        }
+  //           this.Entradas[row].Concluido = true;
+  //       }
 
-        this.newDataEmitter.newDataEmit(results);
-        sub.unsubscribe();
-      });
-    }
+  //       this.newDataEmitter.newDataEmit(results);
+  //       sub.unsubscribe();
+  //     });
+  //   }
 
-  }
+  // }
 
   selectType(type:number){
     this.newEntryForm.controls.Tipo.setValue(type);
@@ -541,7 +540,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   }
 
   updateSoma(){
-
+    if (this.state === 2 ) return;
     let promise = new Promise(async (resolve, reject) => {
 
       //Total Receitas

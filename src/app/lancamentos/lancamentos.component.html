@@ -209,7 +209,7 @@
 
       </cdk-virtual-scroll-viewport>
 
-      <span class="footer-row">
+      <span *ngIf="!loading" class="footer-row">
         <span><button style=" margin-top: 20px;" (click)="clearAllFilters()" mat-raised-button color="warn" type="button"><mat-icon style="font-size: 20px;">delete</mat-icon>Excluir todos os filtros</button></span>
         <div style="margin: auto 0; justify-self: center; width: 70%;display: flex; justify-content: space-evenly;">
           <span *ngIf="state === 1">

@@ -16,7 +16,7 @@ export class NovoContratoComponent implements OnInit {
 
     novoContrato: Contratos;
     novoContratoForm: FormGroup;
-    loading: Boolean = true;
+    loading: Boolean = false;
 
     CC:Array<CC> = new Array();
     div_CC:Array<div_CC> = new Array();
@@ -41,7 +41,7 @@ export class NovoContratoComponent implements OnInit {
                 private decimalPipe: DecimalPipe) { }
 
     ngOnInit(): void {
-
+      this.dialogRef.disableClose = true;
       this.novoContratoForm = this.formBuilder.group({
         Descricao: new FormControl('', Validators.required),
         Pessoa: new FormControl('', Validators.required),
@@ -100,6 +100,7 @@ export class NovoContratoComponent implements OnInit {
 
 
       this.loading = false;
+      this.dialogRef.disableClose = false;
 
     }
 
@@ -123,6 +124,8 @@ export class NovoContratoComponent implements OnInit {
     }
 
     onSubmit(){
+      this.loading = true;
+      this.dialogRef.disableClose = true;
       this.error = '';
 
       let json: Contratos = {
@@ -144,7 +147,11 @@ export class NovoContratoComponent implements OnInit {
 
         this.server.update_List(json, 'contratos_query')
         .then(() => this.onCancel('novoContrato'))
-        .catch(error => console.log(error));
+        .catch(error => {
+          this.loading = false;
+          this.dialogRef.disableClose = false;
+          console.log(error);
+        })
 
       } else {
 

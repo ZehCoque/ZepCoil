@@ -54,8 +54,10 @@
 </div>
 
 <div class="button-row">
-<button mat-raised-button color="primary" (click)='onSubmit()' [disabled]="!doneForm.valid">Concluir</button>
-<button mat-raised-button color="primary" (click)='onCancel()' type="button">Cancelar</button>
+  <button *ngIf="!loading" mat-raised-button color="primary" (click)='onSubmit()' [disabled]="!doneForm.valid">Concluir</button>
+
+  <button *ngIf="loading" mat-raised-button color="primary" disabled><mat-spinner></mat-spinner></button>
+  <button mat-raised-button color="primary" (click)='onCancel()' type="button">Cancelar</button>
 </div>
 
 </div>

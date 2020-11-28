@@ -147,7 +147,8 @@
   </div>
 </div>
 <div class="button-row">
-  <button mat-raised-button  (click)='onSubmit()' [disabled]="!novoContratoForm.valid">Concluir</button>
+  <button mat-raised-button *ngIf="!loading" (click)='onSubmit()' [disabled]="!novoContratoForm.valid">Concluir</button>
+  <button *ngIf="loading" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
   <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
 </div>
 

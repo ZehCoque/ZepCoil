@@ -59,7 +59,7 @@ export class EditRowComponent implements OnInit {
     private routingService: AppRoutingService) { }
 
   ngOnInit()  {
-
+    this.dialogRef.disableClose = true;
     this.state = this.routingService.getRouteTitle();
 
     this.editedEntryForm = this.formBuilder.group({
@@ -94,7 +94,7 @@ export class EditRowComponent implements OnInit {
             {emitEvent:false})
         }
       });
-
+      this.dialogRef.disableClose = false;
       this.loading = false
     })
 
@@ -186,7 +186,9 @@ export class EditRowComponent implements OnInit {
   }
 
   onSubmit(){
-
+    this.loading = true;
+    this.dialogRef.disableClose = true;
+    this.error ='';
     if (this.editedEntryForm.get("Pessoa").value == null) {
       this.editedEntryForm.controls.Pessoa.setValue(new Array(Entrada));
     }
@@ -227,6 +229,8 @@ export class EditRowComponent implements OnInit {
 
     }).catch((err) => {
       console.log(err);
+      this.loading = false;
+      this.dialogRef.disableClose = false;
       this.error = err;
     })
 

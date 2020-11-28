@@ -31,8 +31,8 @@ export class NovoCCComponent implements OnInit {
               public dialogRef: MatDialogRef<NovoCCComponent>,
               @Inject(MAT_DIALOG_DATA) public preloaded ) { }
 
-  async ngOnInit(): Promise<void> {
-
+  ngOnInit() {
+    this.dialogRef.disableClose = true;
     this.novoCCForm = this.formBuilder.group({
       Abreviacao: new FormControl('', Validators.compose([
         Validators.required,
@@ -49,13 +49,15 @@ export class NovoCCComponent implements OnInit {
       this.novoCCForm.controls.Abreviacao.setValue(this.preloaded.cc.Nome);
       this.novoCCForm.controls.Descricao.setValue(this.preloaded.cc.Descricao);
 
-      await this.get_div_cc(this.preloaded.cc.Nome).then(() => {
+      this.get_div_cc(this.preloaded.cc.Nome).then(() => {
         this.div_CC.forEach(element => {
           this.divCCArray = [...this.divCCArray, element.Divisao ]
-        })
+        });
+        this.loading = false;
+        this.dialogRef.disableClose = false;
       });
 
-      this.loading = false;
+
     }
 
   }
@@ -112,6 +114,7 @@ export class NovoCCComponent implements OnInit {
   }
 
   onDelete(){
+    this.dialogRef.disableClose = false;
     this.error_CC = '';
     this.error_div_CC = '';
     this.loading = true;
@@ -143,7 +146,8 @@ export class NovoCCComponent implements OnInit {
   }
 
   onSubmit(){
-
+    this.loading = true;
+    this.dialogRef.disableClose = true;
     this.error_CC = '';
     this.error_div_CC = '';
 
@@ -160,7 +164,11 @@ export class NovoCCComponent implements OnInit {
         });
 
         return;
-      }).catch((error) => this.error_div_CC = error);
+      }).catch((error) => {
+        this.loading = false;
+        this.dialogRef.disableClose = false;
+        this.error_div_CC = error;
+      })
 
     } else {
       this.addNew().then(() => {

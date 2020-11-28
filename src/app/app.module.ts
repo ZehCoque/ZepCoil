@@ -31,7 +31,6 @@ import { NovoCCComponent } from './novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
 import { UppercaseDirective } from './directives/uppercase.directive';
 import { ErrormessagePipe } from './pipes/errormessage.pipe';
-import { UsersComponent } from './users/users.component';
 import { AppRoutingService } from './services/app-routing-service.service';
 
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
@@ -62,7 +61,6 @@ registerLocaleData(localePtBr);
     NovaPessoaComponent,
     UppercaseDirective,
     ErrormessagePipe,
-    UsersComponent,
     AdminCcComponent,
     AdminPessoasComponent,
     ErrorModalComponent,

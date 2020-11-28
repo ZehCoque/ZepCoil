@@ -137,6 +137,12 @@ input[readonly] {
   font-size: 1.1vw;
 }
 
+.button-spinner {
+   zoom: 0.30;
+   display: flex;
+   justify-content: center;
+}
+
 .el-title{
   background-color: rgba(242,249,252,0.6);
   border: solid 1px;

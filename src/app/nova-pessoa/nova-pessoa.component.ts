@@ -31,6 +31,7 @@ export class NovaPessoaComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public preloaded) { }
 
   ngOnInit(): void {
+    this.dialogRef.disableClose = true;
 
     this.novaPessoaForm = this.formBuilder.group({
       Nome: new FormControl('', Validators.required),
@@ -56,6 +57,7 @@ export class NovaPessoaComponent implements OnInit {
     }
 
     this.loading = false;
+    this.dialogRef.disableClose = false;
 
   }
 
@@ -65,6 +67,8 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   onSubmit(){
+    this.loading = true;
+    this.dialogRef.disableClose = true;
     this.error = '';
     if (this.preloaded.pessoa){
       this.delete_pessoa().then(() => {
@@ -80,7 +84,8 @@ export class NovaPessoaComponent implements OnInit {
         this.onCancel('novaPessoa');
       })
     }
-
+    this.loading = false;
+    this.dialogRef.disableClose = false;
   }
 
   add_pessoa(){
