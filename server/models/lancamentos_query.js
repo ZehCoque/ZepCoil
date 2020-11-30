@@ -56,8 +56,9 @@ function lancamentos_router() {
         }
       }
     );
+    connection.release();
   })
-  connection.release();
+
   });
 
   router.post('/lancamentos_query', function (req, res, next) {
