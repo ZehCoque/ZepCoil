@@ -11,7 +11,8 @@ app.use(express.static(www));
 app.use(bodyParser.json())
 app.use(cookieParser());
 
-var allowedOrigins = ['http://localhost:3000',
+var allowedOrigins = ['zepcoil.coyu9rmcmge8.sa-east-1.rds.amazonaws.com:3306',
+                      'http://localhost:3000',
                       'http://localhost:4200'];
 
 app.use(cors({
