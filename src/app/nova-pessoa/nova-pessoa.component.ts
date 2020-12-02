@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
 import { utilsBr } from 'js-brasil';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-nova-pessoa',
@@ -28,7 +29,8 @@ export class NovaPessoaComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private server: ServerService,
               public dialogRef: MatDialogRef<NovaPessoaComponent>,
-              @Inject(MAT_DIALOG_DATA) public preloaded) { }
+              @Inject(MAT_DIALOG_DATA) public preloaded,
+              private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.dialogRef.disableClose = true;
@@ -137,17 +139,28 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   delete_pessoa(){
+    let promise;
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Tem certeza que deseja deletar?"
+    });
 
-    this.loading = true;
-    let promise = new Promise((resolve,reject) => {
-      this.server.delete_Value({Nome: this.preloaded.pessoa.Nome},'pessoa_query_delete').then(() => {
-        resolve();
-      }).catch(error => {
-        console.log(error);
-        reject(error);
-      })
-    })
+    confirmationDialog.afterClosed().subscribe(result => {
+      if (result){
+        this.dialogRef.disableClose = true;
+        this.loading = true;
+        promise = new Promise((resolve,reject) => {
+          this.server.delete_Value({Nome: this.preloaded.pessoa.Nome},'pessoa_query_delete').then(() => {
+            resolve();
+          }).catch(error => {
+            console.log(error);
+            reject(error);
+          })
+        })
 
+    }
+
+  })
     return promise;
   }
 

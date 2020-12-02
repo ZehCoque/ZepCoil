@@ -76,7 +76,8 @@ function get_user(auth_connection, req, res) {
     auth_connection.getConnection((err,connection) => {
 
       if (err) {
-      res.status(404).json((err));
+        console.log(err)
+        res.status(404).json((err));
       return
       }
 
@@ -110,6 +111,7 @@ function getUserByRefreshToken(auth_connection, refreshToken,res) {
     auth_connection.getConnection((err,connection) => {
 
       if (err) {
+          console.log(err)
           res.status(404).json((err));
           return
           }
@@ -139,6 +141,7 @@ function update_user(auth_connection, req, res, refreshToken) {
     auth_connection.getConnection((err,connection) => {
 
       if (err) {
+        console.log(err)
         res.status(404).json((err));
         return
         }
@@ -168,6 +171,7 @@ function delete_token(auth_connection, username, refreshToken) {
     auth_connection.getConnection((err,connection) => {
 
       if (err) {
+        console.log(err)
           res.status(404).json((err));
           return
           }
@@ -248,6 +252,7 @@ function getUsers(auth_connection,req,res) {
       auth_connection.getConnection((err,connection) => {
 
         if (err) {
+          console.log(err)
         res.status(404).json((err));
         return
         }
@@ -290,6 +295,9 @@ function ok(body, res) {
 }
 
 function error(res, message) {
+    if (message == 'Username or password is incorrect') {
+      return res.status(400).json({error: { message: message } })
+    }
     return res.status(404).json({error: { message: message } })
 }
 

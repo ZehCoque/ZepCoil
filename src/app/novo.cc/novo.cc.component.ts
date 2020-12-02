@@ -1,8 +1,9 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { div_CC } from '../classes/tableColumns';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
 
@@ -29,7 +30,8 @@ export class NovoCCComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private server: ServerService,
               public dialogRef: MatDialogRef<NovoCCComponent>,
-              @Inject(MAT_DIALOG_DATA) public preloaded ) { }
+              @Inject(MAT_DIALOG_DATA) public preloaded,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.dialogRef.disableClose = true;
@@ -114,15 +116,29 @@ export class NovoCCComponent implements OnInit {
   }
 
   onDelete(){
-    this.dialogRef.disableClose = false;
-    this.error_CC = '';
-    this.error_div_CC = '';
-    this.loading = true;
-    this.delete_cc()
-    .then(() => this.onCancel('CCExcluido'))
-    .catch((error) => this.error_div_CC = error)
 
-  }
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Tem certeza que deseja deletar?"
+    });
+
+    confirmationDialog.afterClosed().subscribe(result => {
+      if (result){
+        this.dialogRef.disableClose = true;
+        this.error_CC = '';
+        this.error_div_CC = '';
+        this.loading = true;
+        this.delete_cc()
+        .then(() => this.onCancel('CCExcluido'))
+        .catch((error) => {
+          this.dialogRef.disableClose = false;
+          this.error_div_CC = error
+        })
+
+    }
+
+  })
+}
 
   delete_cc(){
 
