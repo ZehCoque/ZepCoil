@@ -12,14 +12,14 @@ export class ContratosActiveFilters {
   Descricao: String = '';
   Data_inicio: String = '';
   Data_termino: String = '';
-  CC: String;
-  Div_CC: String;
-  Valor: String;
-  Pessoa: String;
-  Tipo: String;
-  PCoil: String;
-  PZep: String;
-  PComissao: String;
+  CC: String = '';
+  Div_CC: String = '';
+  Valor: String = '';
+  Pessoa: String = '';
+  Tipo: String = '';
+  PCoil: String = '';
+  PZep: String = '';
+  PComissao: String = '';
   }
 
 export class ContratosActiveSorts {

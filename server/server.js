@@ -13,6 +13,7 @@ app.use(cookieParser());
 
 var allowedOrigins = ['zepcoil.coyu9rmcmge8.sa-east-1.rds.amazonaws.com:3306',
                       'http://localhost:3000',
+                      'http://localhost:4401',
                       'http://localhost:4200'];
 
 app.use(cors({

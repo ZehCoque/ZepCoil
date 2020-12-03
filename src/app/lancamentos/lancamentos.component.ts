@@ -228,14 +228,18 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     return promise
   }
 
-  async getColumnValues(column:string) {
+  getColumnValues(column:string) {
     this.filterValues = new Array<string>();
-    await this.server.get_Value({column: column, active_filters: this.activeFilters},this.column_url).then(async (element: any) => {
-      await element.forEach(el => {
-        this.filterValues = [...this.filterValues, el[column]]
+    let select_col_value = this.activeFilters[column];
+
+    if (this.activeFilters[column].length > 0) this.activeFilters[column] = '';
+    this.server.get_Value({column: column, active_filters: this.activeFilters},this.column_url).then((element: any) => {
+      element.forEach(el => {
+        if (el[column] != null) this.filterValues = [...this.filterValues, el[column]]
       });
 
     });
+    this.activeFilters[column] = select_col_value;
     return this.filterValues
   }
 
