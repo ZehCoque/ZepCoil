@@ -152,7 +152,7 @@ export class ContratosComponent implements OnInit {
   }
 
   scroll_func(event){
-    console.log(event)
+    
   }
 
   editLine(row){

@@ -565,7 +565,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       if (this.totalInvestimentos === null) this.totalInvestimentos = 0;
       if (this.totalDespesas === null) this.totalDespesas = 0;
       if (this.totalReceitas === null) this.totalReceitas = 0;
-      console.log(this.totalInvestimentos)
+
       resolve()
     })
 

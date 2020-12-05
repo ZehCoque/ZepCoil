@@ -266,7 +266,7 @@ export class NovoContratoComponent implements OnInit {
       if (numberValue.charAt(0) == '.'){
         numberValue = 0;
       }
-      console.log(numberValue)
+     
       return numberValue;
     }
 

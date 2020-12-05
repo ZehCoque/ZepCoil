@@ -81,7 +81,7 @@ export class EditRowComponent implements OnInit {
     this.loadData(this.ID).then(() => {
 
       this.insertData();
-      console.log(this.current_data)
+
       this.editedEntryForm.valueChanges.subscribe(val => {
         if (val.Valor) {
           let valor;

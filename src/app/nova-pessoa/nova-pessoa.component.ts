@@ -61,6 +61,8 @@ export class NovaPessoaComponent implements OnInit {
     this.loading = false;
     this.dialogRef.disableClose = false;
 
+    console.log(this.loading)
+
   }
 
   changeDocument(radio_select: string){
@@ -139,7 +141,22 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   delete_pessoa(){
-    let promise;
+
+    this.dialogRef.disableClose = true;
+    this.loading = true;
+    let promise = new Promise((resolve,reject) => {
+      this.server.delete_Value({Nome: this.preloaded.pessoa.Nome},'pessoa_query_delete').then(() => {
+        resolve();
+      }).catch(error => {
+        console.log(error);
+        reject(error);
+      })
+    })
+
+    return promise;
+  }
+
+  onDelete(){
     const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: "Tem certeza que deseja deletar?"
@@ -147,27 +164,12 @@ export class NovaPessoaComponent implements OnInit {
 
     confirmationDialog.afterClosed().subscribe(result => {
       if (result){
-        this.dialogRef.disableClose = true;
-        this.loading = true;
-        promise = new Promise((resolve,reject) => {
-          this.server.delete_Value({Nome: this.preloaded.pessoa.Nome},'pessoa_query_delete').then(() => {
-            resolve();
-          }).catch(error => {
-            console.log(error);
-            reject(error);
-          })
-        })
-
-    }
-
-  })
-    return promise;
-  }
-
-  onDelete(){
     this.delete_pessoa().then(() => {
       this.onCancel('deleted');
     })
+    }
+
+  })
   }
 
   onCancel(data?){
@@ -179,6 +181,7 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   getNumberValue(value){
+    if (value == null) return;
     if (typeof value == "number") return;
     else return value.replace(/\D/g,"");
   }

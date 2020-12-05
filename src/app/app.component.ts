@@ -35,8 +35,7 @@ export class AppComponent {
       } else {
         this.current_url = event.url;
       }
-      
-      console.log(this.current_url)
+ 
     });
   }
 

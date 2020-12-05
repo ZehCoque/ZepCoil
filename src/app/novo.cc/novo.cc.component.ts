@@ -55,12 +55,14 @@ export class NovoCCComponent implements OnInit {
         this.div_CC.forEach(element => {
           this.divCCArray = [...this.divCCArray, element.Divisao ]
         });
-        this.loading = false;
-        this.dialogRef.disableClose = false;
+
       });
 
 
     }
+
+    this.loading = false;
+    this.dialogRef.disableClose = false;
 
   }
 
