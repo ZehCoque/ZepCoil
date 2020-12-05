@@ -1,12 +1,8 @@
 import { Component, ViewChild, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ErrorMatcherDirective } from '../directives/error-matcher.directive'
-import { CurrencyPipe } from '@angular/common';
 import { ServerService } from '../services/server.service'
 import { CC, div_CC, Contratos, Pessoa } from '../classes/tableColumns'
 
-import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SortMessages } from '../classes/active_filters_and_sorts';
@@ -28,7 +24,7 @@ export class ContratosComponent implements OnInit {
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
 
-  loading = true;
+  loading: boolean = true;
 
   Contratos: Array<Contratos>;
   filterValues: Array<string>;
@@ -37,7 +33,6 @@ export class ContratosComponent implements OnInit {
   Pessoa:Array<Pessoa> = new Array();
 
   cdk_empty: boolean = true;
-  div_cc_ready: boolean = false;
 
   activeSorts: ContratosActiveSorts = new ContratosActiveSorts;
   activeFilters: ContratosActiveFilters = new ContratosActiveFilters;
@@ -152,7 +147,7 @@ export class ContratosComponent implements OnInit {
   }
 
   scroll_func(event){
-    
+
   }
 
   editLine(row){

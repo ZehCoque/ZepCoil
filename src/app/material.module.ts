@@ -22,6 +22,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 export const MY_FORMATS = {
@@ -61,7 +62,8 @@ export const MY_FORMATS = {
     MatSidenavModule,
     MatListModule,
     MatButtonToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    MatAutocompleteModule,
   ],
   exports: [
     MatButtonModule,
@@ -83,7 +85,8 @@ export const MY_FORMATS = {
     MatSidenavModule,
     MatListModule,
     MatButtonToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    MatAutocompleteModule
   ],
   providers: [
     {

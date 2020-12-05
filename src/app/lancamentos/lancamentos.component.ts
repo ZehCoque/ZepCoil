@@ -45,7 +45,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   Pessoa:Array<Pessoa> = new Array();
 
   cdk_empty: boolean = true;
-  div_cc_ready: boolean = false;
 
   activeSorts: ActiveSorts = new ActiveSorts;
   activeFilters: ActiveFilters = new ActiveFilters;
@@ -125,7 +124,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       Valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
       Data_Entrada: new FormControl(moment().toISOString(), Validators.required),
       CC: new FormControl('',Validators.required),
-      Div_CC: new FormControl('',Validators.required),
+      Div_CC: new FormControl({value: '', disabled: true},Validators.required),
       Vencimento: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
       Observacao: new FormControl(''),
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
@@ -150,7 +149,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.loadData()
       .then(() => {
-        console.log(this.Entradas)
+
         this.loading = false;
         if (this.Entradas.length > 0) {
           this.cdk_empty = false;
@@ -212,18 +211,18 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       });
       resolve(this.div_CC.length);
     }).catch(err => {
-      this.div_cc_ready = false;
+      this.newEntryForm.controls.Div_CC.disable();
       reject(err);
     });
     })
 
     promise.then((div_cc_len) => {
       if (div_cc_len > 0){
-        this.div_cc_ready = true;
+        this.newEntryForm.controls.Div_CC.enable();
       } else {
-        this.div_cc_ready = false;
+        this.newEntryForm.controls.Div_CC.disable();;
       }
-    }).catch(() => this.div_cc_ready = false)
+    }).catch(() => this.newEntryForm.controls.Div_CC.disable())
 
     return promise
   }
@@ -257,7 +256,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   }
 
   scroll_func(event){
-    console.log(event)
+    //console.log(event)
   }
 
   resetValue(){
@@ -321,7 +320,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   onClear(){
 
-    this.div_cc_ready = false;
+    this.newEntryForm.controls.Div_CC.disable();
     this.newEntryForm.reset();
     this.newEntryForm.controls.Descricao.setErrors(null);
     this.newEntryForm.controls.CC.setErrors(null);

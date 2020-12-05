@@ -439,7 +439,7 @@
 
       <mat-form-field  style="width: 40%;" class="form-field">
         <mat-label>Divisão Centro de Custo</mat-label>
-        <mat-select [disabled]="!div_cc_ready" formControlName="Div_CC">
+        <mat-select formControlName="Div_CC">
         <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
          {{ div_CC.Divisao }}
         </mat-option>

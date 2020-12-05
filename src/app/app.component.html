@@ -1,25 +1,18 @@
-<mat-sidenav-container style="background-color: white;">
-  <mat-sidenav #sidenav>
-    <mat-nav-list>
 
-      <a mat-list-item (click)="openCCDialog();sidenav.toggle()">
-        <mat-icon>apartment</mat-icon>
-        Gerenciar Centros de Custo </a>
-      <a mat-list-item (click)="openPessoaDialog();sidenav.toggle()">
-        <mat-icon>person</mat-icon>
-        Gerenciar Pessoas </a>
-      <a mat-list-item (click)="sidenav.toggle()" mat-list-item>
-        <mat-icon>close</mat-icon>
-        Fechar menu</a>
-
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
     <div class="toolbar" role="banner">
-      <button *ngIf="user" mat-icon-button>
-        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-      </button>
-      <span *ngIf="user">Bem vindo, {{user.firstName}}</span>
+
+      <div style="padding-left: 10px;">
+        <button (click)="openPessoaDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
+          <mat-icon >person</mat-icon>
+        </button>
+      </div>
+      <div style="padding-left: 10px;">
+        <button (click)="openPessoaDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
+          <mat-icon >apartment</mat-icon>
+        </button>
+      </div>
+
+      <span style="padding-left: 20px;" *ngIf="user">Bem vindo, {{user.firstName}}</span>
       <div style="flex: 1;"></div>
       <div style="justify-content: space-between; display: flex;">
         <mat-button-toggle-group *ngIf="user" [value]="current_url">
@@ -50,5 +43,4 @@
       </svg>
 
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+
