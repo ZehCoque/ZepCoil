@@ -23,7 +23,6 @@ export class FocusNextDirective {
       return item.tabIndex >= "0";
     });
     var index = list.indexOf(el);
-    console.log(index)
     return list[index + 1] || list[0];
   }
 

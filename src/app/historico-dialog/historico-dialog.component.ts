@@ -39,8 +39,6 @@ export class HistoricoDialogComponent implements OnInit {
   ngOnInit(): void {
 
     this.loadData(this.ID).then(() => {
-      console.log(this.before.Valor);
-
       this.Descricao = this.lancamentos.Descricao;
 
       this.before.Valor = this.lancamentos.Valor;
