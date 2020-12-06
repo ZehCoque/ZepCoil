@@ -11,7 +11,9 @@ export class Entrada {
   N_Invest: number;
   Pessoa: String;
   Responsavel: String;
-
+  Concluido: Boolean;
+  Imposto: Boolean | Number;
+  Tipo_despesa: String;
 }
 
 export class CC {
@@ -46,6 +48,21 @@ export class contratos{
   Div_CC: String;
   Descricao: String;
   Tipo: String;
+}
+
+export class Contratos {
+  ID?: Number;
+  Descricao: String;
+  Data_inicio: Date;
+  Data_termino: Date;
+  CC: String;
+  Div_CC: String;
+  Valor: String;
+  Pessoa: String;
+  Tipo: String;
+  PCoil: Number;
+  PZep: Number;
+  PComissao: Number;
 }
 
 

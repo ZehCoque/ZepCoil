@@ -1,0 +1,21 @@
+.error-title{
+  font-size: 20x;
+  font-weight: bolder;
+  padding-top: 10px;
+}
+
+.error-text{
+  font-size: 15x;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.around-error{
+  background-color: rgba(242,249,252,0.6);
+  border: solid 1px;
+  border-color: #ef9a9a;
+  border-radius: 5px;
+  color:#d32f2f;
+  text-align: center;
+}

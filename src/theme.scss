@@ -20,3 +20,19 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 .mat-grey {
   color: mat-color($my-app-grey)
 }
+
+.mat-button-toggle{
+  background-color: mat-color($my-app-primary);
+  color: white
+}
+
+.mat-button-toggle-checked{
+  background-color: mat-color($my-app-primary,900);
+  color: white !important
+}
+
+.mat-black{
+  background-color: black;
+  color: white;
+}
+

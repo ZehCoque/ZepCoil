@@ -6,8 +6,16 @@ function CC_router() {
   const router = express.Router();
 
   router.get('/cc_query', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
       'SELECT * FROM ' + database + 'cc',
       [],
       (error, results) => {
@@ -19,11 +27,20 @@ function CC_router() {
         }
       }
     );
+    connection.release();
+    });
   });
 
   router.post('/cc_query_add', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
       'INSERT INTO ' + database + 'cc (`Nome`,`Descricao`) VALUES (?,?)',
       [req.body.Nome,req.body.Descricao],
       (error, results) => {
@@ -35,11 +52,20 @@ function CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.delete('/cc_query_delete', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
       'DELETE FROM ' + database + 'cc WHERE Nome=?',
       [req.body.Nome],
       (error) => {
@@ -51,6 +77,8 @@ function CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
 return router;

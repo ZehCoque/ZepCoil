@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrencyPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import localePtBr from '@angular/common/locales/pt';
@@ -30,14 +31,25 @@ import { NovoCCComponent } from './novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from './nova-pessoa/nova-pessoa.component';
 import { UppercaseDirective } from './directives/uppercase.directive';
 import { ErrormessagePipe } from './pipes/errormessage.pipe';
-import { UsersComponent } from './users/users.component';
+import { AppRoutingService } from './services/app-routing-service.service';
 
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
-import { TerceirosComponent } from './terceiros/terceiros.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+<<<<<<< HEAD
 import { ContratosComponent } from './contratos/contratos.component';
+=======
+import { ConcluirDialogComponent } from './concluir-dialog/concluir-dialog.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { HistoricoDialogComponent } from './historico-dialog/historico-dialog.component';
+
+import { NgBrazil } from 'ng-brazil';
+import { TextMaskModule } from 'angular2-text-mask';
+import { ContratosComponent } from './contratos/contratos.component';
+import { NovoContratoComponent } from './novo-contrato/novo-contrato.component';
+
+>>>>>>> master
 
 registerLocaleData(localePtBr);
 
@@ -53,14 +65,22 @@ registerLocaleData(localePtBr);
     NovaPessoaComponent,
     UppercaseDirective,
     ErrormessagePipe,
-    UsersComponent,
     AdminCcComponent,
-    TerceirosComponent,
     AdminPessoasComponent,
     ErrorModalComponent,
+<<<<<<< HEAD
     ContratosComponent,
+=======
+    ConcluirDialogComponent,
+    ConfirmationDialogComponent,
+    HistoricoDialogComponent,
+    ContratosComponent,
+    NovoContratoComponent,
+>>>>>>> master
   ],
   imports: [
+    TextMaskModule,
+    NgBrazil,
     CommonModule,
     HttpClientModule,
     BrowserModule,
@@ -86,10 +106,12 @@ registerLocaleData(localePtBr);
       useClass: HashLocationStrategy
     },
     CurrencyPipe,
+    DecimalPipe,
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    newDataTrackerService
+    newDataTrackerService,
+    AppRoutingService
   ],
   bootstrap: [AppComponent]
 })

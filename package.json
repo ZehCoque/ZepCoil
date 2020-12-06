@@ -1,6 +1,6 @@
 {
   "name": "zepcoil",
-  "version": "0.9.0",
+  "version": "0.9.7",
   "main": "./src/electron/electron.dev.js",
   "author": "José Antonio Rico Coque",
   "scripts": {
@@ -43,6 +43,8 @@
     "@angular/platform-browser": "~9.0.0",
     "@angular/platform-browser-dynamic": "~9.0.0",
     "@angular/router": "~9.0.0",
+    "@nbfontana/ngx-br": "^1.0.0-rc.4.0.2",
+    "angular2-text-mask": "^9.0.0",
     "body-parser": "^1.19.0",
     "concurrently": "^5.3.0",
     "cookie-parser": "^1.4.5",
@@ -50,8 +52,10 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "js-brasil": "^2.3.8",
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
+    "ng-brazil": "^2.2.2",
     "ngx-moment": "^5.0.0",
     "ngx-upper-case-directive": "^1.0.3",
     "nodemon": "^2.0.4",

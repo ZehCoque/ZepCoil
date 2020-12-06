@@ -12,15 +12,23 @@
 
       <div class="button-row button-container">
 
-        <button name="addButton_edit" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
+        <button *ngIf="state == 1" name="addButton_edit" type="button" mat-mini-fab color="success" class="selection-button" (click)="selectType(0)">
           <mat-icon>add</mat-icon>
         </button>
-        <button name="removeButton_edit"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
+        <button *ngIf="state == 1" name="removeButton_edit"  type="button" mat-mini-fab color="warn" class="selection-button" (click)="selectType(1)">
           <mat-icon>remove</mat-icon>
         </button>
 
-        <button name="investButton_edit" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
+        <button *ngIf="state == 1" name="investButton_edit" type="button" mat-mini-fab color="accent" class="selection-button" style="color: white;" (click)="selectType(2)">
           <mat-icon>show_chart</mat-icon>
+        </button>
+
+        <button *ngIf="state == 2" name="outButton_edit" mat-mini-fab color="success" (click)="selectType(3)" >
+          <mat-icon >arrow_downward</mat-icon>
+        </button>
+
+        <button *ngIf="state == 2" name="inButton_edit" mat-mini-fab color="warn" (click)="selectType(4)">
+          <mat-icon >arrow_upward</mat-icon>
         </button>
       </div>
 
@@ -120,14 +128,23 @@
 </mat-error>
 </mat-form-field>
 
-<mat-form-field *ngIf="editedEntryForm.get('Pessoa').value === 0" style="width: 45%;" class="form-field">
-<mat-label>Origem</mat-label>
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 45%;" class="form-field">
+<mat-label >Origem</mat-label>
 <mat-select formControlName="Pessoa">
 <mat-option *ngFor="let dest of Pessoa" [value]="dest">
  {{ dest.Nome }}
 </mat-option>
 </mat-select>
 </mat-form-field>
+
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1 " style="width: 45%;" class="form-field">
+  <mat-label >Origem</mat-label>
+  <mat-select formControlName="Pessoa">
+  <mat-option *ngFor="let dest of Pessoa" [value]="dest">
+   {{ dest.Nome }}
+  </mat-option>
+  </mat-select>
+  </mat-form-field>
 
 <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 2" style="width: 45%;" class="form-field">
 <mat-label>Nº do Investimento</mat-label>
@@ -137,6 +154,26 @@
 O número de investimento deve ser um número.
 </mat-error>
 </mat-form-field>
+
+<div>
+  <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 35%;" class="form-field">
+    <mat-label>Tem imposto?</mat-label>
+    <mat-select formControlName="Imposto">
+      <mat-option *ngFor="let imp of Imposto" [value]="imp">
+        {{ imp.text }}
+       </mat-option>
+  </mat-select>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1" style="width: 35%;" class="form-field">
+    <mat-label>Variável/Fixa</mat-label>
+    <mat-select formControlName="Tipo_despesa">
+    <mat-option *ngFor="let desp of Tipo_despesa" [value]="desp">
+     {{ desp.text }}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
+</div>
 
 <div>
 <mat-form-field style="width: 100%;" class="example-full-width">
@@ -153,8 +190,9 @@ O número de investimento deve ser um número.
 </div>
 
 <div class="button-row">
-  <button mat-raised-button color="primary" (click)='onSubmit()' [disabled]="!editedEntryForm.valid">Concluir</button>
-  <button mat-raised-button color="primary" (click)='onReset()' type="button">Valores Originais</button>
+  <button *ngIf="!loading" mat-raised-button color="primary" (click)='onSubmit()' [disabled]="!editedEntryForm.valid">Concluir</button>
+  <button *ngIf="loading" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
+  <button mat-raised-button color="primary" (click)='onReset()' type="button">Restaurar valores</button>
   <button mat-raised-button color="primary" (click)='onCancel()' type="button">Cancelar</button>
 </div>
 

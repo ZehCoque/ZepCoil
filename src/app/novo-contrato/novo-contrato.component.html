@@ -1,0 +1,156 @@
+<form focusNext [formGroup]="novoContratoForm">
+
+  <div *ngIf="preloaded" class="el-title" style="margin-bottom: 10px;">
+    Editar um contrato
+  </div>
+
+  <div *ngIf="!preloaded" class="el-title" style="margin-bottom: 10px;">
+    Novo contrato
+  </div>
+
+<div>
+  <div class="formulario">
+  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+
+    <mat-form-field style="width: 30%;" class="form-field">
+      <mat-label>Locatário</mat-label>
+      <mat-select formControlName="Pessoa">
+      <mat-option *ngFor="let locatario of Pessoa" [value]="locatario">
+       {{ locatario.Nome }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novoContratoForm.get('Pessoa').hasError('required')" >
+      É necessário inserir um locatário.
+    </mat-error>
+  </mat-form-field>
+
+    <mat-form-field  style="width: 60%;text-align: center;" class="form-field">
+      <mat-label>Descrição</mat-label>
+      <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('Descricao').hasError('required')" >
+        É necessário inserir uma descrição.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 20%;" class="form-field">
+      <mat-label>Data de Início</mat-label>
+      <input matInput formControlName="Data_inicio" [matDatepicker]="picker1">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+      <mat-error *ngIf="novoContratoForm.get('Data_inicio').hasError('required')" >
+        É necessário inserir uma data de início válida.
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field style="width: 20%;" class="form-field">
+      <mat-label>Data de Término</mat-label>
+      <input matInput formControlName="Data_termino" [matDatepicker]="picker2">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <mat-error *ngIf="novoContratoForm.get('Data_termino').hasError('required')" >
+        É necessário inserir uma data de término válida.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field  style="width: 20%;" class="form-field">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="Tipo">
+        <mat-option *ngFor="let tipo of Tipos" [value]="tipo">
+          {{ tipo }}
+         </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novoContratoForm.get('Tipo').hasError('required')" >
+      É necessário escolher um tipo.
+    </mat-error>
+  </mat-form-field>
+
+    <mat-form-field  style="width: 25%;text-align: center;" class="form-field">
+      <mat-label>Valor</mat-label>
+      <input matInput formControlName="Valor" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('Valor').hasError('required')" >
+        É necessário inserir um sobrenome.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 45%;" class="form-field">
+      <mat-label>Centro de Custo</mat-label>
+      <mat-select formControlName="CC">
+      <mat-option *ngFor="let cc of CC" [value]="cc" (click)="get_div_cc(cc.Nome)">
+       {{ cc.Descricao }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novoContratoForm.get('CC').hasError('required')" >
+      É necessário inserir um de centro de custo.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 45%;" class="form-field">
+    <mat-label>Divisão Centro de Custo</mat-label>
+    <mat-select formControlName="Div_CC">
+    <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
+     {{ div_CC.Divisao }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="novoContratoForm.get('Div_CC').hasError('required')" >
+    É necessário inserir uma divisão de centro de custo.
+  </mat-error>
+</mat-form-field>
+
+  </div >
+
+  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+
+    <mat-form-field  style="width: 20%;" class="form-field">
+      <mat-label>% Zep</mat-label>
+      <input matInput formControlName="PZep" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('pattern')" >
+        Valor inserido deve ser um número
+      </mat-error>
+      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('max')" >
+        Porcentagem maior que 100%.
+      </mat-error>
+      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('min')" >
+        Porcentagem menor que 0%.
+      </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 20%;" class="form-field">
+    <mat-label>% Coil</mat-label>
+    <input matInput formControlName="PCoil" [errorStateMatcher]="errorMatcher">
+    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('max')" >
+      Porcentagem maior que 100%.
+    </mat-error>
+    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('min')" >
+      Porcentagem menor que 0%.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 20%;" class="form-field">
+    <mat-label>% Comissão</mat-label>
+    <input matInput formControlName="PComissao" [errorStateMatcher]="errorMatcher">
+    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('max')" >
+      Porcentagem maior que 100%.
+    </mat-error>
+    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('min')" >
+      Porcentagem menor que 0%.
+    </mat-error>
+  </mat-form-field>
+
+  </div>
+
+
+</div>
+
+  <div *ngIf="error" style="width: 100%;text-align: center; ">
+    <mat-error>{{error | errorMessage }} </mat-error>
+  </div>
+</div>
+<div class="button-row">
+  <button mat-raised-button *ngIf="!loading" (click)='onSubmit()' [disabled]="!novoContratoForm.valid">Concluir</button>
+  <button *ngIf="loading" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
+  <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
+</div>
+
+
+</form>

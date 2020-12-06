@@ -20,6 +20,9 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 export const MY_FORMATS = {
@@ -57,7 +60,10 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatTooltipModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatButtonToggleModule,
+    MatRadioModule,
+    MatAutocompleteModule,
   ],
   exports: [
     MatButtonModule,
@@ -77,7 +83,10 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatTooltipModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatButtonToggleModule,
+    MatRadioModule,
+    MatAutocompleteModule
   ],
   providers: [
     {

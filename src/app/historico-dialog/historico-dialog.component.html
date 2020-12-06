@@ -1,0 +1,49 @@
+<div class="el-title" style="margin-bottom: 10px;">
+  {{Descricao}}
+</div>
+
+
+<div class="formulario">
+
+  <div class="el-tag--plain" style="padding-top: 10px; font-weight: bolder;">
+    Antes
+  </div>
+
+  <div style="display: flex;">
+    <div class="el-tag--plain" style="padding-top: 10px; width: 33%;">
+      {{before.Valor | currency:'BRL'}}
+    </div>
+    <div class="el-tag--plain" style="padding-top: 10px; width: 33%;">
+      {{before.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}
+    </div>
+    <div class="el-tag--plain" style="padding-top: 10px; width: 33%;">
+      {{before.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}
+    </div>
+  </div>
+
+    <mat-divider></mat-divider>
+
+
+
+  <div class="el-tag--plain" style="padding-top: 10px; font-weight: bolder;">
+    Depois
+  </div>
+
+  <div style="display: flex;">
+    <div class="el-tag--plain" style="padding-top: 10px; width: 33%;">
+      {{after.Valor | currency:'BRL'}}
+    </div>
+    <div class="el-tag--plain" style="padding-top: 10px; width: 33%;">
+      {{after.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}
+    </div>
+    <div class="el-tag--plain" style="padding-top: 10px; width: 33%;">
+      {{after.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}
+    </div>
+  </div>
+
+
+<div class="button-row">
+<button mat-raised-button color="primary" (click)='onCancel()' type="button">Fechar</button>
+</div>
+
+</div>

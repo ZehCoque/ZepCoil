@@ -34,7 +34,8 @@
         </div>
 
         <div class="button-row">
-          <button mat-raised-button color="primary" style="font-size:1vw" (click)='onSubmit()'>Entrar</button>
+          <button *ngIf="!loading" mat-raised-button color="primary" style="font-size:1vw" (click)='onSubmit()'>Entrar</button>
+          <button *ngIf="loading" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
         </div>
 
       </div>

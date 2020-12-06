@@ -11,7 +11,7 @@ export class ErrormessagePipe implements PipeTransform {
       return 'Valor inserido já existe'
     }
 
-    if (error_code === 'Not Found'){
+    if (error_code === 'Bad Request'){
       return 'Usuário e/ou senha inválidos'
     }
 

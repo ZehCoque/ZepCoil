@@ -1,33 +1,29 @@
-<mat-sidenav-container style="background-color: white;">
-  <mat-sidenav #sidenav>
-    <mat-nav-list>
 
-      <a mat-list-item (click)="openCCDialog();sidenav.toggle()">
-        <mat-icon>apartment</mat-icon>
-        Gerenciar Centros de Custo </a>
-      <a mat-list-item (click)="openPessoaDialog();sidenav.toggle()">
-        <mat-icon>person</mat-icon>
-        Gerenciar Pessoas </a>
-        <a mat-list-item (click)="sidenav.toggle()">
-          <mat-icon>vpn_key</mat-icon>
-          Gerenciar Usuários </a>
-      <a mat-list-item (click)="sidenav.toggle()" mat-list-item>
-        <mat-icon>close</mat-icon>
-        Fechar menu</a>
-
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
     <div class="toolbar" role="banner">
-      <button *ngIf="user" mat-icon-button>
-        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-      </button>
-      <span *ngIf="user">Bem vindo, {{user.firstName}}</span>
+
+      <div style="padding-left: 10px;">
+        <button (click)="openPessoaDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
+          <mat-icon >person</mat-icon>
+        </button>
+      </div>
+      <div style="padding-left: 10px;">
+        <button (click)="openCCDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
+          <mat-icon >apartment</mat-icon>
+        </button>
+      </div>
+
+      <span style="padding-left: 20px;" *ngIf="user">Bem vindo, {{user.firstName}}</span>
+      <div style="flex: 0.8;"></div>
+      <div style="justify-content: space-between; display: flex;">
+        <mat-button-toggle-group *ngIf="user" [value]="current_url">
+          <mat-button-toggle routerLink='lancamentos' value="/lancamentos">Lançamentos</mat-button-toggle>
+          <mat-button-toggle routerLink='terceiros' value="/terceiros">Terceiros</mat-button-toggle>
+          <mat-button-toggle routerLink='contratos' value="/contratos">Contratos</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
         <div class="spacer"></div>
         <a *ngIf="user" style="cursor: pointer; padding-right: 20px;" (click)="logout()">Sair</a>
-        <!-- <a *ngIf="user" target="_blank" rel="noopener" title="Notificações">
-          <img style="filter: invert();" src="assets/icons8-bell-24.png">
-        </a> -->
     </div>
 
     <div *ngIf="user">
@@ -47,5 +43,4 @@
       </svg>
 
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+

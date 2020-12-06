@@ -100,8 +100,7 @@ md-divider {
   border-radius: 5px;
   background-color: rgba(242,249,252,0.6);
   font-weight: bold;
-  font-size: 36px; /* Some tweener fallback that doesn't look awful */
-  font-size: 1.1vw;
+  font-size: 2vw;
   color: #187caf;
   text-align: center;
   display: block;
@@ -192,8 +191,20 @@ p {
   position: absolute;
   z-index: 10;
   top: 59%;
-  left: 6.5%;
+  left: 6%;
   font-size: 8px;
+}
+
+.imposto{
+  width: 98%;
+  text-align: center;
+  position: absolute;
+  font-weight: bolder;
+  font-size: 0.7vw;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #187caf;
+  top: -1px;
+  text-align: center;
 }
 
 .blue-rectangle {

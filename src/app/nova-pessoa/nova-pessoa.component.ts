@@ -1,10 +1,11 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
+import { utilsBr } from 'js-brasil';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-nova-pessoa',
@@ -12,13 +13,12 @@ import { ServerService } from '../services/server.service';
   styleUrls: ['./nova-pessoa.component.scss']
 })
 export class NovaPessoaComponent implements OnInit {
-
+  public MASKS = utilsBr.MASKS;
   novaPessoa: Pessoa;
   novaPessoaForm: FormGroup;
   loading: Boolean = true;
 
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport: CdkVirtualScrollViewport;
+  selected_document: string = 'CPF';
 
   error: string;
 
@@ -29,14 +29,16 @@ export class NovaPessoaComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private server: ServerService,
               public dialogRef: MatDialogRef<NovaPessoaComponent>,
-              @Inject(MAT_DIALOG_DATA) public preloaded) { }
+              @Inject(MAT_DIALOG_DATA) public preloaded,
+              private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.dialogRef.disableClose = true;
 
     this.novaPessoaForm = this.formBuilder.group({
       Nome: new FormControl('', Validators.required),
       Sobrenome: new FormControl('', Validators.required),
-      CPF_CNPJ: new FormControl('', Validators.pattern("^[0-9]*$")),
+      CPF_CNPJ: new FormControl(''),
       Banco: new FormControl(''),
       Agencia: new FormControl('',Validators.pattern("^[0-9]*$")),
       Conta: new FormControl('',Validators.pattern("^[0-9]*$")),
@@ -46,21 +48,31 @@ export class NovaPessoaComponent implements OnInit {
     if (this.preloaded.pessoa){
       this.novaPessoaForm.patchValue(this.preloaded.pessoa);
 
+      if (this.preloaded.pessoa.CPF_CNPJ){
+        if (this.preloaded.pessoa.CPF_CNPJ.toString().length > 11) this.selected_document = 'CNPJ'
+      }
+
       if (this.novaPessoaForm.get('CPF_CNPJ').value == 0) this.novaPessoaForm.controls.CPF_CNPJ.setValue('');
       if (this.novaPessoaForm.get('Agencia').value == 0) this.novaPessoaForm.controls.Agencia.setValue('');
       if (this.novaPessoaForm.get('Conta').value == 0) this.novaPessoaForm.controls.Conta.setValue('');
 
-      setTimeout(() => {
-        this.viewport.scrollToIndex(this.viewport.getDataLength());
-      }, 0);
-
     }
 
     this.loading = false;
+    this.dialogRef.disableClose = false;
+
+    console.log(this.loading)
 
   }
 
+  changeDocument(radio_select: string){
+    this.novaPessoaForm.get('CPF_CNPJ').value == '';
+    this.selected_document = radio_select;
+  }
+
   onSubmit(){
+    this.loading = true;
+    this.dialogRef.disableClose = true;
     this.error = '';
     if (this.preloaded.pessoa){
       this.delete_pessoa().then(() => {
@@ -76,23 +88,42 @@ export class NovaPessoaComponent implements OnInit {
         this.onCancel('novaPessoa');
       })
     }
-
+    this.loading = false;
+    this.dialogRef.disableClose = false;
   }
 
   add_pessoa(){
-    
+
+    let given_cpj_cnpj;
+    let given_agencia;
+    let given_conta;
+
     let promise = new Promise((resolve,reject) => {
-      if (this.novaPessoaForm.get('CPF_CNPJ').value == '') this.novaPessoaForm.controls.CPF_CNPJ.setValue(0);
-      if (this.novaPessoaForm.get('Agencia').value == '') this.novaPessoaForm.controls.Agencia.setValue(0);
-      if (this.novaPessoaForm.get('Conta').value == '') this.novaPessoaForm.controls.Conta.setValue(0);
+      if (this.novaPessoaForm.get('CPF_CNPJ').value == '') {
+        given_cpj_cnpj = 0;
+      } else {
+        given_cpj_cnpj = this.novaPessoaForm.controls.CPF_CNPJ.value;
+      }
+
+      if (this.novaPessoaForm.get('Agencia').value == '') {
+        given_agencia = 0;
+      } else {
+        given_agencia = this.novaPessoaForm.controls.Agencia.value;
+      }
+
+      if (this.novaPessoaForm.get('Conta').value == '') {
+        given_conta = 0;
+      } else {
+        given_conta = this.novaPessoaForm.controls.Conta.value;
+      }
 
       this.novaPessoa = {
         Nome: this.novaPessoaForm.get('Nome').value,
         Sobrenome: this.novaPessoaForm.get('Sobrenome').value,
-        CPF_CNPJ: this.novaPessoaForm.get('CPF_CNPJ').value,
+        CPF_CNPJ: this.getNumberValue(given_cpj_cnpj),
         Banco: this.novaPessoaForm.get('Banco').value,
-        Agencia: this.novaPessoaForm.get('Agencia').value,
-        Conta: this.novaPessoaForm.get('Conta').value,
+        Agencia: given_agencia,
+        Conta: given_conta,
         Tipo: this.novaPessoaForm.get('Tipo').value,
       }
 
@@ -111,6 +142,7 @@ export class NovaPessoaComponent implements OnInit {
 
   delete_pessoa(){
 
+    this.dialogRef.disableClose = true;
     this.loading = true;
     let promise = new Promise((resolve,reject) => {
       this.server.delete_Value({Nome: this.preloaded.pessoa.Nome},'pessoa_query_delete').then(() => {
@@ -125,9 +157,19 @@ export class NovaPessoaComponent implements OnInit {
   }
 
   onDelete(){
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Tem certeza que deseja deletar?"
+    });
+
+    confirmationDialog.afterClosed().subscribe(result => {
+      if (result){
     this.delete_pessoa().then(() => {
       this.onCancel('deleted');
     })
+    }
+
+  })
   }
 
   onCancel(data?){
@@ -136,6 +178,12 @@ export class NovaPessoaComponent implements OnInit {
 
   setTipo(tipo:string){
     this.novaPessoaForm.controls.Tipo.setValue(tipo);
+  }
+
+  getNumberValue(value){
+    if (value == null) return;
+    if (typeof value == "number") return;
+    else return value.replace(/\D/g,"");
   }
 
 }

@@ -36,7 +36,9 @@ app.on('ready', createWindow)
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    auth.db_conn().destroy();
+    if (auth.db_conn()) {
+      auth.db_conn().end();
+    }
     app.quit();
   }
 })

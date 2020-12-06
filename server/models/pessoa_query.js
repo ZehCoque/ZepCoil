@@ -6,8 +6,15 @@ function CC_router() {
   const router = express.Router();
 
   router.get('/pessoa_query', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
       'SELECT * FROM ' + database + 'func_forn',
       [],
       (error, results) => {
@@ -19,11 +26,20 @@ function CC_router() {
         }
       }
     );
+    connection.release();
+    });
   });
 
   router.post('/pessoa_query_add', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.';
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
       'INSERT INTO ' + database + 'func_forn (`Nome`,`Sobrenome`,`CPF_CNPJ`,`Banco`,`Agencia`,`Conta`,`Tipo`) VALUES (?,?,?,?,?,?,?)',
       [
         req.body.Nome,
@@ -43,11 +59,20 @@ function CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
   router.delete('/pessoa_query_delete', function (req, res, next) {
-    let database = auth.db_conn().config.database + '.'
-    auth.db_conn().query(
+    auth.db_conn().getConnection((err,connection) => {
+
+      if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
       'DELETE FROM ' + database + 'func_forn WHERE Nome=?',
       [req.body.Nome],
       (error) => {
@@ -60,6 +85,8 @@ function CC_router() {
         }
       }
     );
+    connection.release();
+  });
   });
 
 return router;

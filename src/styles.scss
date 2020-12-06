@@ -134,7 +134,13 @@ input[readonly] {
   border-color: #a3cbdf;
   color: #187caf;
   text-align: center;
-  font-size: 0.9vw;
+  font-size: 1.1vw;
+}
+
+.button-spinner {
+   zoom: 0.30;
+   display: flex;
+   justify-content: center;
 }
 
 .el-title{
@@ -151,36 +157,26 @@ input[readonly] {
 
 .el-col-1{
   width: 8%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
 }
 
 .el-col-2{
   width: 9%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
 }
 
 .el-col-3 {
   width: 11%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
 }
 
 
 
 .el-col-4 {
   width: 15%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
 }
 
 .el-col-5 {
   width: 21%;
-  background-color: rgba(0, 0, 0, 0);
-  // border: solid 2px black;
-}
 
+}
 
 .display-flex {
   display: flex;

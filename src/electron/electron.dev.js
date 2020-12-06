@@ -16,6 +16,7 @@ function createWindow () {
 
   mainWindow.maximize();
   mainWindow.show();
+  mainWindow.removeMenu()
 
   mainWindow.loadURL(
     url.format({
@@ -37,7 +38,11 @@ app.on('ready', createWindow)
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     if (auth.db_conn()) {
+<<<<<<< HEAD
       auth.db_conn().destroy();
+=======
+      auth.db_conn().end();
+>>>>>>> master
     }
     app.quit();
   }
