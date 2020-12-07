@@ -37,9 +37,6 @@ import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { AdminCcComponent } from './admin-cc/admin-cc.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
-<<<<<<< HEAD
-import { ContratosComponent } from './contratos/contratos.component';
-=======
 import { ConcluirDialogComponent } from './concluir-dialog/concluir-dialog.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { HistoricoDialogComponent } from './historico-dialog/historico-dialog.component';
@@ -49,7 +46,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { ContratosComponent } from './contratos/contratos.component';
 import { NovoContratoComponent } from './novo-contrato/novo-contrato.component';
 
->>>>>>> master
 
 registerLocaleData(localePtBr);
 
@@ -68,15 +64,11 @@ registerLocaleData(localePtBr);
     AdminCcComponent,
     AdminPessoasComponent,
     ErrorModalComponent,
-<<<<<<< HEAD
-    ContratosComponent,
-=======
     ConcluirDialogComponent,
     ConfirmationDialogComponent,
     HistoricoDialogComponent,
     ContratosComponent,
     NovoContratoComponent,
->>>>>>> master
   ],
   imports: [
     TextMaskModule,
