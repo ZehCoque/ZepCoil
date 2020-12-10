@@ -1,7 +1,12 @@
 
     <div class="toolbar" role="banner">
-
       <div style="padding-left: 10px;">
+      <button (click)="refresh()" color="darker-primary" *ngIf="user" mat-mini-fab>
+        <mat-icon >autorenew</mat-icon>
+      </button>
+      </div>
+      <div style="padding-left: 10px;">
+
         <button (click)="openPessoaDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
           <mat-icon >person</mat-icon>
         </button>
@@ -12,7 +17,7 @@
         </button>
       </div>
 
-      <span style="padding-left: 20px;" *ngIf="user">Bem vindo, {{user.firstName}}</span>
+      <span style="padding-left: 20px;" *ngIf="user">Bem vinda, {{user.firstName}}</span>
       <div style="flex: 0.8;"></div>
       <div style="justify-content: space-between; display: flex;">
         <mat-button-toggle-group *ngIf="user" [value]="current_url">

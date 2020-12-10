@@ -74,7 +74,7 @@
           </div >
 
           <div class="el-tag--plain el-col-3">
-            Vence em
+            Vencimento
             <button (click)="getColumnValues('Vencimento')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Vencimento', 'class_msg':sortMessages.forExpire }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Vencimento.active && !activeFilters.Vencimento">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Vencimento">filter_alt</mat-icon>
@@ -467,7 +467,7 @@
     </mat-select>
   </mat-form-field>
 
-  <button *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 0" type="button" mat-icon-button color="primary" (click)="openPessoaDialog()">
+  <button *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 0 || newEntryForm.get('Tipo').value === 3 || newEntryForm.get('Tipo').value === 4" type="button" mat-icon-button color="primary" (click)="openPessoaDialog()">
     <mat-icon>add</mat-icon>
   </button>
 

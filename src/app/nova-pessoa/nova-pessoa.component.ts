@@ -61,8 +61,6 @@ export class NovaPessoaComponent implements OnInit {
     this.loading = false;
     this.dialogRef.disableClose = false;
 
-    console.log(this.loading)
-
   }
 
   changeDocument(radio_select: string){

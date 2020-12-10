@@ -35,12 +35,16 @@ export class AppComponent {
       } else {
         this.current_url = event.url;
       }
- 
+
     });
   }
 
   logout() {
       this.authenticationService.logout();
+  }
+
+  refresh(): void {
+    this.newDataEmitter.newDataEmit('refresh');
   }
 
   openCCDialog(): void {
