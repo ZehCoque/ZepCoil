@@ -177,7 +177,15 @@
                 </div >
 
                 <div class="el-tag--plain el-col-3">
-                  Em {{Entrada.Vencimento | amDifference: today :'days' : false}} dias
+                  <div *ngIf="today > Entrada.Vencimento">
+                    Há {{today| amDifference: Entrada.Vencimento :'days' : false}} dias
+                  </div>
+                  <div *ngIf="today < Entrada.Vencimento">
+                    Em {{Entrada.Vencimento | amDifference: today :'days' : false}} dias
+                  </div>
+                  <div *ngIf="today === Entrada.Vencimento">
+                    Hoje
+                  </div>
                 </div>
 
                 <div class="el-tag--plain el-col-2">

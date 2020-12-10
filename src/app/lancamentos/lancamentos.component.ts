@@ -36,7 +36,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   newEntryForm: FormGroup;
   errorMatcher: ErrorMatcherDirective;
   loading = true;
-  today = moment().toISOString();
+  today = moment().startOf('day').toISOString();
 
   Entradas: Array<Entrada> = new Array();
   filterValues: Array<string>;
@@ -149,7 +149,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.loadData()
       .then(() => {
-
+        console.log(this.Entradas)
         this.loading = false;
         if (this.Entradas.length > 0) {
           this.cdk_empty = false;
@@ -162,6 +162,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
 
     })
+
+
   }
 
 
