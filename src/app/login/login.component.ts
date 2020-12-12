@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
+import { newDataTrackerService } from '../services/new-data-tracker.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private newDataEmitter: newDataTrackerService
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.userValue) {
@@ -56,6 +58,7 @@ export class LoginComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.router.navigate([this.returnUrl]);
+                    this.newDataEmitter.newDataEmit('login');
                 },
                 error: error => {
                   console.log(error)
