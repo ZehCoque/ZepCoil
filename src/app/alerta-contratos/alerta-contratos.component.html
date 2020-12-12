@@ -1,0 +1,41 @@
+<div class="header-padding">
+  <div class="unselectable-line header-row" style=" align-items: center; ">
+
+    <div class="el-tag--plain" style="width: 100%; font-weight: bolder;">
+      Alertas de Contratos
+    </div>
+
+  </div>
+</div>
+<div>
+
+<div class="header-padding">
+  <div class="unselectable-line display-flex header-row" style=" align-items: center">
+
+    <div class="el-tag" style="width: 60%;">
+      Descrição do Contrato
+    </div>
+    <div class="el-tag" style="width: 30%;">
+      Vencido há
+    </div>
+  </div>
+</div>
+
+
+<cdk-virtual-scroll-viewport itemSize="56" style="height: 500px">
+  <mat-list *cdkVirtualFor="let alerta of AlertaContratos">
+          <mat-card style="text-align: center; display: flex; height: 20px;">
+            <mat-card-content style="width: 60%;" class="el-tag--plain unselectable-line">
+              {{alerta.Descricao}}
+            </mat-card-content>
+            <mat-card-content style="width: 30%;"  class="el-tag--plain unselectable-line">
+              {{alerta.Delta}} meses
+            </mat-card-content>
+          </mat-card>
+  </mat-list>
+
+ </cdk-virtual-scroll-viewport>
+
+ <div class="button-row">
+  <button mat-raised-button  (click)='onCancel()'>Fechar</button>
+</div>

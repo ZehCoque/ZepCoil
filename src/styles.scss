@@ -47,8 +47,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .loading-indicator {
   z-index: 999;
-  height: 5em;
-  width: 5em;
+  height: 2em;
+  width: 2em;
   overflow: show;
   margin: auto;
 }
@@ -141,6 +141,21 @@ input[readonly] {
    zoom: 0.30;
    display: flex;
    justify-content: center;
+}
+
+.blue-dot {
+  height: 20px;
+  width: 20px;
+  background-color: rgb(25,118,210);
+  border-radius: 50%;
+  display: inline-block;
+  color: white;
+  line-height: 20px;
+  position: absolute;
+  z-index: 10;
+  top: 59%;
+  left: 6.5%;
+  font-size: 8px;
 }
 
 .el-title{

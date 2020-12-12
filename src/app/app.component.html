@@ -18,13 +18,25 @@
       </div>
 
       <span style="padding-left: 20px;" *ngIf="user">Bem vinda, {{user.firstName}}</span>
-      <div style="flex: 0.8;"></div>
+      <div style="flex: 0.6;"></div>
       <div style="justify-content: space-between; display: flex;">
+
         <mat-button-toggle-group *ngIf="user" [value]="current_url">
           <mat-button-toggle routerLink='lancamentos' value="/lancamentos">Lançamentos</mat-button-toggle>
           <mat-button-toggle routerLink='terceiros' value="/terceiros">Terceiros</mat-button-toggle>
           <mat-button-toggle routerLink='contratos' value="/contratos">Contratos</mat-button-toggle>
         </mat-button-toggle-group>
+
+      </div>
+
+      <div style="padding-left: 10px;">
+        <button (click)="openAlertsDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
+          <mat-icon *ngIf="contagem == 0">notifications</mat-icon>
+          <mat-icon *ngIf="contagem > 0">notification_important</mat-icon>
+        </button>
+        <span *ngIf="contagem > 0 && user" style="position: absolute; top: 30px; padding-left: 5px;">
+          {{contagem}}
+        </span>
       </div>
 
         <div class="spacer"></div>

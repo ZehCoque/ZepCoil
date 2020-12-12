@@ -30,6 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
     openErrorDialog(err): void {
+      if (!this.dialog.openDialogs || !this.dialog.openDialogs.length) return;
       const dialogRef = this.dialog.open(ErrorModalComponent, {
         width: '500px',
         data: {err}

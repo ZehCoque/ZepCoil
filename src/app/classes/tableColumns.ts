@@ -54,4 +54,11 @@ export class Contratos {
   PComissao: Number;
 }
 
+export class AlertaContratos {
+  Descricao: String;
+  Delta: Number;
+  Data_inicio: Date;
+  Data_termino: Date;
+}
+
 

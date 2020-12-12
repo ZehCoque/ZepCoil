@@ -149,7 +149,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.loadData()
       .then(() => {
-        console.log(this.Entradas)
         this.loading = false;
         if (this.Entradas.length > 0) {
           this.cdk_empty = false;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { AuthenticationService } from './services/authentication.service';
 import { User } from './classes/user';
@@ -8,6 +8,8 @@ import { AdminCcComponent } from './admin-cc/admin-cc.component';
 import { AdminPessoasComponent } from './admin-pessoas/admin-pessoas.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { ServerService } from './services/server.service';
+import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.component';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +19,13 @@ import { filter } from 'rxjs/operators';
 export class AppComponent {
   user: User;
   current_url: string;
+  contagem: number = 0;
 
   constructor(private authenticationService: AuthenticationService,
     public dialog: MatDialog,
     private newDataEmitter: newDataTrackerService,
-    private router: Router) {
+    private router: Router,
+    private server: ServerService) {
 
   }
 
@@ -37,6 +41,24 @@ export class AppComponent {
       }
 
     });
+
+
+    if (this.user) {
+      this.server.get_List('contagem_contratos_alerta').then((response) => {
+        this.contagem = response[0].Contagem;
+
+      })
+    }
+
+
+    this.newDataEmitter.currentData.subscribe(() => {
+      if (this.user) {
+        this.server.get_List('contagem_contratos_alerta').then((response) => {
+          this.contagem = response[0].Contagem;
+        })
+      }
+    })
+
   }
 
   logout() {
@@ -68,6 +90,13 @@ export class AppComponent {
     let sub = dialogRef.afterClosed().subscribe((results) => {
       this.newDataEmitter.newDataEmit(results);
       sub.unsubscribe();
+    });
+  }
+
+  openAlertsDialog(): void {
+    const dialogRef = this.dialog.open(AlertaContratosComponent, {
+      width: '500px',
+      data: {}
     });
   }
 }

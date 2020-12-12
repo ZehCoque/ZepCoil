@@ -252,11 +252,10 @@
           align-items: center;">
             <mat-card class="empty-results-disclaimer">
               <mat-card-content style="font-size: 1.1vw;">Nada para mostrar</mat-card-content>
-
             </mat-card>
           </div>
-          <div *ngIf="loading" class="loading-indicator">
-            <mat-spinner></mat-spinner>
+          <div *ngIf="loading" style="text-align: center;">
+            <mat-spinner class="loading-indicator"></mat-spinner>
             <div>Carregando...</div>
           </div>
         </cdk-virtual-scroll-viewport>
