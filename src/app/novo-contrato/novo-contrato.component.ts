@@ -49,7 +49,7 @@ export class NovoContratoComponent implements OnInit {
         Data_inicio: new FormControl(moment().toISOString(), Validators.required),
         CC: new FormControl('',Validators.required),
         Div_CC: new FormControl('',Validators.required),
-        Data_termino: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
+        Data_termino: new FormControl(moment().toISOString(), Validators.required),
         Tipo: new FormControl('',Validators.required),
         PZep: new FormControl(this.decimalPipe.transform(0.00,'1.2-2')),
         PCoil: new FormControl(this.decimalPipe.transform(0.00,'1.2-2')),
@@ -266,7 +266,7 @@ export class NovoContratoComponent implements OnInit {
       if (numberValue.charAt(0) == '.'){
         numberValue = 0;
       }
-     
+
       return numberValue;
     }
 
