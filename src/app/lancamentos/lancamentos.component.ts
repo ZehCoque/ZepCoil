@@ -125,7 +125,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       Data_Entrada: new FormControl(moment().toISOString(), Validators.required),
       CC: new FormControl('',Validators.required),
       Div_CC: new FormControl({value: '', disabled: true},Validators.required),
-      Vencimento: new FormControl(moment(this.today).add(1, 'M').toISOString(), Validators.required),
+      Vencimento: new FormControl(moment().toISOString(), Validators.required),
       Observacao: new FormControl(''),
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
@@ -276,13 +276,13 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.newEntryForm.controls.Pessoa.setValue(new Array(Entrada));
       }
 
-      let imp;
+      let imp = this.Imposto[0].value;
 
       if (this.newEntryForm.get("Tipo").value == 0){
         imp = this.newEntryForm.get("Imposto").value.value;
       }
 
-      let desp;
+      let desp = this.Tipo_despesa[1].value;
 
       if (this.newEntryForm.get("Tipo").value == 1){
         desp = this.newEntryForm.get("Tipo_despesa").value.value;
@@ -329,7 +329,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.newEntryForm.controls.Descricao.setErrors(null);
     this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
     this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
-    this.newEntryForm.controls.Vencimento.patchValue(moment(this.today).add(1, 'M').toISOString());
+    this.newEntryForm.controls.Vencimento.patchValue(moment().toISOString());
 
     if (document.getElementsByName("addButton")[0]) {
       document.getElementsByName("addButton")[0].style.opacity = "0.4";
