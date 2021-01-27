@@ -71,7 +71,7 @@ export class ContratosComponent implements OnInit {
 
 
   loadData(){
-        let promise = new Promise(async (resolve, reject) => {
+        let promise = new Promise<void>(async (resolve, reject) => {
         this.CC = new Array();
         this.div_CC = new Array();
         this.Pessoa = new Array();

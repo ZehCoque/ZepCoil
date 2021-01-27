@@ -23,6 +23,7 @@ export class ContratosActiveFilters {
   }
 
 export class ContratosActiveSorts {
+  Identificacao: sortJson = {active: false, dir: 'arrow_downward'};
   Descricao: sortJson = {active: false, dir: 'arrow_downward'};
   Data_inicio: sortJson = {active: false, dir: 'arrow_downward'};
   Data_termino: sortJson = {active: false, dir: 'arrow_downward'};
@@ -31,9 +32,6 @@ export class ContratosActiveSorts {
   Valor: sortJson = {active: false, dir: 'arrow_downward'};
   Tipo:  sortJson = {active: false, dir: 'arrow_downward'};
   Pessoa: sortJson = {active: false, dir: 'arrow_downward'};
-  PZep: sortJson = {active: false, dir: 'arrow_downward'};
-  PCoil: sortJson = {active: false, dir: 'arrow_downward'};
-  PComissao: sortJson = {active: false, dir: 'arrow_downward'};
 }
 
 

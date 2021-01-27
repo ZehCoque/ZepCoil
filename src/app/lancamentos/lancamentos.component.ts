@@ -168,7 +168,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
 
   loadData(){
-    let promise = new Promise(async (resolve, reject) => {
+    let promise = new Promise<void>(async (resolve, reject) => {
     this.CC = new Array();
     this.div_CC = new Array();
     this.Pessoa = new Array();
@@ -545,7 +545,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   updateSoma(){
     if (this.state === 2 ) return;
-    let promise = new Promise(async (resolve, reject) => {
+    let promise = new Promise<void>(async (resolve, reject) => {
 
       //Total Receitas
       await this.server.get_List_CF({active_filters : this.activeFilters, state: this.state},'total_receitas').then((total: any) => {

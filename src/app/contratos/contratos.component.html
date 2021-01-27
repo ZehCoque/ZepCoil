@@ -3,8 +3,17 @@
     <div class="header-padding">
       <div class="unselectable-line display-flex header-row" style=" align-items: center">
 
-
         <div class="el-tag--plain el-col-3">
+          Identificação
+          <button (click)="getColumnValues('Pessoa')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <mat-icon color="darker-primary" *ngIf="!activeSorts.Pessoa.active && !activeFilters.Pessoa">arrow_drop_down</mat-icon>
+            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Pessoa">filter_alt</mat-icon>
+            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Pessoa.active && activeFilters.Pessoa" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Pessoa.dir}}</mat-icon>
+            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Pessoa.active && !activeFilters.Pessoa">{{activeSorts.Pessoa.dir}}</mat-icon>
+          </button>
+      </div>
+
+        <div class="el-tag--plain el-col-4">
             Locatário
             <button (click)="getColumnValues('Pessoa')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Pessoa.active && !activeFilters.Pessoa">arrow_drop_down</mat-icon>
@@ -14,7 +23,7 @@
             </button>
         </div>
 
-        <div class="el-tag--plain el-col-3">
+        <div class="el-tag--plain el-col-4">
           Descrição
           <button (click)="getColumnValues('Descricao')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Descricao.active && !activeFilters.Descricao">arrow_drop_down</mat-icon>
@@ -86,36 +95,6 @@
           </button>
         </div>
 
-        <div class="el-tag--plain el-col-1">
-          % Zep
-          <button (click)="getColumnValues('PZep')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'PZep' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
-            <mat-icon color="darker-primary" *ngIf="!activeSorts.PZep.active && !activeFilters.PZep">arrow_drop_down</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.PZep">filter_alt</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.PZep.active && activeFilters.PZep" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.PZep.dir}}</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.PZep.active && !activeFilters.PZep">{{activeSorts.PZep.dir}}</mat-icon>
-          </button>
-        </div>
-
-        <div class="el-tag--plain el-col-1">
-          % Coil
-          <button (click)="getColumnValues('PCoil')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'PCoil' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
-            <mat-icon color="darker-primary" *ngIf="!activeSorts.PCoil.active && !activeFilters.PCoil">arrow_drop_down</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.PCoil">filter_alt</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.PCoil.active && activeFilters.PCoil" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.PCoil.dir}}</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.PCoil.active && !activeFilters.PCoil">{{activeSorts.PCoil.dir}}</mat-icon>
-          </button>
-        </div>
-
-        <div class="el-tag--plain el-col-1">
-          % Comissão
-          <button (click)="getColumnValues('PComissao')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'PComissao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
-            <mat-icon color="darker-primary" *ngIf="!activeSorts.PComissao.active && !activeFilters.PComissao">arrow_drop_down</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.PComissao">filter_alt</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.PComissao.active && activeFilters.PComissao" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.PComissao.dir}}</mat-icon>
-            <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.PComissao.active && !activeFilters.PComissao">{{activeSorts.PComissao.dir}}</mat-icon>
-          </button>
-        </div>
-
         </div>
     </div>
 
@@ -127,12 +106,15 @@
             <mat-card-content>
               <div class="unselectable-line display-flex" style=" align-items: center">
 
-
                 <div class="el-tag--plain el-col-3">
+                  {{Contrato.Identificacao}}
+                </div>
+
+                <div class="el-tag--plain el-col-4">
                   {{Contrato.Pessoa}}
                 </div>
 
-                <div class="el-tag--plain el-col-3">
+                <div class="el-tag--plain el-col-4">
                   {{Contrato.Descricao}}
                 </div>
 
@@ -160,19 +142,6 @@
                 <div class="el-tag--plain el-col-1">
                   {{Contrato.Tipo}}
                 </div >
-
-                <div class="el-tag--plain el-col-1">
-                  {{Contrato.PZep}}
-                </div >
-
-                <div class="el-tag--plain el-col-1">
-                  {{Contrato.PCoil}}
-                </div >
-
-                <div class="el-tag--plain el-col-1">
-                  {{Contrato.PComissao}}
-                </div >
-
 
               </div>
 
