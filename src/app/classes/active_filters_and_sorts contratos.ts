@@ -3,11 +3,6 @@ interface sortJson {
   dir: string
 }
 
-interface dirMsgJson{
-  up: string;
-  down: string;
-}
-
 export class ContratosActiveFilters {
   Descricao: String = '';
   Data_inicio: String = '';

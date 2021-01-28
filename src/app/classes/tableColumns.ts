@@ -40,7 +40,7 @@ export class Pessoa{
 }
 
 export class Contratos {
-  ID?: Number;
+  Identificacao: String;
   Descricao: String;
   Data_inicio: Date;
   Data_termino: Date;
@@ -49,9 +49,6 @@ export class Contratos {
   Valor: String;
   Pessoa: String;
   Tipo: String;
-  PCoil: Number;
-  PZep: Number;
-  PComissao: Number;
 }
 
 export class AlertaContratos {
@@ -59,6 +56,20 @@ export class AlertaContratos {
   Delta: Number;
   Data_inicio: Date;
   Data_termino: Date;
+}
+
+export class PagamentosContratos{
+  DataPgto: Date;
+  Fav1: String;
+  Valor1: Number;
+  ValorPiscina: Number;
+  Fav2: String;
+  Valor2: Number;
+  Fav3: String;
+  Valor3: Number;
+  FavCom: String;
+  ValorCom: Number;
+  PCom: Number;
 }
 
 

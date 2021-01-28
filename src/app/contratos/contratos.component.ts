@@ -154,7 +154,7 @@ export class ContratosComponent implements OnInit {
 
     this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
       width: "50%",
-      data: this.Contratos[row].ID
+      data: this.Contratos[row].Identificacao
     });
 
     this.editRowDialogRef.afterClosed().subscribe((results) => {
@@ -257,7 +257,7 @@ export class ContratosComponent implements OnInit {
   openContratosDialog(){
 
     this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
-      width: "50%"
+      width: "70%"
     });
 
     this.editRowDialogRef.afterClosed().subscribe((results) => {

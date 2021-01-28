@@ -12,7 +12,15 @@
   <div class="formulario">
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
-    <mat-form-field style="width: 30%;" class="form-field">
+    <mat-form-field style="width: 25%;" class="form-field">
+      <mat-label>Identificação</mat-label>
+      <input matInput formControlName="Identificacao" [errorStateMatcher]="errorMatcher">
+      <mat-error *ngIf="novoContratoForm.get('Identificacao').hasError('required')" >
+        É necessário inserir uma identificação.
+      </mat-error>
+  </mat-form-field>
+
+    <mat-form-field style="width: 25%;" class="form-field">
       <mat-label>Locatário</mat-label>
       <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let locatario of Pessoa" [value]="locatario">
@@ -24,7 +32,7 @@
     </mat-error>
   </mat-form-field>
 
-    <mat-form-field  style="width: 60%;text-align: center;" class="form-field">
+    <mat-form-field  style="width: 40%;text-align: center;" class="form-field">
       <mat-label>Descrição</mat-label>
       <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoContratoForm.get('Descricao').hasError('required')" >
@@ -99,46 +107,131 @@
 
   </div >
 
-  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+  <!-- PAGAMENTOS DE CONTRATO -->
 
-    <mat-form-field  style="width: 20%;" class="form-field">
-      <mat-label>% Zep</mat-label>
-      <input matInput formControlName="PZep" [errorStateMatcher]="errorMatcher">
-      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('pattern')" >
-        Valor inserido deve ser um número
-      </mat-error>
-      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('max')" >
-        Porcentagem maior que 100%.
-      </mat-error>
-      <mat-error *ngIf="novoContratoForm.get('PZep').hasError('min')" >
-        Porcentagem menor que 0%.
-      </mat-error>
-  </mat-form-field>
 
-  <mat-form-field  style="width: 20%;" class="form-field">
-    <mat-label>% Coil</mat-label>
-    <input matInput formControlName="PCoil" [errorStateMatcher]="errorMatcher">
-    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('max')" >
-      Porcentagem maior que 100%.
-    </mat-error>
-    <mat-error *ngIf="novoContratoForm.get('PCoil').hasError('min')" >
-      Porcentagem menor que 0%.
-    </mat-error>
-  </mat-form-field>
+  <!--  Separar em caixinhas 1,2,3,comissao -->
+  <mat-divider></mat-divider>
 
-  <mat-form-field  style="width: 20%;" class="form-field">
-    <mat-label>% Comissão</mat-label>
-    <input matInput formControlName="PComissao" [errorStateMatcher]="errorMatcher">
-    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('max')" >
-      Porcentagem maior que 100%.
-    </mat-error>
-    <mat-error *ngIf="novoContratoForm.get('PComissao').hasError('min')" >
-      Porcentagem menor que 0%.
-    </mat-error>
-  </mat-form-field>
-
+  <div class="el-tag--plain" style="width: 100%; padding-top: 10px;">
+    Pagamentos programados
   </div>
 
+  <form [formGroup]="contratosPgmtForm">
+
+    <div style="width: 100%; text-align: center; padding-top: 10px;">
+      <mat-form-field style="width: 20%;text-align: center;">
+        <mat-label>Data de Pagamento</mat-label>
+        <input matInput formControlName="DataPgto" [matDatepicker]="picker3">
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <mat-datepicker #picker3></mat-datepicker>
+        <mat-error *ngIf="contratosPgmtForm.get('DataPgto').hasError('required')" >
+          É necessário inserir uma data de pagamento válida.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div style="width: 100%; justify-content: space-around;" class="display-flex">
+
+      <div class="pgmt-div">
+
+        <!-- 1 -->
+
+        <mat-form-field  style="width: 80%;text-align: center;" >
+          <mat-label>Favorecido 1</mat-label>
+          <mat-select formControlName="Fav1">
+            <mat-option *ngFor="let favorecido of Favorecidos" [value]="favorecido">
+             {{ favorecido }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="contratosPgmtForm.get('Fav1').hasError('required')" >
+            É necessário selecionar o primeiro favorecido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field  style="width: 80%;text-align: center;" >
+          <mat-label>Valor 1</mat-label>
+          <input matInput formControlName="Valor1" [errorStateMatcher]="errorMatcher">
+          <mat-error *ngIf="contratosPgmtForm.get('Valor1').hasError('required')" >
+            É necessário inserir o valor do primeiro favorecido.
+          </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Valor Piscina</mat-label>
+          <input matInput formControlName="ValorPiscina">
+        </mat-form-field>
+
+      </div>
+
+      <div class="pgmt-div">
+
+        <!-- 2 -->
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Favorecido 2</mat-label>
+          <mat-select formControlName="Fav2">
+            <mat-option *ngFor="let favorecido of Favorecidos" [value]="favorecido">
+             {{ favorecido }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Valor 2</mat-label>
+          <input matInput formControlName="Valor2">
+        </mat-form-field>
+
+      </div>
+
+      <div class="pgmt-div">
+
+        <!-- 3 -->
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Favorecido 3</mat-label>
+          <mat-select formControlName="Fav3">
+            <mat-option *ngFor="let favorecido of Favorecidos" [value]="favorecido">
+             {{ favorecido }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Valor 3</mat-label>
+          <input matInput formControlName="Valor3">
+        </mat-form-field>
+
+      </div>
+
+      <div class="pgmt-div">
+
+        <!-- comissao -->
+
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Favorecido Comissão</mat-label>
+          <mat-select formControlName="FavCom">
+            <mat-option disabled value="Marcia">Marcia
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>Valor Comissão</mat-label>
+          <input matInput formControlName="ValorCom">
+        </mat-form-field>
+
+        <mat-form-field  style="width: 80%;text-align: center;">
+          <mat-label>% Comissão</mat-label>
+          <input matInput formControlName="PCom">
+        </mat-form-field>
+
+      </div>
+
+    </div>
+  </form>
 
 </div>
 

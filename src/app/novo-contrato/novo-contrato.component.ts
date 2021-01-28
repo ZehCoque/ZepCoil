@@ -16,6 +16,7 @@ export class NovoContratoComponent implements OnInit {
 
     novoContrato: Contratos;
     novoContratoForm: FormGroup;
+    contratosPgmtForm: FormGroup;
     loading: Boolean = false;
 
     CC:Array<CC> = new Array();
@@ -27,6 +28,8 @@ export class NovoContratoComponent implements OnInit {
     error: string;
 
     Tipos = ['Fixo','Variável'];
+
+    Favorecidos = ['Coil', 'Zep', 'MZ'];
 
     errorMatcher: ErrorMatcherDirective;
 
@@ -42,7 +45,9 @@ export class NovoContratoComponent implements OnInit {
 
     ngOnInit(): void {
       this.dialogRef.disableClose = true;
+
       this.novoContratoForm = this.formBuilder.group({
+        Identificacao: new FormControl('', Validators.required),
         Descricao: new FormControl('', Validators.required),
         Pessoa: new FormControl('', Validators.required),
         Valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
@@ -50,10 +55,21 @@ export class NovoContratoComponent implements OnInit {
         CC: new FormControl('',Validators.required),
         Div_CC: new FormControl('',Validators.required),
         Data_termino: new FormControl(moment().toISOString(), Validators.required),
-        Tipo: new FormControl('',Validators.required),
-        PZep: new FormControl(this.decimalPipe.transform(0.00,'1.2-2')),
-        PCoil: new FormControl(this.decimalPipe.transform(0.00,'1.2-2')),
-        PComissao: new FormControl(this.decimalPipe.transform(0.00,'1.2-2'))
+        Tipo: new FormControl('',Validators.required)
+      });
+
+      this.contratosPgmtForm = this.formBuilder.group({
+        DataPgto: new FormControl(moment().toISOString(), Validators.required),
+        Fav1: new FormControl('Coil', Validators.required),
+        Valor1: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'),Validators.required),
+        ValorPiscina: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
+        Fav2: new FormControl(''),
+        Valor2: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
+        Fav3: new FormControl(''),
+        Valor3: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
+        FavCom: new FormControl('Marcia'),
+        ValorCom: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
+        PCom: new FormControl(''),
       });
 
 
@@ -65,28 +81,46 @@ export class NovoContratoComponent implements OnInit {
             {emitEvent:false})
         }
 
-        if (val.PZep) {
-          let valor = this.getNumberValue(val.PZep);
-          this.novoContratoForm.patchValue({
-            PZep: this.decimalPipe.transform(valor,'1.2-2') },
+      });
+
+      this.contratosPgmtForm.valueChanges.subscribe(val => {
+        if (val.Valor1) {
+          let valor = this.getNumberValue(val.Valor1);
+          this.contratosPgmtForm.patchValue({
+            Valor1: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
             {emitEvent:false})
         }
 
-        if (val.PCoil) {
-          let valor = this.getNumberValue(val.PCoil);
-          this.novoContratoForm.patchValue({
-            PCoil: this.decimalPipe.transform(valor,'1.2-2') },
+        if (val.ValorPiscina) {
+          let valor = this.getNumberValue(val.ValorPiscina);
+          this.contratosPgmtForm.patchValue({
+            ValorPiscina: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
             {emitEvent:false})
         }
 
-        if (val.PComissao) {
-          let valor = this.getNumberValue(val.PComissao);
-          this.novoContratoForm.patchValue({
-            PComissao: this.decimalPipe.transform(valor,'1.2-2') },
+        if (val.Valor2) {
+          let valor = this.getNumberValue(val.Valor2);
+          this.contratosPgmtForm.patchValue({
+            Valor2: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+            {emitEvent:false})
+        }
+
+        if (val.Valor3) {
+          let valor = this.getNumberValue(val.Valor3);
+          this.contratosPgmtForm.patchValue({
+            Valor3: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+            {emitEvent:false})
+        }
+
+        if (val.ValorCom) {
+          let valor = this.getNumberValue(val.ValorCom);
+          this.contratosPgmtForm.patchValue({
+            ValorCom: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
             {emitEvent:false})
         }
 
       });
+
 
 
       if (this.preloaded){
@@ -129,7 +163,7 @@ export class NovoContratoComponent implements OnInit {
       this.error = '';
 
       let json: Contratos = {
-        ID: this.preloaded,
+        Identificacao: this.preloaded,
         Descricao: this.novoContratoForm.controls.Descricao.value,
         Pessoa: this.novoContratoForm.controls.Pessoa.value.Nome,
         Data_inicio: this.novoContratoForm.controls.Data_inicio.value,
@@ -138,9 +172,6 @@ export class NovoContratoComponent implements OnInit {
         CC: this.novoContratoForm.controls.CC.value.Nome,
         Div_CC: this.novoContratoForm.controls.Div_CC.value.Divisao,
         Tipo: this.novoContratoForm.controls.Tipo.value,
-        PCoil: this.getNumberValue(this.novoContratoForm.controls.PCoil.value),
-        PZep: this.getNumberValue(this.novoContratoForm.controls.PZep.value),
-        PComissao: this.getNumberValue(this.novoContratoForm.controls.PComissao.value),
       }
 
       if (this.preloaded){
@@ -155,23 +186,14 @@ export class NovoContratoComponent implements OnInit {
 
       } else {
 
-        this.server.get_List('max_id').then((results) => {
-          json.ID = results[0].max_id + 1
 
-          this.add_contrato(json).then(() => {
-            this.onCancel('novoContrato');
-
-        })
-
-
-        })
 
       }
 
     }
 
     loadData(ID?:number){
-      let promise = new Promise(async (resolve, reject) => {
+      let promise = new Promise<void>(async (resolve, reject) => {
       this.CC = new Array();
       this.div_CC = new Array();
       this.Pessoa = new Array();
@@ -208,7 +230,7 @@ export class NovoContratoComponent implements OnInit {
 
     add_contrato(edit_json){
 
-      let promise = new Promise((resolve,reject) => {
+      let promise = new Promise<void>((resolve,reject) => {
 
         this.server.add_List(edit_json,'contratos_query_insert').then(() => {
 
