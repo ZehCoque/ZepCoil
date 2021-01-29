@@ -100,7 +100,7 @@
 
     <cdk-virtual-scroll-viewport *ngIf="!cdk_empty && !loading; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
 
-        <div style="padding-bottom: 10px;" *cdkVirtualFor="let Contrato of Contratos, let i=index"  >
+        <div style="padding-bottom: 10px; height: 84px;" *cdkVirtualFor="let Contrato of Contratos, let i=index"  >
 
           <mat-card (contextmenu)="onContextMenu($event, Contrato, i)">
             <mat-card-content>

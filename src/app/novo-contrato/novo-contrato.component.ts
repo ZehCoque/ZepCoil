@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { CC, Contratos, div_CC, Pessoa } from '../classes/tableColumns';
+import { CC, Contratos, div_CC, PagamentosContratos, Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { ServerService } from '../services/server.service';
 
@@ -15,9 +15,13 @@ import { ServerService } from '../services/server.service';
 export class NovoContratoComponent implements OnInit {
 
     novoContrato: Contratos;
+    pagamentosContratos: Array<PagamentosContratos> = new Array();
+
     novoContratoForm: FormGroup;
     contratosPgmtForm: FormGroup;
+
     loading: Boolean = false;
+    loading_ctrlpgmt: Boolean = false;
 
     CC:Array<CC> = new Array();
     div_CC:Array<div_CC> = new Array();
@@ -53,7 +57,7 @@ export class NovoContratoComponent implements OnInit {
         Valor: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
         Data_inicio: new FormControl(moment().toISOString(), Validators.required),
         CC: new FormControl('',Validators.required),
-        Div_CC: new FormControl('',Validators.required),
+        Div_CC: new FormControl({value: '', disabled: true},Validators.required),
         Data_termino: new FormControl(moment().toISOString(), Validators.required),
         Tipo: new FormControl('',Validators.required)
       });
@@ -153,6 +157,8 @@ export class NovoContratoComponent implements OnInit {
 
         let current_Pessoa = this.Pessoa.find(value => value.Nome === this.novoContrato.Pessoa)
         this.novoContratoForm.controls.Pessoa.patchValue(current_Pessoa);
+
+
 
       });
     }
@@ -261,11 +267,11 @@ export class NovoContratoComponent implements OnInit {
 
       promise.then((div_cc_len) => {
         if (div_cc_len > 0){
-          this.div_cc_ready = true;
+          this.novoContratoForm.controls.Div_CC.enable();
         } else {
-          this.div_cc_ready = false;
+          this.novoContratoForm.controls.Div_CC.disable();
         }
-      }).catch(() => this.div_cc_ready = false)
+      }).catch(() => this.novoContratoForm.controls.Div_CC.disable())
 
       return promise
     }
@@ -290,6 +296,18 @@ export class NovoContratoComponent implements OnInit {
       }
 
       return numberValue;
+    }
+
+    onResetPgmts(){
+      this.contratosPgmtForm.reset();
+      this.contratosPgmtForm.controls.DataPgto.patchValue(moment().toISOString());
+      this.contratosPgmtForm.controls.Fav1.patchValue('Coil');
+      this.contratosPgmtForm.controls.Valor1.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+      this.contratosPgmtForm.controls.ValorPiscina.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+      this.contratosPgmtForm.controls.Valor2.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+      this.contratosPgmtForm.controls.Valor3.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+      this.contratosPgmtForm.controls.ValorCom.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+      this.contratosPgmtForm.controls.FavCom.patchValue('Marcia');
     }
 
   }

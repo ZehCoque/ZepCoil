@@ -104,7 +104,7 @@
   </div>
 </div>
 <div class="button-row">
-  <button *ngIf="!loading" mat-raised-button  (click)='onSubmit()' [disabled]="!novaPessoaForm.valid">Concluir</button>
+  <button *ngIf="!loading" mat-raised-button mat-raised-button color="primary" (click)='onSubmit()' [disabled]="!novaPessoaForm.valid">Concluir</button>
   <button *ngIf="loading" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
   <button mat-raised-button *ngIf="preloaded.pessoa"  (click)='onDelete()' type="button">Excluir</button>
   <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>

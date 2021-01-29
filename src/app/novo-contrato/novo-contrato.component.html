@@ -12,7 +12,7 @@
   <div class="formulario">
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
-    <mat-form-field style="width: 25%;" class="form-field">
+    <mat-form-field style="width: 10%;" class="form-field">
       <mat-label>Identificação</mat-label>
       <input matInput formControlName="Identificacao" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoContratoForm.get('Identificacao').hasError('required')" >
@@ -20,7 +20,7 @@
       </mat-error>
   </mat-form-field>
 
-    <mat-form-field style="width: 25%;" class="form-field">
+    <mat-form-field style="width: 13%;" class="form-field">
       <mat-label>Locatário</mat-label>
       <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let locatario of Pessoa" [value]="locatario">
@@ -32,7 +32,7 @@
     </mat-error>
   </mat-form-field>
 
-    <mat-form-field  style="width: 40%;text-align: center;" class="form-field">
+    <mat-form-field  style="width: 18%;text-align: center;" class="form-field">
       <mat-label>Descrição</mat-label>
       <input matInput formControlName="Descricao" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoContratoForm.get('Descricao').hasError('required')" >
@@ -40,7 +40,31 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field style="width: 20%;" class="form-field">
+    <mat-form-field style="width: 9%;" class="form-field">
+      <mat-label>C.C.</mat-label>
+      <mat-select formControlName="CC">
+      <mat-option *ngFor="let cc of CC" [value]="cc" (click)="get_div_cc(cc.Nome)">
+       {{ cc.Descricao }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="novoContratoForm.get('CC').hasError('required')" >
+      É necessário inserir um de centro de custo.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field  style="width: 9%;" class="form-field">
+    <mat-label>Div. C.C.</mat-label>
+    <mat-select formControlName="Div_CC">
+    <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
+     {{ div_CC.Divisao }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="novoContratoForm.get('Div_CC').hasError('required')" >
+    É necessário inserir uma divisão de centro de custo.
+  </mat-error>
+</mat-form-field>
+
+    <mat-form-field style="width: 9%;" class="form-field">
       <mat-label>Data de Início</mat-label>
       <input matInput formControlName="Data_inicio" [matDatepicker]="picker1">
       <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
@@ -51,7 +75,7 @@
     </mat-form-field>
 
 
-    <mat-form-field style="width: 20%;" class="form-field">
+    <mat-form-field style="width: 9%;" class="form-field">
       <mat-label>Data de Término</mat-label>
       <input matInput formControlName="Data_termino" [matDatepicker]="picker2">
       <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -61,7 +85,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field  style="width: 20%;" class="form-field">
+    <mat-form-field  style="width: 5%;" class="form-field">
       <mat-label>Tipo</mat-label>
       <mat-select formControlName="Tipo">
         <mat-option *ngFor="let tipo of Tipos" [value]="tipo">
@@ -73,37 +97,13 @@
     </mat-error>
   </mat-form-field>
 
-    <mat-form-field  style="width: 25%;text-align: center;" class="form-field">
+    <mat-form-field  style="width: 7%;text-align: center;" class="form-field">
       <mat-label>Valor</mat-label>
       <input matInput formControlName="Valor" [errorStateMatcher]="errorMatcher">
       <mat-error *ngIf="novoContratoForm.get('Valor').hasError('required')" >
         É necessário inserir um sobrenome.
       </mat-error>
     </mat-form-field>
-
-    <mat-form-field style="width: 45%;" class="form-field">
-      <mat-label>Centro de Custo</mat-label>
-      <mat-select formControlName="CC">
-      <mat-option *ngFor="let cc of CC" [value]="cc" (click)="get_div_cc(cc.Nome)">
-       {{ cc.Descricao }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="novoContratoForm.get('CC').hasError('required')" >
-      É necessário inserir um de centro de custo.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field  style="width: 45%;" class="form-field">
-    <mat-label>Divisão Centro de Custo</mat-label>
-    <mat-select formControlName="Div_CC">
-    <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
-     {{ div_CC.Divisao }}
-    </mat-option>
-  </mat-select>
-  <mat-error *ngIf="novoContratoForm.get('Div_CC').hasError('required')" >
-    É necessário inserir uma divisão de centro de custo.
-  </mat-error>
-</mat-form-field>
 
   </div >
 
@@ -120,7 +120,7 @@
   <form [formGroup]="contratosPgmtForm">
 
     <div style="width: 100%; text-align: center; padding-top: 10px;">
-      <mat-form-field style="width: 20%;text-align: center;">
+      <mat-form-field style="width: 9%;text-align: center;">
         <mat-label>Data de Pagamento</mat-label>
         <input matInput formControlName="DataPgto" [matDatepicker]="picker3">
         <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
@@ -131,7 +131,7 @@
       </mat-form-field>
     </div>
 
-    <div style="width: 100%; justify-content: space-around;" class="display-flex">
+    <div style="width: 100%; justify-content: space-around;padding-bottom: 10px;" class="display-flex">
 
       <div class="pgmt-div">
 
@@ -231,16 +231,137 @@
       </div>
 
     </div>
+
+    <div class="button-row">
+      <button mat-raised-button color="primary" *ngIf="!loading" (click)='onSubmit()' [disabled]="!contratosPgmtForm.valid">Inserir</button>
+      <button *ngIf="loading_ctrlpgmt" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
+      <button mat-raised-button   (click)='onResetPgmts()' type="button">Limpar</button>
+    </div>
+
   </form>
 
+  <mat-divider></mat-divider>
+
+  <div class="el-tag-pgmt-subtitle">
+
+    <div class="unselectable-line display-flex header-row" style=" align-items: center">
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Data Pgmt
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Favorecido 1
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor 1
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor Piscina
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Favorecido 2
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor 2
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Favorecido 3
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor 3
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Fav. Comissão
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor Comissão
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        % Comissão
+      </div>
+
+    </div>
+
+  </div>
+
+  <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
+    <div *ngIf="pagamentosContratos.length > 0">
+      <mat-list  *cdkVirtualFor="let cc of CC, let i=index">
+        <mat-card style="text-align: center;">
+          <mat-card-content *ngFor="let pgmt of pagamentosContratos" class="el-tag--plain unselectable-line">
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.DataPgto}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Fav1}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Valor1}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.ValorPiscina}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Fav2}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Valor2}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Fav3}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Valor3}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.FavCom}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.ValorCom}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.PCom}}
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+    </mat-list>
+    </div>
+    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento inseridas aparecerão aqui.</div>
+  </cdk-virtual-scroll-viewport>
+
 </div>
+
+
+
 
   <div *ngIf="error" style="width: 100%;text-align: center; ">
     <mat-error>{{error | errorMessage }} </mat-error>
   </div>
 </div>
 <div class="button-row">
-  <button mat-raised-button *ngIf="!loading" (click)='onSubmit()' [disabled]="!novoContratoForm.valid">Concluir</button>
+  <button mat-raised-button color="primary" *ngIf="!loading" (click)='onSubmit()' [disabled]="!novoContratoForm.valid">Concluir</button>
   <button *ngIf="loading" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
   <button mat-raised-button   (click)='onCancel()' type="button">Cancelar</button>
 </div>

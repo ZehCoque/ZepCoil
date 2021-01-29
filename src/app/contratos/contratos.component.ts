@@ -257,7 +257,7 @@ export class ContratosComponent implements OnInit {
   openContratosDialog(){
 
     this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
-      width: "70%"
+      width: "100%"
     });
 
     this.editRowDialogRef.afterClosed().subscribe((results) => {

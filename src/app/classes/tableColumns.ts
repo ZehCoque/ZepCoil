@@ -59,6 +59,7 @@ export class AlertaContratos {
 }
 
 export class PagamentosContratos{
+  Identificacao: String;
   DataPgto: Date;
   Fav1: String;
   Valor1: Number;
