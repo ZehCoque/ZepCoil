@@ -23,7 +23,7 @@
             </button>
         </div>
 
-        <div class="el-tag--plain el-col-4">
+        <div class="el-tag--plain el-col-5">
           Descrição
           <button (click)="getColumnValues('Descricao')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Descricao.active && !activeFilters.Descricao">arrow_drop_down</mat-icon>
@@ -98,13 +98,13 @@
         </div>
     </div>
 
-    <cdk-virtual-scroll-viewport *ngIf="!cdk_empty && !loading; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
+    <cdk-virtual-scroll-viewport *ngIf="!cdk_empty && !loading; else elseBlock" itemSize="78" (scrolledIndexChange)="scroll_func($event)">
 
-        <div style="padding-bottom: 10px; height: 84px;" *cdkVirtualFor="let Contrato of Contratos, let i=index"  >
+        <div style="height: 78px;" *cdkVirtualFor="let Contrato of Contratos, let i=index"  >
 
           <mat-card (contextmenu)="onContextMenu($event, Contrato, i)">
-            <mat-card-content>
-              <div class="unselectable-line display-flex" style=" align-items: center">
+            <mat-card-content >
+              <div class="unselectable-line display-flex" style=" align-items: center;height: 36px;">
 
                 <div class="el-tag--plain el-col-3">
                   {{Contrato.Identificacao}}
@@ -114,7 +114,7 @@
                   {{Contrato.Pessoa}}
                 </div>
 
-                <div class="el-tag--plain el-col-4">
+                <div class="el-tag--plain el-col-5">
                   {{Contrato.Descricao}}
                 </div>
 

@@ -33,7 +33,7 @@
 
           </div>
 
-          <div class="el-tag--plain el-col-4">
+          <div class="el-tag--plain el-col-4" >
             Descrição
             <button (click)="getColumnValues('Descricao')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Descricao.active && !activeFilters.Descricao">arrow_drop_down</mat-icon>
@@ -83,7 +83,7 @@
             </button>
           </div>
 
-          <div class="el-tag--plain el-col-2">
+          <div class="el-tag--plain el-col-3">
             Pessoa
             <button (click)="getColumnValues('Pessoa')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Pessoa.active && !activeFilters.Pessoa">arrow_drop_down</mat-icon>
@@ -111,11 +111,11 @@
       </div>
 
 
-      <cdk-virtual-scroll-viewport *ngIf="!cdk_empty && !loading; else elseBlock" itemSize="94" (scrolledIndexChange)="scroll_func($event)">
+      <cdk-virtual-scroll-viewport *ngIf="!cdk_empty && !loading; else elseBlock" itemSize="96" (scrolledIndexChange)="scroll_func($event)">
 
-        <div style="padding-bottom: 10px;" *cdkVirtualFor="let Entrada of Entradas, let i=index"  >
+        <div style="height: 96px;" *cdkVirtualFor="let Entrada of Entradas, let i=index"  >
 
-          <mat-card (contextmenu)="onContextMenu($event, Entrada, i)">
+          <mat-card style="height: 54px;" (contextmenu)="onContextMenu($event, Entrada, i)">
             <mat-card-content>
               <div *ngIf="Entrada.Imposto" class="unselectable-line imposto">
                 C/ IMPOSTO
@@ -126,7 +126,7 @@
               <div *ngIf="Entrada.Tipo_despesa == 'V'" class="unselectable-line imposto">
                 VARIÁVEL
               </div>
-              <div class="unselectable-line display-flex" style=" align-items: center">
+              <div class="unselectable-line display-flex" style=" align-items: center;height: 54px;">
                 <div class="el-tag--plain el-col-1">
                     <button *ngIf="Entrada.Tipo == 1" mat-mini-fab color="warn">
                       <mat-icon >remove</mat-icon>
@@ -188,7 +188,7 @@
                   </div>
                 </div>
 
-                <div class="el-tag--plain el-col-2">
+                <div class="el-tag--plain el-col-3">
                   {{Entrada.Pessoa}}
                 </div>
 
