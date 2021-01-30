@@ -46,6 +46,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { ContratosComponent } from './contratos/contratos.component';
 import { NovoContratoComponent } from './novo-contrato/novo-contrato.component';
 import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.component';
+import { PgmtContratosModalComponent } from './pgmt-contratos-modal/pgmt-contratos-modal.component';
 
 
 registerLocaleData(localePtBr);
@@ -71,6 +72,7 @@ registerLocaleData(localePtBr);
     ContratosComponent,
     NovoContratoComponent,
     AlertaContratosComponent,
+    PgmtContratosModalComponent,
   ],
   imports: [
     TextMaskModule,

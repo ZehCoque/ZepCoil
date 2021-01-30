@@ -1,0 +1,186 @@
+<form focusNext [formGroup]="novoContratoForm">
+
+  <div class="el-title" style="margin-bottom: 10px;">
+    Visualizar um contrato
+  </div>
+
+<div>
+  <div class="formulario">
+  <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
+
+    <mat-form-field style="width: 20%;" class="form-field">
+      <mat-label>Identificação</mat-label>
+      <input matInput formControlName="Identificacao">
+  </mat-form-field>
+
+    <mat-form-field style="width: 26%;" class="form-field">
+      <mat-label>Locatário</mat-label>
+      <input matInput formControlName="Pessoa">
+  </mat-form-field>
+
+    <mat-form-field  style="width: 44%;" class="form-field">
+      <mat-label>Descrição</mat-label>
+      <input matInput formControlName="Descricao">
+    </mat-form-field>
+
+    <mat-form-field style="width: 18%;" class="form-field">
+      <mat-label>C.C.</mat-label>
+      <input matInput formControlName="CC">
+  </mat-form-field>
+
+  <mat-form-field  style="width: 18%;" class="form-field">
+    <mat-label>Div. C.C.</mat-label>
+    <input matInput formControlName="Div_CC">
+</mat-form-field>
+
+    <mat-form-field style="width: 10%;" class="form-field">
+      <mat-label>Data de Início</mat-label>
+      <input matInput formControlName="Data_inicio" [matDatepicker]="picker1">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+
+
+    <mat-form-field style="width: 10%;" class="form-field">
+      <mat-label>Data de Término</mat-label>
+      <input matInput formControlName="Data_termino" [matDatepicker]="picker2">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field  style="width: 10%;" class="form-field">
+      <mat-label>Tipo</mat-label>
+      <input matInput formControlName="Tipo">
+  </mat-form-field>
+
+    <mat-form-field  style="width: 14%;" class="form-field">
+      <mat-label>Valor</mat-label>
+      <input matInput formControlName="Valor">
+    </mat-form-field>
+
+  </div >
+
+  <!-- PAGAMENTOS DE CONTRATO -->
+
+
+  <!--  Separar em caixinhas 1,2,3,comissao -->
+  <mat-divider></mat-divider>
+
+  <div class="el-tag--plain" style="width: 100%; padding-top: 10px;">
+    Pagamentos programados
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="el-tag-pgmt-subtitle">
+
+    <div class="unselectable-line display-flex header-row" style=" align-items: center">
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Data Pgmt
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Favorecido 1
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor 1
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor Piscina
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Favorecido 2
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor 2
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Favorecido 3
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor 3
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Fav. Comissão
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        Valor Comissão
+      </div>
+
+      <div class="el-tag" class="pgmt-contrato-header">
+        % Comissão
+      </div>
+
+    </div>
+
+  <cdk-virtual-scroll-viewport itemSize="36" style="height: 252px">
+    <div *ngIf="pagamentosContratos.length > 0">
+      <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos" >
+        <mat-card style="text-align: center;">
+          <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.DataPgto | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Fav1}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Valor1 | currency:'BRL'}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.ValorPiscina | currency:'BRL'}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Fav2}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Valor2 | currency:'BRL'}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Fav3}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.Valor3 | currency:'BRL'}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.FavCom}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.ValorCom | currency:'BRL'}}
+            </div>
+
+            <div class="pgmt-contrato-header">
+              {{pgmt.PCom}}
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+    </mat-list>
+    </div>
+    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 126px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
+  </cdk-virtual-scroll-viewport>
+
+</div>
+
+<div class="button-row">
+  <button mat-raised-button   (click)='onCancel()' type="button">Voltar</button>
+</div>

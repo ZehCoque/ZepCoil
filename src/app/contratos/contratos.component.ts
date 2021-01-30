@@ -10,6 +10,7 @@ import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { ContratosActiveFilters, ContratosActiveSorts } from '../classes/active_filters_and_sorts contratos';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { NovoContratoComponent } from '../novo-contrato/novo-contrato.component';
+import { PgmtContratosModalComponent } from '../pgmt-contratos-modal/pgmt-contratos-modal.component';
 
 @Component({
   selector: 'app-contratos',
@@ -38,7 +39,8 @@ export class ContratosComponent implements OnInit {
   activeFilters: ContratosActiveFilters = new ContratosActiveFilters;
   sortMessages: SortMessages = new SortMessages;
 
-  editRowDialogRef: MatDialogRef<NovoContratoComponent>;
+  editRowDialogRefNovoContrato: MatDialogRef<NovoContratoComponent>;
+  editRowDialogRefVisualizarContrato: MatDialogRef<PgmtContratosModalComponent>;
   currentActiveSort: string;
   currentActiveFilter: string;
   contratos: any[];
@@ -152,12 +154,12 @@ export class ContratosComponent implements OnInit {
 
   editLine(row){
 
-    this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
+    this.editRowDialogRefNovoContrato = this.dialog.open(NovoContratoComponent,{
       width: "50%",
       data: this.Contratos[row].Identificacao
     });
 
-    this.editRowDialogRef.afterClosed().subscribe((results) => {
+    this.editRowDialogRefVisualizarContrato.afterClosed().subscribe((results) => {
       this.newDataEmitter.newDataEmit(results);
     });
   }
@@ -256,11 +258,23 @@ export class ContratosComponent implements OnInit {
 
   openContratosDialog(){
 
-    this.editRowDialogRef = this.dialog.open(NovoContratoComponent,{
+    this.editRowDialogRefNovoContrato = this.dialog.open(NovoContratoComponent,{
       width: "100%"
     });
 
-    this.editRowDialogRef.afterClosed().subscribe((results) => {
+    this.editRowDialogRefNovoContrato.afterClosed().subscribe((results) => {
+      this.newDataEmitter.newDataEmit(results);
+    });
+  }
+
+  viewContrato(IdentificacaoContrato){
+
+    this.editRowDialogRefVisualizarContrato = this.dialog.open(PgmtContratosModalComponent,{
+      width: "100%",
+      data: IdentificacaoContrato
+    });
+
+    this.editRowDialogRefVisualizarContrato.afterClosed().subscribe((results) => {
       this.newDataEmitter.newDataEmit(results);
     });
   }

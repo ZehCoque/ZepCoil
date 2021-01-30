@@ -102,7 +102,7 @@
 
         <div style="height: 78px;" *cdkVirtualFor="let Contrato of Contratos, let i=index"  >
 
-          <mat-card (contextmenu)="onContextMenu($event, Contrato, i)">
+          <mat-card (contextmenu)="onContextMenu($event, Contrato, i)" (click)="viewContrato(Contrato.Identificacao)">
             <mat-card-content >
               <div class="unselectable-line display-flex" style=" align-items: center;height: 36px;">
 

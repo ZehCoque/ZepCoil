@@ -5,7 +5,7 @@ function pagamentos_contratos_router() {
 
   const router = express.Router();
 
-  router.post('/pagamentos_contratos_query', function (req, res, next) {
+  router.post('/pagamentos_contratos_query/:Identificacao', function (req, res, next) {
     auth.db_conn().getConnection((err,connection) => {
 
       if (err) {
@@ -17,8 +17,7 @@ function pagamentos_contratos_router() {
 
     connection.query(
       'SELECT * FROM ' + database + 'contratos_pgtos WHERE Identificacao = ? LIMIT 100',
-      [req.Identificacao,
-        req.DataPgmt],
+      [req.body.Identificacao],
       (error, results) => {
         if (error) {
           console.log(error);

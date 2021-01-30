@@ -7,6 +7,7 @@ function contratos_router() {
   const router = express.Router();
 
     router.post('/contratos_query_get/:Identificacao', function (req, res, next) {
+
       auth.db_conn().getConnection((err,connection) => {
 
         if (err) {

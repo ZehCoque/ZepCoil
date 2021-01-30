@@ -296,9 +296,9 @@
 
   <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
     <div *ngIf="pagamentosContratos.length > 0">
-      <mat-list  *cdkVirtualFor="let cc of CC, let i=index">
+      <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos, let i=index">
         <mat-card style="text-align: center;">
-          <mat-card-content *ngFor="let pgmt of pagamentosContratos" class="el-tag--plain unselectable-line">
+          <mat-card-content  class="el-tag--plain unselectable-line">
 
             <div class="pgmt-contrato-header">
               {{pgmt.DataPgto}}
@@ -348,7 +348,7 @@
         </mat-card>
     </mat-list>
     </div>
-    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento inseridas aparecerão aqui.</div>
+    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
   </cdk-virtual-scroll-viewport>
 
 </div>
