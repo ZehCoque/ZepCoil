@@ -6,7 +6,7 @@ function contratos_router() {
 
   const router = express.Router();
 
-    router.post('/contratos_query_get/:ID', function (req, res, next) {
+    router.post('/contratos_query_get/:Identificacao', function (req, res, next) {
       auth.db_conn().getConnection((err,connection) => {
 
         if (err) {
@@ -16,8 +16,8 @@ function contratos_router() {
 
         let database = connection.config.database + '.';
         connection.query(
-        'SELECT * FROM ' + database + 'contratos WHERE ID = ?',
-        [req.body.ID],
+        'SELECT * FROM ' + database + 'contratos WHERE Identificacao = ?',
+        [req.body.Identificacao],
         (error, results) => {
           if (error) {
             console.log(error);
@@ -97,8 +97,9 @@ function contratos_router() {
 
       let database = connection.config.database + '.';
       connection.query(
-      'INSERT INTO ' + database + 'contratos (`Descricao`, `Pessoa`, `Data_inicio`, `Data_termino`, `Valor`, `CC`, `Div_CC`, `Tipo`, `PCoil`, `PZep`,`PComissao`) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+      'INSERT INTO ' + database + 'contratos (`Identificacao`, `Descricao`, `Pessoa`, `Data_inicio`, `Data_termino`, `Valor`, `CC`, `Div_CC`, `Tipo`) VALUES (?,?,?,?,?,?,?,?,?)',
       [
+        req.body.Identificacao,
         req.body.Descricao,
         req.body.Pessoa,
         new Date(req.body.Data_inicio),
@@ -106,10 +107,7 @@ function contratos_router() {
         req.body.Valor,
         req.body.CC,
         req.body.Div_CC,
-        req.body.Tipo,
-        req.body.PCoil,
-        req.body.PZep,
-        req.body.PComissao
+        req.body.Tipo
       ],
       (error) => {
         if (error) {
@@ -134,7 +132,7 @@ router.get('/max_id_contratos', function (req, res, next) {
 
     let database = connection.config.database + '.';
     connection.query(
-    'SELECT MAX(ID) as max_id FROM ' + database + 'contratos',
+    'SELECT MAX(Identificacao) as max_id FROM ' + database + 'contratos',
     [],
     (error, results) => {
       if (!results.max_id){
@@ -164,8 +162,8 @@ router.delete('/contratos_query', function (req, res, next) {
 
     let database = connection.config.database + '.';
     connection.query(
-    'DELETE FROM ' + database + 'contratos WHERE ID=?',
-    [req.body.ID],
+    'DELETE FROM ' + database + 'contratos WHERE Identificacao=?',
+    [req.body.Identificacao],
     (error) => {
       if (error) {
         res.status(500).json({status: 'error'});
@@ -178,7 +176,7 @@ router.delete('/contratos_query', function (req, res, next) {
 });
 });
 
-router.put('/contratos_query/:ID', function (req, res, next) {
+router.put('/contratos_query/:Identificacao', function (req, res, next) {
   auth.db_conn().getConnection((err,connection) => {
 
     if (err) {
@@ -188,7 +186,7 @@ router.put('/contratos_query/:ID', function (req, res, next) {
 
     let database = connection.config.database + '.';
     connection.query(
-    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?,`PZep` = ?,`PCoil` = ?, `PComissao` = ?  WHERE `ID`=?',
+    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?,  WHERE `Identificacao`=?',
     [
       req.body.Descricao,
       req.body.Pessoa,
@@ -198,10 +196,7 @@ router.put('/contratos_query/:ID', function (req, res, next) {
       req.body.CC,
       req.body.Div_CC,
       req.body.Tipo,
-      req.body.PCoil,
-      req.body.PZep,
-      req.body.PComissao,
-      req.body.ID
+      req.body.Identificacao
     ],
     (error) => {
       if (error) {

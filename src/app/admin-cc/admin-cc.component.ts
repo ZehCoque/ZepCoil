@@ -48,7 +48,7 @@ export class AdminCcComponent implements OnInit {
 
 
   loadData(){
-    let promise = new Promise(async (resolve, reject) => {
+    let promise = new Promise<void>(async (resolve, reject) => {
     this.CC = new Array();
 
       //GET ALL CC

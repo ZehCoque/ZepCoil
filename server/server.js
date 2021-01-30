@@ -37,6 +37,7 @@ const auth = require('./models/auth.js');
 const lancamentos_query = require('./models/lancamentos_query.js');
 const terceiros_query = require('./models/terceiros_query.js');
 const contratos_query = require('./models/contratos_query.js');
+const pagamentos_contratos_query = require('./models/pagamentos_contratos_query.js');
 const aux_query = require('./models/aux_query.js');
 const CC_query = require('./models/cc_query.js');
 const div_CC_query = require('./models/div_cc_query.js');
@@ -52,6 +53,7 @@ app.use(CC_query());
 app.use(div_CC_query());
 app.use(pessoa_query());
 app.use(sp_query());
+app.use(pagamentos_contratos_query())
 
 console.log(`serving ${www}`);
 app.get('*', (req, res) => {
