@@ -88,8 +88,8 @@
     <mat-form-field  style="width: 5%;" class="form-field">
       <mat-label>Tipo</mat-label>
       <mat-select formControlName="Tipo">
-        <mat-option *ngFor="let tipo of Tipos" [value]="tipo">
-          {{ tipo }}
+        <mat-option *ngFor="let tipo of Tipo_despesa" [value]="tipo">
+          {{ tipo.text }}
          </mat-option>
     </mat-select>
     <mat-error *ngIf="novoContratoForm.get('Tipo').hasError('required')" >
@@ -296,12 +296,12 @@
 
   <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
     <div *ngIf="pagamentosContratos.length > 0">
-      <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos, let i=index">
+      <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos" >
         <mat-card style="text-align: center;">
-          <mat-card-content  class="el-tag--plain unselectable-line">
+          <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
 
             <div class="pgmt-contrato-header">
-              {{pgmt.DataPgto}}
+              {{pgmt.DataPgto | amLocal | amDateFormat: 'DD/MM/YYYY'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -309,11 +309,11 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Valor1}}
+              {{pgmt.Valor1 | currency:'BRL'}}
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.ValorPiscina}}
+              {{pgmt.ValorPiscina | currency:'BRL'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -321,7 +321,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Valor2}}
+              {{pgmt.Valor2 | currency:'BRL'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -329,7 +329,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Valor3}}
+              {{pgmt.Valor3 | currency:'BRL'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -337,7 +337,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.ValorCom}}
+              {{pgmt.ValorCom | currency:'BRL'}}
             </div>
 
             <div class="pgmt-contrato-header">

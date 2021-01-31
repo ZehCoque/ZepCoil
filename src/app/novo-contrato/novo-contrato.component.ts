@@ -31,7 +31,20 @@ export class NovoContratoComponent implements OnInit {
 
     error: string;
 
-    Tipos = ['Fixo','Variável'];
+    Tipo_despesa = [
+      {
+        text: 'Fixa',
+        value: 'F'
+      },
+      {
+        text: 'AirBnb',
+        value: 'A'
+      },
+      {
+        text: 'Contrato',
+        value: 'C'
+      },
+    ];
 
     Favorecidos = ['Coil', 'Zep', 'MZ'];
 

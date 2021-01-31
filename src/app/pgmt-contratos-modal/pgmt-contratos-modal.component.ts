@@ -1,7 +1,8 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AdminPessoasComponent } from '../admin-pessoas/admin-pessoas.component';
 import { PagamentosContratos } from '../classes/tableColumns';
 import { ServerService } from '../services/server.service';
 
@@ -20,10 +21,10 @@ export class PgmtContratosModalComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private currencyPipe: CurrencyPipe,
     private server: ServerService,
+    public dialogRef: MatDialogRef<AdminPessoasComponent>,
     @Inject(MAT_DIALOG_DATA) public Identificacao: number) { }
 
   ngOnInit(): void {
-    console.log(this.Identificacao)
     this.novoContratoForm = this.formBuilder.group({
       Identificacao: new FormControl({value: '', disabled: true}),
       Descricao: new FormControl({value: '', disabled: true}),
@@ -50,15 +51,14 @@ export class PgmtContratosModalComponent implements OnInit {
 
       response.forEach(element => {
         this.pagamentosContratos = [...this.pagamentosContratos, element]
-        console.log(this.pagamentosContratos)
       });
     })
 
 
   }
 
-  onCancel(): void {
-
+  onCancel(){
+    this.dialogRef.close()
   }
 
 }

@@ -78,8 +78,12 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       value: 'F'
     },
     {
-      text: 'Variável',
-      value: 'V'
+      text: 'AirBnb',
+      value: 'A'
+    },
+    {
+      text: 'Contrato',
+      value: 'C'
     },
   ];
 

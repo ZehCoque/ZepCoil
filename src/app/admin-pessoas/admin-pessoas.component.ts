@@ -48,7 +48,7 @@ export class AdminPessoasComponent implements OnInit {
 
 
   loadData(){
-    let promise = new Promise(async (resolve, reject) => {
+    let promise = new Promise<void>(async (resolve, reject) => {
     this.Pessoas = new Array();
 
       //GET ALL PESSOA

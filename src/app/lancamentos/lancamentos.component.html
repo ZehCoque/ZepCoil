@@ -497,7 +497,7 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1" style="width: 35%;" class="form-field">
-    <mat-label>Variável/Fixa</mat-label>
+    <mat-label>Tipo</mat-label>
     <mat-select formControlName="Tipo_despesa">
     <mat-option *ngFor="let desp of Tipo_despesa" [value]="desp">
      {{ desp.text }}
