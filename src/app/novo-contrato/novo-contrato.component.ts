@@ -47,6 +47,8 @@ export class NovoContratoComponent implements OnInit {
     ];
 
     Favorecidos = ['Coil', 'Zep', 'MZ'];
+    Favorecidos2 = ['Não há','Coil', 'Zep', 'MZ'];
+    FavoricidosComissao = ['Não há', 'Marcia'];
 
     errorMatcher: ErrorMatcherDirective;
 
@@ -80,13 +82,13 @@ export class NovoContratoComponent implements OnInit {
         Fav1: new FormControl('Coil', Validators.required),
         Valor1: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'),Validators.required),
         ValorPiscina: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
-        Fav2: new FormControl(''),
-        Valor2: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
-        Fav3: new FormControl(''),
-        Valor3: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
-        FavCom: new FormControl('Marcia'),
-        ValorCom: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')),
-        PCom: new FormControl(''),
+        Fav2: new FormControl('Não há'),
+        Valor2: new FormControl({value: this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), disabled: true}),
+        Fav3: new FormControl('Não há'),
+        Valor3: new FormControl({value: this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), disabled: true}),
+        FavCom: new FormControl('Não há'),
+        ValorCom: new FormControl({value: this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), disabled: true}),
+        PCom: new FormControl({value: '', disabled: true}),
       });
 
 
@@ -171,8 +173,6 @@ export class NovoContratoComponent implements OnInit {
         let current_Pessoa = this.Pessoa.find(value => value.Nome === this.novoContrato.Pessoa)
         this.novoContratoForm.controls.Pessoa.patchValue(current_Pessoa);
 
-
-
       });
     }
 
@@ -182,7 +182,7 @@ export class NovoContratoComponent implements OnInit {
       this.error = '';
 
       let json: Contratos = {
-        Identificacao: this.preloaded,
+        Identificacao: this.novoContratoForm.controls.Identificacao.value,
         Descricao: this.novoContratoForm.controls.Descricao.value,
         Pessoa: this.novoContratoForm.controls.Pessoa.value.Nome,
         Data_inicio: this.novoContratoForm.controls.Data_inicio.value,
@@ -190,24 +190,30 @@ export class NovoContratoComponent implements OnInit {
         Valor: this.getNumberValue(this.novoContratoForm.controls.Valor.value),
         CC: this.novoContratoForm.controls.CC.value.Nome,
         Div_CC: this.novoContratoForm.controls.Div_CC.value.Divisao,
-        Tipo: this.novoContratoForm.controls.Tipo.value,
+        Tipo: this.novoContratoForm.controls.Tipo.value.value,
       }
 
-      if (this.preloaded){
-
-        this.server.update_List(json, 'contratos_query')
-        .then(() => this.onCancel('novoContrato'))
-        .catch(error => {
-          this.loading = false;
-          this.dialogRef.disableClose = false;
-          console.log(error);
-        })
-
-      } else {
+      this.add_contrato(json).then(() => {
+        this.loading = false;
+        this.onCancel('novoContrato');
+      });
 
 
+      // if (this.preloaded){
 
-      }
+      //   this.server.update_List(json, 'contratos_query')
+      //   .then(() => this.onCancel('novoContrato'))
+      //   .catch(error => {
+      //     this.loading = false;
+      //     this.dialogRef.disableClose = false;
+      //     console.log(error);
+      //   })
+
+      // } else {
+
+
+
+      // }
 
     }
 
@@ -258,6 +264,7 @@ export class NovoContratoComponent implements OnInit {
         }).catch(error => {
           console.log(error);
           this.error = error;
+          this.loading = false;
         })
       })
 
@@ -321,6 +328,28 @@ export class NovoContratoComponent implements OnInit {
       this.contratosPgmtForm.controls.Valor3.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
       this.contratosPgmtForm.controls.ValorCom.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
       this.contratosPgmtForm.controls.FavCom.patchValue('Marcia');
+    }
+
+    inserirPgmt() {
+
+      let json: PagamentosContratos = {
+        Identificacao: this.novoContratoForm.controls.Identificacao.value,
+        DataPgto: this.contratosPgmtForm.controls.DataPgto.value,
+        Fav1: this.contratosPgmtForm.controls.Fav1.value,
+        Valor1: this.contratosPgmtForm.controls.Valor1.value,
+        ValorPiscina: this.contratosPgmtForm.controls.ValorPiscina.value,
+        Fav2: this.contratosPgmtForm.controls.Fav2.value,
+        Valor2: this.contratosPgmtForm.controls.Valor2.value,
+        Fav3: this.contratosPgmtForm.controls.Fav3.value,
+        Valor3: this.contratosPgmtForm.controls.Valor3.value,
+        FavCom: this.contratosPgmtForm.controls.FavCom.value,
+        ValorCom: this.contratosPgmtForm.controls.ValorCom.value,
+        PCom: this.contratosPgmtForm.controls.PCom.value,
+      }
+
+      this.pagamentosContratos = [... this.pagamentosContratos, json];
+
+      this.onResetPgmts();
     }
 
   }

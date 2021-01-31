@@ -172,7 +172,7 @@
         <mat-form-field  style="width: 80%;text-align: center;">
           <mat-label>Favorecido 2</mat-label>
           <mat-select formControlName="Fav2">
-            <mat-option *ngFor="let favorecido of Favorecidos" [value]="favorecido">
+            <mat-option *ngFor="let favorecido of Favorecidos2" [value]="favorecido">
              {{ favorecido }}
             </mat-option>
           </mat-select>
@@ -192,7 +192,7 @@
         <mat-form-field  style="width: 80%;text-align: center;">
           <mat-label>Favorecido 3</mat-label>
           <mat-select formControlName="Fav3">
-            <mat-option *ngFor="let favorecido of Favorecidos" [value]="favorecido">
+            <mat-option *ngFor="let favorecido of Favorecidos2" [value]="favorecido">
              {{ favorecido }}
             </mat-option>
           </mat-select>
@@ -213,7 +213,8 @@
         <mat-form-field  style="width: 80%;text-align: center;">
           <mat-label>Favorecido Comissão</mat-label>
           <mat-select formControlName="FavCom">
-            <mat-option disabled value="Marcia">Marcia
+            <mat-option *ngFor="let favorecido of FavoricidosComissao" [value]="favorecido">
+              {{ favorecido}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -233,7 +234,7 @@
     </div>
 
     <div class="button-row">
-      <button mat-raised-button color="primary" *ngIf="!loading" (click)='onSubmit()' [disabled]="!contratosPgmtForm.valid">Inserir</button>
+      <button mat-raised-button color="primary" *ngIf="!loading" (click)='inserirPgmt()' [disabled]="!contratosPgmtForm.valid || !novoContratoForm.controls.Identificacao.value">Inserir</button>
       <button *ngIf="loading_ctrlpgmt" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
       <button mat-raised-button   (click)='onResetPgmts()' type="button">Limpar</button>
     </div>

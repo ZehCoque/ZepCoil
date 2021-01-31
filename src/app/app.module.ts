@@ -47,6 +47,7 @@ import { ContratosComponent } from './contratos/contratos.component';
 import { NovoContratoComponent } from './novo-contrato/novo-contrato.component';
 import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.component';
 import { PgmtContratosModalComponent } from './pgmt-contratos-modal/pgmt-contratos-modal.component';
+import { TipoTextPipe } from './pipes/tipo-text.pipe';
 
 
 registerLocaleData(localePtBr);
@@ -73,6 +74,7 @@ registerLocaleData(localePtBr);
     NovoContratoComponent,
     AlertaContratosComponent,
     PgmtContratosModalComponent,
+    TipoTextPipe,
   ],
   imports: [
     TextMaskModule,

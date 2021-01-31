@@ -113,7 +113,9 @@ function contratos_router() {
       (error) => {
         if (error) {
           console.error(error);
-          res.status(500).json({status: 'error'});
+          if (error.sqlMessage.includes("Duplicate")) {
+            res.status(409).json({status: 'duplicate entry'});
+          } else res.status(500).json({status: 'error'});
         } else {
           res.status(200).json({status: 'ok'});
         }
