@@ -1,9 +1,11 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import * as moment from 'moment';
 import { CC, Contratos, div_CC, PagamentosContratos, Pessoa } from '../classes/tableColumns';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { TipoTextPipe } from '../pipes/tipo-text.pipe';
 import { ServerService } from '../services/server.service';
@@ -14,6 +16,9 @@ import { ServerService } from '../services/server.service';
   styleUrls: ['./novo-contrato.component.scss']
 })
 export class NovoContratoComponent implements OnInit {
+
+    @ViewChild('contextMenuTrigger') contextMenu: MatMenuTrigger;
+    contextMenuPosition = { x: '0px', y: '0px' };
 
     novoContrato: Contratos;
     pagamentosContratos: Array<PagamentosContratos> = new Array();
@@ -61,6 +66,7 @@ export class NovoContratoComponent implements OnInit {
                 private server: ServerService,
                 public dialogRef: MatDialogRef<NovoContratoComponent>,
                 @Inject(MAT_DIALOG_DATA) public preloaded,
+                private dialog: MatDialog,
                 private currencyPipe: CurrencyPipe,
                 private decimalPipe: DecimalPipe) { }
 
@@ -211,6 +217,12 @@ export class NovoContratoComponent implements OnInit {
         .then(() => {
           this.server.delete_List({Identificacao: this.preloaded},'pagamentos_contratos_query').then(() => {
 
+            if (this.pagamentosContratos.length == 0) {
+              this.loading = false;
+              this.dialogRef.disableClose = false;
+              this.onCancel('novoContrato');
+            }
+
             this.pagamentosContratos.forEach(async (element) => {
               await this.server.add_List(element,'pagamentos_contratos_query_insert').catch((err) =>{
                 this.loading = false;
@@ -286,6 +298,8 @@ export class NovoContratoComponent implements OnInit {
       let promise = new Promise<void>((resolve,reject) => {
 
         this.server.add_List(json,'contratos_query_insert').then(() => {
+          console.log(this.pagamentosContratos.length)
+          if (this.pagamentosContratos.length == 0) resolve()
           this.pagamentosContratos.forEach(async (element) => {
             await this.server.add_List(element,'pagamentos_contratos_query_insert').catch((err) =>{
               console.log(err);
@@ -336,7 +350,7 @@ export class NovoContratoComponent implements OnInit {
 
 
     getNumberValue(value){
-
+      if (!value) return null;
       if (typeof value == 'number') return value;
 
       let numberValue = value.replace(/\D/g,"");
@@ -353,6 +367,7 @@ export class NovoContratoComponent implements OnInit {
 
     onResetPgmts(){
       this.contratosPgmtForm.reset();
+      this.contratosPgmtForm.get('Valor1').markAsUntouched();
       this.contratosPgmtForm.controls.DataPgto.patchValue(moment().toISOString());
       this.contratosPgmtForm.controls.Fav1.patchValue('Coil');
       this.contratosPgmtForm.controls.Fav2.patchValue('Não há');
@@ -400,7 +415,8 @@ export class NovoContratoComponent implements OnInit {
       if (json.Fav3 == 'Não há') json.Fav3 = '';
       if (json.FavCom == 'Não há') json.FavCom = '';
 
-      this.pagamentosContratos = [... this.pagamentosContratos, json];
+        this.pagamentosContratos = [...this.pagamentosContratos, json]
+
 
       this.onResetPgmts();
     }
@@ -427,6 +443,53 @@ export class NovoContratoComponent implements OnInit {
 
       }
 
+    }
+
+    onContextMenu(event: MouseEvent, item, index) {
+
+      event.preventDefault();
+        this.contextMenuPosition.x = event.clientX + 'px';
+        this.contextMenuPosition.y = event.clientY + 'px';
+        this.contextMenu.menuData = { 'item': item, 'index': index };
+        this.contextMenu.openMenu();
+
+    }
+
+    deleteLine(row){
+      const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+        width: '350px',
+        data: "Tem certeza que deseja deletar?"
+      });
+
+      confirmationDialog.afterClosed().subscribe(result => {
+        if (result){
+
+          if (this.pagamentosContratos.length == 1) this.pagamentosContratos = new Array()
+          else this.pagamentosContratos = this.pagamentosContratos.filter((item, index) => index !== row)
+
+        }
+      })
+    }
+
+    editLine(row){
+      let dataToEdit = this.pagamentosContratos[row];
+      this.pagamentosContratos = this.pagamentosContratos.filter((item, index) => index !== row);
+      this.onResetPgmts();
+      this.contratosPgmtForm.patchValue(dataToEdit);
+
+      if(dataToEdit.Fav2 != '') this.contratosPgmtForm.controls.Valor2.enable();
+      else this.contratosPgmtForm.controls.Fav2.setValue('Não há');
+
+      if(dataToEdit.Fav3 != '') this.contratosPgmtForm.controls.Valor2.enable();
+      else this.contratosPgmtForm.controls.Fav3.setValue('Não há');
+
+      if(dataToEdit.FavCom != '') {
+        this.contratosPgmtForm.controls.ValorCom.enable();
+        this.contratosPgmtForm.controls.PCom.enable();
+      }
+      else this.contratosPgmtForm.controls.FavCom.setValue('Não há');
+
+      this.contratosPgmtForm.controls.Valor2.markAsUntouched();
     }
 
   }

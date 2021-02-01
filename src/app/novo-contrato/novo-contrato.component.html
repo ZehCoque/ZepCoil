@@ -302,9 +302,9 @@
   </div>
 
   <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
-    <div *ngIf="pagamentosContratos.length > 0">
-      <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos" >
-        <mat-card style="text-align: center;">
+
+      <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos; let i=index" >
+        <mat-card style="text-align: center;" (contextmenu)="onContextMenu($event, pgmt, i)">
           <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
 
             <div class="pgmt-contrato-header">
@@ -354,7 +354,7 @@
           </mat-card-content>
         </mat-card>
     </mat-list>
-    </div>
+
     <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
   </cdk-virtual-scroll-viewport>
 
@@ -375,3 +375,16 @@
 
 
 </form>
+
+<div style="visibility: hidden; position: fixed"
+[style.left]="contextMenuPosition.x"
+[style.top]="contextMenuPosition.y"
+[matMenuTriggerFor]="contextMenu"
+#contextMenuTrigger="matMenuTrigger">
+  </div>
+<mat-menu #contextMenu="matMenu" >
+  <ng-template matMenuContent let-item="item" let-index = "index">
+    <button mat-menu-item (click)="editLine(index)">Editar</button>
+    <button mat-menu-item (click)="deleteLine(index)">Deletar</button>
+  </ng-template>
+</mat-menu>
