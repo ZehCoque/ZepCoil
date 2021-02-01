@@ -18,6 +18,7 @@
       <mat-error *ngIf="novoContratoForm.get('Identificacao').hasError('required')" >
         É necessário inserir uma identificação.
       </mat-error>
+      <mat-hint *ngIf="preloaded">Não é possível editar este campo.</mat-hint>
   </mat-form-field>
 
     <mat-form-field style="width: 13%;" class="form-field">
@@ -113,22 +114,28 @@
   <!--  Separar em caixinhas 1,2,3,comissao -->
   <mat-divider></mat-divider>
 
-  <div class="el-tag--plain" style="width: 100%; padding-top: 10px;">
+  <div class="el-tag--plain" style="width: 100%; padding-top: 10px;font-weight: bolder;">
     Pagamentos programados
   </div>
 
   <form [formGroup]="contratosPgmtForm">
 
-    <div style="width: 100%; text-align: center; padding-top: 10px;">
+    <div style="width: 100%; text-align: center; padding-top: 10px;padding-bottom: 0px;">
       <mat-form-field style="width: 9%;text-align: center;">
         <mat-label>Data de Pagamento</mat-label>
         <input matInput formControlName="DataPgto" [matDatepicker]="picker3">
         <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
         <mat-datepicker #picker3></mat-datepicker>
+
         <mat-error *ngIf="contratosPgmtForm.get('DataPgto').hasError('required')" >
           É necessário inserir uma data de pagamento válida.
         </mat-error>
+
       </mat-form-field>
+
+      <mat-error *ngIf="dataPgmtError">
+        Esta data de programação não pode se repetir.
+      </mat-error>
     </div>
 
     <div style="width: 100%; justify-content: space-around;padding-bottom: 10px;" class="display-flex">
@@ -172,7 +179,7 @@
         <mat-form-field  style="width: 80%;text-align: center;">
           <mat-label>Favorecido 2</mat-label>
           <mat-select formControlName="Fav2">
-            <mat-option *ngFor="let favorecido of Favorecidos2" [value]="favorecido">
+            <mat-option *ngFor="let favorecido of Favorecidos2" [value]="favorecido" (click)="checkDisableAttr($event, '2')">
              {{ favorecido }}
             </mat-option>
           </mat-select>
@@ -192,7 +199,7 @@
         <mat-form-field  style="width: 80%;text-align: center;">
           <mat-label>Favorecido 3</mat-label>
           <mat-select formControlName="Fav3">
-            <mat-option *ngFor="let favorecido of Favorecidos2" [value]="favorecido">
+            <mat-option *ngFor="let favorecido of Favorecidos2" [value]="favorecido" (click)="checkDisableAttr($event, '3')">
              {{ favorecido }}
             </mat-option>
           </mat-select>
@@ -213,7 +220,7 @@
         <mat-form-field  style="width: 80%;text-align: center;">
           <mat-label>Favorecido Comissão</mat-label>
           <mat-select formControlName="FavCom">
-            <mat-option *ngFor="let favorecido of FavoricidosComissao" [value]="favorecido">
+            <mat-option *ngFor="let favorecido of FavoricidosComissao" [value]="favorecido" (click)="checkDisableAttr($event, 'Com')">
               {{ favorecido}}
             </mat-option>
           </mat-select>
@@ -234,8 +241,7 @@
     </div>
 
     <div class="button-row">
-      <button mat-raised-button color="primary" *ngIf="!loading" (click)='inserirPgmt()' [disabled]="!contratosPgmtForm.valid || !novoContratoForm.controls.Identificacao.value">Inserir</button>
-      <button *ngIf="loading_ctrlpgmt" mat-raised-button color="primary" disabled style="width: 84px;"> <div class="button-spinner"><mat-spinner ></mat-spinner></div></button>
+      <button mat-raised-button color="primary" (click)='inserirPgmt()' [disabled]="loading ||!contratosPgmtForm.valid || !novoContratoForm.controls.Identificacao.value">Inserir</button>
       <button mat-raised-button   (click)='onResetPgmts()' type="button">Limpar</button>
     </div>
 
@@ -318,7 +324,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Fav2}}
+              {{pgmt.Fav2 || '-'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -326,7 +332,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Fav3}}
+              {{pgmt.Fav3 || '-'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -334,11 +340,11 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.FavCom}}
+              {{pgmt.FavCom || '-'}}
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.ValorCom | currency:'BRL'}}
+              {{pgmt.ValorCom | currency:'BRL' }}
             </div>
 
             <div class="pgmt-contrato-header">

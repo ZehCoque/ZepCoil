@@ -66,7 +66,7 @@
   <!--  Separar em caixinhas 1,2,3,comissao -->
   <mat-divider></mat-divider>
 
-  <div class="el-tag--plain" style="width: 100%; padding-top: 10px;">
+  <div class="el-tag--plain" style="width: 100%; padding-top: 10px;font-weight: bolder;">
     Pagamentos programados
   </div>
 
@@ -145,7 +145,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Fav2}}
+              {{pgmt.Fav2 || '-'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -153,7 +153,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.Fav3}}
+              {{pgmt.Fav3 || '-'}}
             </div>
 
             <div class="pgmt-contrato-header">
@@ -161,7 +161,7 @@
             </div>
 
             <div class="pgmt-contrato-header">
-              {{pgmt.FavCom}}
+              {{pgmt.FavCom || '-'}}
             </div>
 
             <div class="pgmt-contrato-header">

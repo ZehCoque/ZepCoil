@@ -11,7 +11,7 @@ export class TipoTextPipe implements PipeTransform {
       return "AirBnb"
     } else if (value == "F") {
       return "Fixa"
-    } else if (value = "C") {
+    } else if (value == "C") {
       return "Contrato"
     }
 

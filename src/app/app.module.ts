@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrencyPipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
+
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import localePtBr from '@angular/common/locales/pt';
@@ -74,7 +75,7 @@ registerLocaleData(localePtBr);
     NovoContratoComponent,
     AlertaContratosComponent,
     PgmtContratosModalComponent,
-    TipoTextPipe,
+    TipoTextPipe
   ],
   imports: [
     TextMaskModule,
@@ -105,6 +106,7 @@ registerLocaleData(localePtBr);
     },
     CurrencyPipe,
     DecimalPipe,
+    TipoTextPipe,
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

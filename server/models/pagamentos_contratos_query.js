@@ -80,7 +80,7 @@ router.delete('/pagamentos_contratos_query', function (req, res, next) {
 
     let database = connection.config.database + '.';
     connection.query(
-    'DELETE FROM ' + database + 'contratos_pgtos WHERE `Identificacao`=? AND `DataPgmt` = ?',
+    'DELETE FROM ' + database + 'contratos_pgtos WHERE `Identificacao`=?',
     [req.body.Identificacao,
      req.body.DataPgmt,
     ],

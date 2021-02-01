@@ -189,7 +189,7 @@ router.put('/contratos_query/:Identificacao', function (req, res, next) {
 
     let database = connection.config.database + '.';
     connection.query(
-    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?,  WHERE `Identificacao`=?',
+    'UPDATE ' + database + 'contratos SET `Descricao` = ?,`Pessoa` = ?,`Data_inicio` = ?,`Data_termino` = ?,`Valor` = ?,`CC` = ?,`Div_CC` = ?,`Tipo` = ?  WHERE `Identificacao`=?',
     [
       req.body.Descricao,
       req.body.Pessoa,

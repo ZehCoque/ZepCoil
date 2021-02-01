@@ -155,11 +155,11 @@ export class ContratosComponent implements OnInit {
   editLine(row){
 
     this.editRowDialogRefNovoContrato = this.dialog.open(NovoContratoComponent,{
-      width: "50%",
+      width: "100%",
       data: this.Contratos[row].Identificacao
     });
 
-    this.editRowDialogRefVisualizarContrato.afterClosed().subscribe((results) => {
+    this.editRowDialogRefNovoContrato.afterClosed().subscribe((results) => {
       this.newDataEmitter.newDataEmit(results);
     });
   }
