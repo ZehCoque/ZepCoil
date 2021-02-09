@@ -133,6 +133,31 @@ router.put('/pagamentos_contratos_query/:Identificacao/:DataPgmt', function (req
 });
 });
 
+router.post('/lanxcon/:Identificacao', function (req, res, next) {
+  auth.db_conn().getConnection((err,connection) => {
+
+    if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
+      'SELECT * FROM ' + database + 'contratosxlançamentos WHERE `Identificacao` = ?',
+      [req.body.Identificacao],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+    connection.release();
+    })
+  });
+
 return router;
 }
 module.exports = pagamentos_contratos_router;

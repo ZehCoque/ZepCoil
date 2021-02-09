@@ -30,6 +30,12 @@
       </div>
 
       <div style="padding-left: 10px;">
+        <button (click)="openLanXConDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
+          <mat-icon>manage_search</mat-icon>
+        </button>
+      </div>
+
+      <div style="padding-left: 10px;">
         <button (click)="openAlertsDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
           <mat-icon *ngIf="contagem == 0">notifications</mat-icon>
           <mat-icon *ngIf="contagem > 0">notification_important</mat-icon>

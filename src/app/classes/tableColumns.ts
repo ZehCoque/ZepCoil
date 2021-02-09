@@ -73,4 +73,13 @@ export class PagamentosContratos{
   PCom: Number;
 }
 
+export class LanXCon{
+  Pessoa: String;
+  Descricao: String;
+  Responsavel: String;
+  Data_Entrada: Date;
+  Vencimento: Date;
+  Valor: Number;
+  DataPgto: Date;
+}
 

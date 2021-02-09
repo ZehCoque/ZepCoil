@@ -125,36 +125,6 @@ function contratos_router() {
   });
   });
 
-router.get('/max_id_contratos', function (req, res, next) {
-  auth.db_conn().getConnection((err,connection) => {
-
-    if (err) {
-      res.status(404).json((err));
-      return
-      }
-
-    let database = connection.config.database + '.';
-    connection.query(
-    'SELECT MAX(Identificacao) as max_id FROM ' + database + 'contratos',
-    [],
-    (error, results) => {
-      if (!results.max_id){
-        auth.db_conn().query(
-          'ALTER TABLE ' + database + 'contratos AUTO_INCREMENT = 1',
-          []);
-      }
-      if (error) {
-        console.log(error);
-        res.status(500).json({status: 'error'});
-      } else {
-        res.status(200).json(results);
-      }
-    }
-  );
-  connection.release();
-});
-});
-
 router.delete('/contratos_query', function (req, res, next) {
   auth.db_conn().getConnection((err,connection) => {
 
@@ -213,6 +183,31 @@ router.put('/contratos_query/:Identificacao', function (req, res, next) {
   connection.release();
 });
 });
+
+router.get('/identificacao_unique', function (req, res, next) {
+  auth.db_conn().getConnection((err,connection) => {
+
+    if (err) {
+      res.status(404).json((err));
+      return
+      }
+
+    let database = connection.config.database + '.';
+    connection.query(
+      'SELECT DISTINCT Identificacao FROM ' + database + 'contratos',
+      [],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+    connection.release();
+    })
+  });
 
 router.get('/contagem_contratos_alerta', function (req, res, next) {
   auth.db_conn().getConnection((err,connection) => {

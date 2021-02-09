@@ -10,6 +10,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ServerService } from './services/server.service';
 import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.component';
+import { LanxconComponent } from './lanxcon/lanxcon.component';
 
 @Component({
   selector: 'app-root',
@@ -96,6 +97,13 @@ export class AppComponent {
   openAlertsDialog(): void {
     const dialogRef = this.dialog.open(AlertaContratosComponent, {
       width: '500px',
+      data: {}
+    });
+  }
+
+  openLanXConDialog(): void {
+    const dialogRef = this.dialog.open(LanxconComponent, {
+      width: '100%',
       data: {}
     });
   }

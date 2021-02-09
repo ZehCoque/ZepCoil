@@ -1,0 +1,111 @@
+
+  <div class="el-title" style="margin-bottom: 10px;">
+    Lançamentos VS Contratos
+  </div>
+
+
+<form (click)="initFilter();autocompleteControl.setValue('')" class="example-form" style="text-align: center;">
+  <mat-form-field class="example-full-width" style="text-align: center;">
+    <mat-label>Identificação de Contrato</mat-label>
+    <input type="text"
+           placeholder="Pesquisar..."
+           aria-label="Identificacao"
+           matInput
+           [formControl]="autocompleteControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete
+      autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option (click)="onChoice(option)" *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
+
+<mat-divider></mat-divider>
+
+<div class="el-tag-pgmt-subtitle">
+
+  <div class="unselectable-line display-flex header-row" style=" align-items: center; padding-left: 16px;padding-right: 16px;">
+
+    <div class="el-tag" style="width: 10%">
+      Data de Pagamento
+    </div>
+
+    <div class="el-tag" style="width: 20%">
+      Locatário
+    </div>
+
+    <div class="el-tag" style="width: 30%">
+      Descrição
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Responsável
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Data de Entrada
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Data de Vencimento
+    </div>
+
+    <div class="el-tag" style="width: 10%; ">
+      Valor
+    </div>
+
+  </div>
+
+<cdk-virtual-scroll-viewport itemSize="36" style="height: 252px">
+  <div>
+    <mat-list  *cdkVirtualFor="let lxc of lanxcon" >
+      <mat-card style="text-align: center;">
+        <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
+
+          <div *ngIf="lxc.DataPgto" style="width: 10%">
+            {{lxc.DataPgto | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+          </div>
+          <div *ngIf="!lxc.DataPgto" style="width: 10%"></div>
+
+          <div style="width: 20%">
+            {{lxc.Pessoa}}
+          </div>
+
+          <div style="width: 30%">
+            {{lxc.Descricao}}
+          </div>
+
+          <div style="width: 10%">
+            {{lxc.Responsavel}}
+          </div>
+
+          <div *ngIf="lxc.Data_Entrada" style="width: 10%">
+            {{lxc.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+          </div>
+          <div *ngIf="!lxc.Data_Entrada" style="width: 10%"></div>
+
+          <div *ngIf="lxc.Vencimento" style="width: 10%">
+            {{lxc.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+          </div>
+          <div *ngIf="!lxc.Vencimento" style="width: 10%"></div>
+
+          <div style="width: 10%">
+            {{lxc.Valor | currency:'BRL'}}
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+  </mat-list>
+  </div>
+  <div *ngIf="lanxcon.length == 0" style="width: 100%;height: 126px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">Os lançamentos referentes ao contrato selecionado aparecerão aqui.</div>
+</cdk-virtual-scroll-viewport>
+
+</div>
+
+<div class="button-row">
+<button mat-raised-button   (click)='onCancel()' type="button">Voltar</button>
+</div>
+
+
