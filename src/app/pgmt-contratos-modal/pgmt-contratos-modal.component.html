@@ -267,8 +267,11 @@
         <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
 
           <div style="width: 5%">
-            {{lxc.Tipo}}
+            <!-- {{lxc.Tipo}} -->
             <!-- COLOCAR BOLINHA VERMELHA/VERDE/AMARELA -->
+            <span *ngIf="lxc.Tipo == 0" class="dot green"></span>
+            <span *ngIf="lxc.Tipo == 1" class="dot red"></span>
+            <span *ngIf="lxc.Tipo == 2" class="dot yellow"></span>
           </div>
 
           <div *ngIf="lxc.DataPgto" style="width: 10%">
