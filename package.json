@@ -1,6 +1,6 @@
 {
   "name": "zepcoil",
-  "version": "1.0.9",
+  "version": "1.2.5",
   "main": "./src/electron/electron.dev.js",
   "author": "José Antonio Rico Coque",
   "scripts": {
