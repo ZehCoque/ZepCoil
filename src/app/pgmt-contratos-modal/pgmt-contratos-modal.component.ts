@@ -133,27 +133,39 @@ private _filter(value: String): Array<String> {
 
 onChoice(id: String){
 
+  let json = {
+    Identificacao: id,
+    DataPgmtString: this.selectedDataPgto.toString()
+  }
 
-
-  // this.lanxcon = new Array();
-  // this.server.get_Value({Identificacao: id},'lanxcon').then((response: any) => {
-  //   response.forEach(element => {
-  //     this.lanxcon = [...this.lanxcon, element]
-  //     console.log(this.lanxcon)
-  //   });
-  // });
+  this.server.get_List_CF(json,'lanxcon').then((response: any) => {
+    this.lanxcon = new Array();
+    response.forEach(element => {
+      this.lanxcon = [...this.lanxcon, element]
+    });
+  });
 }
 
 //Functions for checkbox control
 
-updateAllComplete() {
+updateAllComplete(pgmt, completed: boolean) {
+  pgmt.checkbox.completed = completed;
+  this.allComplete = pgmt && this.pagamentosContratos.every(t => t.checkbox.completed);
+
   this.selectedDataPgto = new Array();
-  this.pagamentosContratos.forEach(t => {
-    if(t.checkbox.completed) {
-      this.selectedDataPgto.push(moment(t.DataPgto).toISOString());
-    }
-  });
-  this.allComplete = this.pagamentosContratos && this.pagamentosContratos.every(t => t.checkbox.completed);
+
+  let items = this.pagamentosContratos.filter(t => t.checkbox.completed);
+  if (items.length == 0) {
+    this.lanxcon = new Array();
+    return;
+  }
+
+  for (let index in items) {
+    this.selectedDataPgto.push(moment(items[index].DataPgto).toISOString());
+  }
+
+  this.onChoice(pgmt.Identificacao);
+
 }
 
 someComplete(): boolean {
@@ -168,7 +180,25 @@ setAll(completed: boolean) {
   if (!this.pagamentosContratos) {
     return;
   }
-  this.pagamentosContratos.forEach(t => t.checkbox.completed = completed);
+
+  for (let index in this.pagamentosContratos){
+    this.pagamentosContratos[index].checkbox.completed = completed;
+  }
+
+  this.selectedDataPgto = new Array();
+
+
+  if (completed == false) {
+    this.lanxcon = new Array();
+    return;
+  }
+
+  for (let index in this.pagamentosContratos){
+    this.selectedDataPgto.push(moment(this.pagamentosContratos[index].DataPgto).toISOString());
+  }
+
+  this.onChoice(this.novoContratoForm.controls.Identificacao.value);
+
 }
 
 }

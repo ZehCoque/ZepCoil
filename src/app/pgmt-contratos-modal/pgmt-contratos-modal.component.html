@@ -98,6 +98,7 @@
 
       <div style="width: 3%;">
           <mat-checkbox
+          [disabled]="!pagamentosContratos.length"
           [checked]="allComplete"
           [color]="mainCheckBox.color"
           [indeterminate]="someComplete()"
@@ -154,14 +155,13 @@
   <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
     <div *ngIf="pagamentosContratos.length > 0">
       <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos" >
-        <mat-card style="text-align: center;">
+        <mat-card  style="text-align: center;">
           <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
 
             <div style="width: 3%; margin-right: 5px;">
-              <mat-checkbox [(ngModel)]="pgmt.checkbox.completed"
-              [ngModelOptions]="{standalone: true}"
+              <mat-checkbox [checked]="pgmt.checkbox.completed"
               [color]="pgmt.checkbox.color"
-              (change)="updateAllComplete()">
+              (change)="updateAllComplete(pgmt, $event.checked)">
               </mat-checkbox>
           </div>
 

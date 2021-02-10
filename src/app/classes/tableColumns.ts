@@ -66,7 +66,7 @@ export interface Checkbox {
 }
 
 export class PagamentosContratos{
-  checkbox: Checkbox; //not part of MYSQL
+  checkbox?: Checkbox; //not part of MYSQL
   Identificacao: String;
   DataPgto: Date;
   Fav1: String;
