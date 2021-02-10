@@ -23,6 +23,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 export const MY_FORMATS = {
@@ -64,6 +65,7 @@ export const MY_FORMATS = {
     MatButtonToggleModule,
     MatRadioModule,
     MatAutocompleteModule,
+    MatCheckboxModule
   ],
   exports: [
     MatButtonModule,
@@ -86,7 +88,8 @@ export const MY_FORMATS = {
     MatListModule,
     MatButtonToggleModule,
     MatRadioModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatCheckboxModule
   ],
   providers: [
     {

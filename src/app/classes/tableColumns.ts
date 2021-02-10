@@ -1,3 +1,5 @@
+import { ThemePalette } from "@angular/material/core";
+
 export class Entrada {
   ID?: Number;
   Descricao: String;
@@ -58,7 +60,13 @@ export class AlertaContratos {
   Data_termino: Date;
 }
 
+export interface Checkbox {
+  completed: boolean;
+  color: ThemePalette;
+}
+
 export class PagamentosContratos{
+  checkbox: Checkbox; //not part of MYSQL
   Identificacao: String;
   DataPgto: Date;
   Fav1: String;
@@ -74,6 +82,7 @@ export class PagamentosContratos{
 }
 
 export class LanXCon{
+  Tipo: Number;
   Pessoa: String;
   Descricao: String;
   Responsavel: String;

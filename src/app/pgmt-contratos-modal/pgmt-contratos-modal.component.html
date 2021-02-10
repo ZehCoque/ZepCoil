@@ -8,10 +8,30 @@
   <div class="formulario">
   <div style="width: 100%; text-align: center; justify-content: space-around; padding-top: 10px;">
 
-    <mat-form-field style="width: 20%;" class="form-field">
+    <mat-form-field *ngIf="Identificacao.length" style="width: 20%;" class="form-field">
       <mat-label>Identificação</mat-label>
       <input matInput formControlName="Identificacao">
   </mat-form-field>
+
+  <!-- IN CASE THE VIEW NEEDS USER INPUT -->
+
+  <mat-form-field (click)="initFilter();novoContratoForm.controls.Identificacao.setValue('')" *ngIf="!Identificacao.length" class="example-full-width" style="text-align: center;">
+    <mat-label>Identificação de Contrato</mat-label>
+    <input type="text"
+           placeholder="Pesquisar..."
+           aria-label="Identificacao"
+           matInput
+           [formControl]="novoContratoForm.controls.Identificacao"
+           [matAutocomplete]="auto">
+    <mat-autocomplete
+      autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option (click)="getData(option)" *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <!-- END -->
 
     <mat-form-field style="width: 26%;" class="form-field">
       <mat-label>Locatário</mat-label>
@@ -74,59 +94,76 @@
 
   <div class="el-tag-pgmt-subtitle">
 
-    <div class="unselectable-line display-flex header-row" style=" align-items: center">
+    <div class="unselectable-line display-flex header-row" style=" align-items: center; padding-left: 16px; padding-right: 16px;">
 
-      <div class="el-tag" class="pgmt-contrato-header" style="padding-left: 16px;">
+      <div style="width: 3%;">
+          <mat-checkbox
+          [checked]="allComplete"
+          [color]="mainCheckBox.color"
+          [indeterminate]="someComplete()"
+          (change)="setAll($event.checked)">
+          </mat-checkbox>
+      </div>
+
+      <div class="el-tag pgmt-contrato-header">
         Data Pgmt
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Favorecido 1
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Valor 1
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Valor Piscina
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Favorecido 2
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Valor 2
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Favorecido 3
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Valor 3
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Fav. Comissão
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header">
+      <div class="el-tag pgmt-contrato-header">
         Valor Comissão
       </div>
 
-      <div class="el-tag" class="pgmt-contrato-header" style="padding-right: 16px;">
+      <div class="el-tag pgmt-contrato-header">
         % Comissão
       </div>
 
     </div>
 
-  <cdk-virtual-scroll-viewport itemSize="36" style="height: 252px">
+  <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
     <div *ngIf="pagamentosContratos.length > 0">
       <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos" >
         <mat-card style="text-align: center;">
           <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
+
+            <div style="width: 3%; margin-right: 5px;">
+              <mat-checkbox [(ngModel)]="pgmt.checkbox.completed"
+              [ngModelOptions]="{standalone: true}"
+              [color]="pgmt.checkbox.color"
+              (change)="updateAllComplete()">
+              </mat-checkbox>
+          </div>
 
             <div class="pgmt-contrato-header">
               {{pgmt.DataPgto | amLocal | amDateFormat: 'DD/MM/YYYY'}}
@@ -176,11 +213,104 @@
         </mat-card>
     </mat-list>
     </div>
-    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 126px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
+    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
   </cdk-virtual-scroll-viewport>
 
 </div>
 
+<!-- VISUALIZAÇÃO LANÇAMENTO X CONTRATOS -->
+
+<mat-divider></mat-divider>
+
+<div class="el-tag-pgmt-subtitle">
+
+  <div class="unselectable-line display-flex header-row" style=" align-items: center; padding-left: 16px;padding-right: 16px;">
+
+    <div class="el-tag" style="width: 5%">
+      Tipo
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Data de Pagamento
+    </div>
+
+    <div class="el-tag" style="width: 20%">
+      Locatário
+    </div>
+
+    <div class="el-tag" style="width: 25%">
+      Descrição
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Responsável
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Data de Entrada
+    </div>
+
+    <div class="el-tag" style="width: 10%">
+      Data de Vencimento
+    </div>
+
+    <div class="el-tag" style="width: 10%; ">
+      Valor
+    </div>
+
+  </div>
+
+<cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
+  <div>
+    <mat-list  *cdkVirtualFor="let lxc of lanxcon" >
+      <mat-card style="text-align: center;">
+        <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
+
+          <div style="width: 5%">
+            {{lxc.Tipo}}
+            <!-- COLOCAR BOLINHA VERMELHA/VERDE/AMARELA -->
+          </div>
+
+          <div *ngIf="lxc.DataPgto" style="width: 10%">
+            {{lxc.DataPgto | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+          </div>
+          <div *ngIf="!lxc.DataPgto" style="width: 10%"></div>
+
+          <div style="width: 20%">
+            {{lxc.Pessoa}}
+          </div>
+
+          <div style="width: 25%">
+            {{lxc.Descricao}}
+          </div>
+
+          <div style="width: 10%">
+            {{lxc.Responsavel}}
+          </div>
+
+          <div *ngIf="lxc.Data_Entrada" style="width: 10%">
+            {{lxc.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+          </div>
+          <div *ngIf="!lxc.Data_Entrada" style="width: 10%"></div>
+
+          <div *ngIf="lxc.Vencimento" style="width: 10%">
+            {{lxc.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+          </div>
+          <div *ngIf="!lxc.Vencimento" style="width: 10%"></div>
+
+          <div style="width: 10%">
+            {{lxc.Valor | currency:'BRL'}}
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+  </mat-list>
+  </div>
+  <div *ngIf="lanxcon.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">Os lançamentos referentes ao contrato selecionado aparecerão aqui.</div>
+</cdk-virtual-scroll-viewport>
+
+</div>
+
 <div class="button-row">
-  <button mat-raised-button   (click)='onCancel()' type="button">Voltar</button>
+<button mat-raised-button   (click)='onCancel()' type="button">Voltar</button>
 </div>

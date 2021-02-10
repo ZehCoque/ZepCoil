@@ -10,7 +10,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ServerService } from './services/server.service';
 import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.component';
-import { LanxconComponent } from './lanxcon/lanxcon.component';
+import { PgmtContratosModalComponent } from './pgmt-contratos-modal/pgmt-contratos-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -102,7 +102,7 @@ export class AppComponent {
   }
 
   openLanXConDialog(): void {
-    const dialogRef = this.dialog.open(LanxconComponent, {
+    const dialogRef = this.dialog.open(PgmtContratosModalComponent, {
       width: '100%',
       data: {}
     });
