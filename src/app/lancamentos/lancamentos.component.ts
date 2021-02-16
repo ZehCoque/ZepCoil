@@ -16,9 +16,10 @@ import { NovoCCComponent } from '../novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { AppRoutingService } from '../services/app-routing-service.service';
-import { filter } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { HistoricoDialogComponent } from '../historico-dialog/historico-dialog.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-lancamentos',
@@ -49,6 +50,11 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   activeSorts: ActiveSorts = new ActiveSorts;
   activeFilters: ActiveFilters = new ActiveFilters;
   sortMessages: SortMessages = new SortMessages;
+
+  Contratos: Array<String> = new Array();
+  DataPgtoContrato: Array<String> = new Array();
+
+  filteredOptions_Contratos: Observable<String[]>;
 
   editRowDialogRef: MatDialogRef<EditRowComponent>;
   currentActiveSort: string;
@@ -133,6 +139,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       Pessoa: new FormControl(''),
       Imposto: new FormControl(this.Imposto[0]),
       Tipo_despesa: new FormControl(this.Tipo_despesa[0]),
+      Contrato: new FormControl(''),
+      DataPgtoContrato: new FormControl({value: '', disabled: true}),
     });
 
     this.newEntryForm.valueChanges.subscribe(val => {
@@ -155,6 +163,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         }
         setTimeout(() => {
           this.viewport.scrollToIndex(this.viewport.getDataLength());
+
         }, 0);
       })
       .catch((error) => console.log(error));
@@ -163,6 +172,18 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     })
 
 
+  }
+
+    initFilter(){
+    this.filteredOptions_Contratos = this.newEntryForm.controls.Contrato.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: String): Array<String> {
+    const filterValue = value.toString().toLowerCase();
+    return this.Contratos.filter(option => option.toString().toLowerCase().includes(filterValue));
   }
 
 
@@ -176,7 +197,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     //GET ALL ENTRADAS
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
       await element.forEach(entrada => {
-        this.Entradas = [...this.Entradas, entrada]
+        this.Entradas = [...this.Entradas, entrada];
       })
     });
 
@@ -194,13 +215,34 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         });
       }).catch(err => reject(err));
 
+      //GET ALL CONTRATOS
+      await this.server.get_List('contratos_unique').then(async (response: any) => {
+        await response.forEach((element) => {
+          this.Contratos = [...this.Contratos, element.Identificacao];
+        });
+      }).catch(err => reject(err));
+
       await this.updateSoma()
 
       resolve();
 
-    })
+    });
+
+
 
     return promise;
+  }
+
+  async get_DataPgtoContrato(id){
+    this.DataPgtoContrato = new Array();
+    await this.server.get_Value({Identificacao: id},'pagamentos_contratos_query').then((response:any) => {
+      response.forEach(element => {
+        console.log(element)
+        this.DataPgtoContrato = [...this.DataPgtoContrato, element.DataPgto];
+      });
+    })
+    if (this.DataPgtoContrato.length > 0) this.newEntryForm.controls.DataPgtoContrato.enable();
+    else this.newEntryForm.controls.DataPgtoContrato.disable();
   }
 
   get_div_cc(Nome_CC:string){
@@ -304,6 +346,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         Concluido: false,
         Imposto: imp,
         Tipo_despesa: desp,
+        Contrato: this.newEntryForm.get("Contrato").value,
+        DataPgtoContrato: this.newEntryForm.get("DataPgtoContrato").value
       }
 
       this.Entradas = [...this.Entradas, input_json]
@@ -356,29 +400,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   }
 
-  // setDoneState(state,ID,row){
-
-  //   if (!state) {
-
-  //     const dialogRef = this.dialog.open(ConcluirDialogComponent, {
-  //       width: '1000px',
-  //       data: {ID,state:true}
-  //     });
-
-  //     let sub = dialogRef.afterClosed().subscribe((results) => {
-
-  //       if (results) {
-
-  //           this.Entradas[row].Concluido = true;
-  //       }
-
-  //       this.newDataEmitter.newDataEmit(results);
-  //       sub.unsubscribe();
-  //     });
-  //   }
-
-  // }
-
   selectType(type:number){
     this.newEntryForm.controls.Tipo.setValue(type);
     if (type == 0){
@@ -411,10 +432,18 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     if (resp == "Coil"){
       document.getElementsByName("CButton")[0].style.opacity = "1";
       document.getElementsByName("ZButton")[0].style.opacity = "0.4";
+      document.getElementsByName("MButton")[0].style.opacity = "0.4";
     }
     if (resp == "Zep"){
       document.getElementsByName("CButton")[0].style.opacity = "0.4";
       document.getElementsByName("ZButton")[0].style.opacity = "1";
+      document.getElementsByName("MButton")[0].style.opacity = "0.4";
+
+    }
+    if (resp == "MZ"){
+      document.getElementsByName("MButton")[0].style.opacity = "1";
+      document.getElementsByName("CButton")[0].style.opacity = "0.4";
+      document.getElementsByName("ZButton")[0].style.opacity = "0.4";
     }
   }
 

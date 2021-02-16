@@ -16,6 +16,8 @@ export class Entrada {
   Concluido: Boolean;
   Imposto: Boolean | Number;
   Tipo_despesa: String;
+  Contrato: String;
+  DataPgtoContrato: Date;
 }
 
 export class CC {

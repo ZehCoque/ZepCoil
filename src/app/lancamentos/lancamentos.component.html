@@ -103,6 +103,16 @@
             </button>
           </div>
 
+          <div class="el-tag--plain el-col-3">
+            Contrato
+            <!-- <button (click)="getColumnValues('Contrato')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Contrato', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+              <mat-icon color="darker-primary" *ngIf="!activeSorts.Contrato.active && !activeFilters.Contrato">arrow_drop_down</mat-icon>
+              <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Contrato">filter_alt</mat-icon>
+              <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Contrato.active && activeFilters.Contrato" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Contrato.dir}}</mat-icon>
+              <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Contrato.active && !activeFilters.Contrato">{{activeSorts.Contrato.dir}}</mat-icon>
+            </button> -->
+          </div>
+
           <div class="el-tag--plain el-col-1">
             Obs
           </div>
@@ -183,7 +193,7 @@
                   <div *ngIf="today < Entrada.Vencimento">
                     Em {{Entrada.Vencimento | amDifference: today :'days' : false}} dias
                   </div>
-                  <div *ngIf="today === Entrada.Vencimento">
+                  <div *ngIf="today == Entrada.Vencimento">
                     Hoje
                   </div>
                 </div>
@@ -194,6 +204,15 @@
 
                 <div class="el-tag--plain el-col-2">
                   {{Entrada.Responsavel}}
+                </div>
+
+                <div class="el-tag--plain el-col-3" style="align-items: center;">
+                  <div *ngIf="Entrada.Contrato" style="font-size: 0.7vw;display:flex;justify-content: center;">
+                    <mat-icon style="font-size: 20px;">work</mat-icon>
+                     {{ Entrada.Contrato}}</div>
+                  <div *ngIf="Entrada.DataPgtoContrato" style="font-size: 0.7vw;display:flex;justify-content: center;">
+                    <mat-icon style="font-size: 20px;">today</mat-icon>
+                    {{ Entrada.DataPgtoContrato | amLocal | amDateFormat: 'DD/MM/YYYY'}}</div>
                 </div>
 
                 <div class="el-tag--plain el-col-1">
@@ -379,6 +398,10 @@
             <a style="font-size: 15px; font-weight: bolder;">Zep</a>
           </button>
 
+          <button name="MButton"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('MZ')">
+            <a style="font-size: 15px; font-weight: bolder;">MZ</a>
+          </button>
+
         </div>
 
         <mat-error *ngIf="newEntryForm.get('Responsavel').hasError('required') && newEntryForm.dirty" style="font-size: 1.5vh; text-align: center;">
@@ -429,7 +452,7 @@
         </mat-form-field>
 
         <mat-form-field style="width: 35%;" class="form-field">
-          <mat-label>Centro de Custo</mat-label>
+          <mat-label>C.C.</mat-label>
           <mat-select formControlName="CC">
           <mat-option (click)="get_div_cc(cc.Nome)" *ngFor="let cc of CC" [value]="cc">
            {{ cc.Descricao }}
@@ -445,7 +468,7 @@
       </button>
 
       <mat-form-field  style="width: 40%;" class="form-field">
-        <mat-label>Divisão Centro de Custo</mat-label>
+        <mat-label>Div.C.C.</mat-label>
         <mat-select formControlName="Div_CC">
         <mat-option *ngFor="let div_CC of div_CC" [value]="div_CC">
          {{ div_CC.Divisao }}
@@ -506,6 +529,32 @@
   </mat-form-field>
 </div>
 
+<div>
+<mat-form-field (click)="initFilter();newEntryForm.controls.Contrato.setValue('')"  style="width: 50%;" class="form-field">
+  <mat-label>Contrato</mat-label>
+  <input type="text"
+         placeholder="Pesquisar..."
+         aria-label="Identificacao"
+         matInput
+         [formControl]="newEntryForm.controls.Contrato"
+         [matAutocomplete]="auto">
+  <mat-autocomplete
+    autoActiveFirstOption #auto="matAutocomplete">
+    <mat-option (click)="get_DataPgtoContrato(option)" *ngFor="let option of filteredOptions_Contratos | async" [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+<mat-form-field style="width: 40%;" class="form-field">
+  <mat-label>Data Pgmt</mat-label>
+  <mat-select formControlName="DataPgtoContrato">
+  <mat-option *ngFor="let data of DataPgtoContrato" [value]="data">
+   {{ data | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+  </mat-option>
+</mat-select>
+</mat-form-field>
+</div>
 
     <div>
       <mat-form-field style="width: 100%;" class="example-full-width">

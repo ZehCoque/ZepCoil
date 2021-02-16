@@ -76,6 +76,8 @@ export class EditRowComponent implements OnInit {
       Pessoa: new FormControl(''),
       Imposto: new FormControl(''),
       Tipo_despesa: new FormControl(''),
+      Contrato: new FormControl(''),
+      DataPgtoContrato: new FormControl(''),
     });
 
     this.loadData(this.ID).then(() => {
@@ -221,6 +223,8 @@ export class EditRowComponent implements OnInit {
       Concluido: this.current_data.Concluido,
       Imposto: imp,
       Tipo_despesa: desp,
+      Contrato: this.editedEntryForm.get("Contrato").value,
+      DataPgtoContrato: this.editedEntryForm.get("DataPgtoContrato").value,
     }
 
     this.server.update_List(edited_json,'main_table_query').then(() => {
@@ -258,7 +262,7 @@ export class EditRowComponent implements OnInit {
   }
 
   loadData(ID:number){
-    let promise = new Promise(async (resolve, reject) => {
+    let promise = new Promise<void>(async (resolve, reject) => {
     this.CC = new Array();
     this.div_CC = new Array();
     this.Pessoa = new Array();
