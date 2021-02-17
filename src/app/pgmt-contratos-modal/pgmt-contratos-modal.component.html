@@ -25,7 +25,7 @@
            [matAutocomplete]="auto">
     <mat-autocomplete
       autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option (click)="getData(option)" *ngFor="let option of filteredOptions | async" [value]="option">
+      <mat-option (click)="getData(option)" (submit)="getData(option)" *ngFor="let option of filteredOptions | async" [value]="option">
         {{option}}
       </mat-option>
     </mat-autocomplete>

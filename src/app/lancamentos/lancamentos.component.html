@@ -161,11 +161,21 @@
 
                 </div>
 
-                <div class="el-tag--plain el-col-3" style="align-items: center;">
+                <!-- <div class="el-tag--plain el-col-3" style="align-items: center;">
+                  <mat-icon style="font-size: 20px;">today</mat-icon>
                   <div style="font-size: 0.7vw; ">
-                    <img src="assets/icons8-time-24.png" width="13vw" >
                      {{ Entrada.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
-                  <div style="font-size: 0.7vw;"><img src="assets/icons8-expired-26.png" width="13vw">
+                  <div style="font-size: 0.7vw;">
+                    <mat-icon style="font-size: 20px;">work</mat-icon>
+                    {{ Entrada.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
+                </div> -->
+
+                <div class="el-tag--plain el-col-3" style="align-items: center;">
+                  <div style="font-size: 0.7vw;display:flex;justify-content: center;">
+                    <mat-icon style="font-size: 20px;">today</mat-icon>
+                    {{ Entrada.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
+                  <div style="font-size: 0.7vw;display:flex;justify-content: center;">
+                    <mat-icon style="font-size: 20px;">hourglass_bottom</mat-icon>
                     {{ Entrada.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
                 </div>
 
@@ -193,7 +203,7 @@
                   <div *ngIf="today < Entrada.Vencimento">
                     Em {{Entrada.Vencimento | amDifference: today :'days' : false}} dias
                   </div>
-                  <div *ngIf="today == Entrada.Vencimento">
+                  <div *ngIf="today === Entrada.Vencimento">
                     Hoje
                   </div>
                 </div>
@@ -540,7 +550,7 @@
          [matAutocomplete]="auto">
   <mat-autocomplete
     autoActiveFirstOption #auto="matAutocomplete">
-    <mat-option (click)="get_DataPgtoContrato(option)" *ngFor="let option of filteredOptions_Contratos | async" [value]="option">
+    <mat-option (click)="get_DataPgtoContrato(option)" (submit)="get_DataPgtoContrato(option)" *ngFor="let option of filteredOptions_Contratos | async" [value]="option">
       {{option}}
     </mat-option>
   </mat-autocomplete>

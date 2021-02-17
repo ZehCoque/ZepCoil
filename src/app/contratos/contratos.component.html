@@ -65,7 +65,7 @@
           </button>
         </div>
 
-        <div class="el-tag--plain el-col-1">
+        <div class="el-tag--plain el-col-2">
           C.C
           <button (click)="getColumnValues('CC')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.CC.active && !activeFilters.CC">arrow_drop_down</mat-icon>
@@ -75,7 +75,7 @@
           </button>
         </div>
 
-        <div class="el-tag--plain el-col-1">
+        <div class="el-tag--plain el-col-2">
           Div. C.C
           <button (click)="getColumnValues('Div_CC')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Div_CC', 'class_msg':sortMessages.forNumber }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Div_CC.active && !activeFilters.Div_CC">arrow_drop_down</mat-icon>
@@ -85,7 +85,7 @@
           </button>
         </div >
 
-        <div class="el-tag--plain el-col-1">
+        <div class="el-tag--plain el-col-2">
           Tipo
           <button (click)="getColumnValues('Tipo')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Tipo' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Tipo.active && !activeFilters.Tipo">arrow_drop_down</mat-icon>
@@ -130,16 +130,16 @@
                   {{ Contrato.Valor | currency:'BRL'}}
                 </div>
 
-                <div class="el-tag--plain el-col-1">
+                <div class="el-tag--plain el-col-2">
                   {{Contrato.CC}}
                 </div>
 
 
-                <div class="el-tag--plain el-col-1">
+                <div class="el-tag--plain el-col-2">
                   {{Contrato.Div_CC}}
                 </div >
 
-                <div class="el-tag--plain el-col-1">
+                <div class="el-tag--plain el-col-2">
                   {{Contrato.Tipo | tipoText}}
                 </div >
 

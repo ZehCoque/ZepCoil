@@ -3,6 +3,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { CC, div_CC, Entrada, Pessoa } from '../classes/tableColumns';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
 import { AppRoutingService } from '../services/app-routing-service.service';
@@ -23,8 +25,15 @@ export class EditRowComponent implements OnInit {
   CC:Array<CC> = new Array();
   div_CC:Array<div_CC> = new Array<div_CC>();
   Pessoa:Array<Pessoa> = new Array();
-  loading: boolean = true;
+  loading: boolean = false;
+  loading_page: boolean = true;
+
   div_cc_ready: boolean = true;
+
+  Contratos: Array<String> = new Array();
+  DataPgtoContrato: Array<String> = new Array();
+
+  filteredOptions_Contratos: Observable<String[]>;
 
   current_data: Entrada;
   error: string;
@@ -77,11 +86,12 @@ export class EditRowComponent implements OnInit {
       Imposto: new FormControl(''),
       Tipo_despesa: new FormControl(''),
       Contrato: new FormControl(''),
-      DataPgtoContrato: new FormControl(''),
+      DataPgtoContrato: new FormControl({value: '', disabled: true}),
     });
 
     this.loadData(this.ID).then(() => {
 
+      this.loading_page = false;
       this.insertData();
 
       this.editedEntryForm.valueChanges.subscribe(val => {
@@ -97,10 +107,22 @@ export class EditRowComponent implements OnInit {
         }
       });
       this.dialogRef.disableClose = false;
-      this.loading = false
+
     })
 
 
+  }
+
+  initFilter(){
+    this.filteredOptions_Contratos = this.editedEntryForm.controls.Contrato.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: String): Array<String> {
+    const filterValue = value.toString().toLowerCase();
+    return this.Contratos.filter(option => option.toString().toLowerCase().includes(filterValue));
   }
 
   insertData(){
@@ -180,10 +202,17 @@ export class EditRowComponent implements OnInit {
     if (resp == "Coil"){
       document.getElementsByName("CButton_edit")[0].style.opacity = "1";
       document.getElementsByName("ZButton_edit")[0].style.opacity = "0.4";
+      document.getElementsByName("MButton_edit")[0].style.opacity = "0.4";
     }
     if (resp == "Zep"){
       document.getElementsByName("CButton_edit")[0].style.opacity = "0.4";
       document.getElementsByName("ZButton_edit")[0].style.opacity = "1";
+      document.getElementsByName("MButton_edit")[0].style.opacity = "0.4";
+    }
+    if (resp == "MZ"){
+      document.getElementsByName("CButton_edit")[0].style.opacity = "0.4";
+      document.getElementsByName("ZButton_edit")[0].style.opacity = "0.4";
+      document.getElementsByName("MButton_edit")[0].style.opacity = "1";
     }
   }
 
@@ -195,25 +224,27 @@ export class EditRowComponent implements OnInit {
       this.editedEntryForm.controls.Pessoa.setValue(new Array(Entrada));
     }
 
-    let imp;
+    let imp = null;
+    let desp = '';
 
     if (this.editedEntryForm.get("Tipo").value == 0){
       imp = this.editedEntryForm.get("Imposto").value.value;
     }
 
-    let desp;
-
     if (this.editedEntryForm.get("Tipo").value == 1){
       desp = this.editedEntryForm.get("Tipo_despesa").value.value;
     }
 
+    if (this.editedEntryForm.get("Contrato").value == '') this.editedEntryForm.get("Contrato").setValue(null);
+    if (this.editedEntryForm.get("DataPgtoContrato").value == '') this.editedEntryForm.get("DataPgtoContrato").setValue(null);
+
     let edited_json: Entrada = {
       ID: this.ID,
       Descricao: this.editedEntryForm.get("Descricao").value,
-      Data_Entrada: moment(this.editedEntryForm.get("Data_Entrada").value).toDate(),
+      Data_Entrada: moment(this.editedEntryForm.get("Data_Entrada").value).startOf('day').toDate(),
       CC: this.editedEntryForm.get("CC").value.Nome,
       Div_CC: this.editedEntryForm.get("Div_CC").value.Divisao,
-      Vencimento: moment(this.editedEntryForm.get("Vencimento").value).toDate(),
+      Vencimento: moment(this.editedEntryForm.get("Vencimento").value).startOf('day').toDate(),
       Valor:  this.getNumberValue(this.editedEntryForm.get("Valor").value),
       Observacao: this.editedEntryForm.get("Observacao").value,
       Tipo: this.editedEntryForm.get("Tipo").value,
@@ -270,6 +301,8 @@ export class EditRowComponent implements OnInit {
     await this.server.get_Value({ID: ID},'main_table_query_get').then(async (response: any) => {
       await response.forEach( (Entrada:Entrada) => {
         this.current_data = Entrada;
+        console.log(this.current_data)
+        if (this.current_data.Contrato) this.get_DataPgtoContrato(this.current_data.Contrato);
       });
     }).catch(err => reject(err));
 
@@ -287,11 +320,29 @@ export class EditRowComponent implements OnInit {
         });
       }).catch(err => reject(err));
 
+      //GET ALL CONTRATOS
+      await this.server.get_List('contratos_unique').then(async (response: any) => {
+        await response.forEach((element) => {
+          this.Contratos = [...this.Contratos, element.Identificacao];
+        });
+      }).catch(err => reject(err));
+
       resolve();
 
     })
 
     return promise;
+  }
+
+  async get_DataPgtoContrato(id){
+    this.DataPgtoContrato = new Array();
+    await this.server.get_Value({Identificacao: id},'pagamentos_contratos_query').then((response:any) => {
+      response.forEach(element => {
+        this.DataPgtoContrato = [...this.DataPgtoContrato, element.DataPgto];
+      });
+    })
+    if (this.DataPgtoContrato.length > 0) this.editedEntryForm.controls.DataPgtoContrato.enable();
+    else this.editedEntryForm.controls.DataPgtoContrato.disable();
   }
 
   get_div_cc(Nome_CC:String){

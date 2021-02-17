@@ -3,10 +3,10 @@ import { ThemePalette } from "@angular/material/core";
 export class Entrada {
   ID?: Number;
   Descricao: String;
-  Data_Entrada: Date;
+  Data_Entrada: any;
   CC: String;
   Div_CC: String;
-  Vencimento: Date;
+  Vencimento: any;
   Valor: String;
   Observacao: String;
   Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos

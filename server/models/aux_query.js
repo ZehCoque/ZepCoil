@@ -65,7 +65,7 @@ function aux_query_router() {
 
         let database = connection.config.database + '.';
         connection.query(
-        'INSERT INTO ' + database + 'lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`,`Concluido`,`Imposto`,`Tipo_despesa`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        'INSERT INTO ' + database + 'lançamentos (`Descricao`, `Data_Entrada`, `CC`, `Div_CC`, `Vencimento`, `Valor`, `Observacao`, `Tipo`, `N_Invest`, `Pessoa`,`Responsavel`,`Concluido`,`Imposto`,`Tipo_despesa`,`Contrato`,`DataPgtoContrato`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         [req.body.Descricao,
           new Date(req.body.Data_Entrada),
           req.body.CC,
@@ -79,7 +79,9 @@ function aux_query_router() {
           req.body.Responsavel,
           req.body.Concluido,
           req.body.Imposto,
-          req.body.Tipo_despesa
+          req.body.Tipo_despesa,
+          req.body.Contrato,
+          req.body.DataPgtoContrato
         ],
         (error) => {
           if (error) {
@@ -279,7 +281,7 @@ function aux_query_router() {
 
       let database = connection.config.database + '.';
       connection.query(
-      'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?, `Concluido`=?, `Imposto`=?, `Tipo_despesa`=?  WHERE `ID`=?',
+      'UPDATE ' + database + 'lançamentos SET `Descricao` = ?,`Data_Entrada`=?, `CC` = ?, `Div_CC` = ?, `Vencimento` = ?,`Valor` = ?, `Observacao` = ?,`Tipo` = ?, `N_Invest`=?, `Pessoa`=?, `Responsavel`=?, `Concluido`=?, `Imposto`=?, `Tipo_despesa`=?, `Contrato`=?, `DataPgtoContrato`=? WHERE `ID`=?',
       [req.body.Descricao,
         new Date(req.body.Data_Entrada),
         req.body.CC,
@@ -294,6 +296,8 @@ function aux_query_router() {
         req.body.Concluido,
         req.body.Imposto,
         req.body.Tipo_despesa,
+        req.body.Contrato,
+        req.body.DataPgtoContrato,
         req.body.ID],
       (error) => {
         if (error) {

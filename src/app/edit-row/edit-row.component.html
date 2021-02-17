@@ -52,6 +52,9 @@
       <button name="ZButton_edit"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('Zep')">
         <a style="font-size: 15px; font-weight: bolder;">Zep</a>
       </button>
+      <button name="MButton_edit"  type="button" mat-mini-fab style="background-color: black; color: white;" color="warn" class="selection-button" (click)="selectResp('MZ')">
+        <a style="font-size: 15px; font-weight: bolder;">MZ</a>
+      </button>
 
     </div>
 
@@ -116,7 +119,7 @@
   </mat-error>
 </mat-form-field>
 
-<mat-form-field style="width: 45%;" class="form-field">
+<mat-form-field style="width: 15%;" class="form-field">
   <mat-label>Divisão Centro de Custo</mat-label>
   <mat-select formControlName="Div_CC">
   <mat-option *ngFor="let div of div_CC" [value]="div">
@@ -128,7 +131,7 @@
 </mat-error>
 </mat-form-field>
 
-<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 45%;" class="form-field">
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 30%;" class="form-field">
 <mat-label >Origem</mat-label>
 <mat-select formControlName="Pessoa">
 <mat-option *ngFor="let dest of Pessoa" [value]="dest">
@@ -137,7 +140,7 @@
 </mat-select>
 </mat-form-field>
 
-<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1 " style="width: 45%;" class="form-field">
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1 " style="width: 30%;" class="form-field">
   <mat-label >Origem</mat-label>
   <mat-select formControlName="Pessoa">
   <mat-option *ngFor="let dest of Pessoa" [value]="dest">
@@ -146,7 +149,7 @@
   </mat-select>
   </mat-form-field>
 
-<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 2" style="width: 45%;" class="form-field">
+<mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 2" style="width: 20%;" class="form-field">
 <mat-label>Nº do Investimento</mat-label>
 <input matInput formControlName="N_Invest" [errorStateMatcher]="errorMatcher"   >
 
@@ -155,8 +158,7 @@ O número de investimento deve ser um número.
 </mat-error>
 </mat-form-field>
 
-<div>
-  <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 35%;" class="form-field">
+  <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 0 " style="width: 20%;" class="form-field">
     <mat-label>Tem imposto?</mat-label>
     <mat-select formControlName="Imposto">
       <mat-option *ngFor="let imp of Imposto" [value]="imp">
@@ -165,7 +167,7 @@ O número de investimento deve ser um número.
   </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1" style="width: 35%;" class="form-field">
+  <mat-form-field *ngIf="editedEntryForm.get('Tipo').value === 1" style="width: 20%;" class="form-field">
     <mat-label>Tipo</mat-label>
     <mat-select formControlName="Tipo_despesa">
     <mat-option *ngFor="let desp of Tipo_despesa" [value]="desp">
@@ -173,7 +175,33 @@ O número de investimento deve ser um número.
     </mat-option>
   </mat-select>
   </mat-form-field>
-</div>
+
+<div>
+  <mat-form-field (click)="initFilter()"  style="width: 50%;" class="form-field">
+    <mat-label>Contrato</mat-label>
+    <input type="text"
+           placeholder="Pesquisar..."
+           aria-label="Identificacao"
+           matInput
+           [formControl]="editedEntryForm.controls.Contrato"
+           [matAutocomplete]="auto">
+    <mat-autocomplete
+      autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option (click)="get_DataPgtoContrato(option)" (submit)="get_DataPgtoContrato(option)" *ngFor="let option of filteredOptions_Contratos | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field style="width: 40%;" class="form-field">
+    <mat-label>Data Pgmt</mat-label>
+    <mat-select formControlName="DataPgtoContrato">
+    <mat-option *ngFor="let data of DataPgtoContrato" [value]="data">
+     {{ data | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
+  </div>
 
 <div>
 <mat-form-field style="width: 100%;" class="example-full-width">

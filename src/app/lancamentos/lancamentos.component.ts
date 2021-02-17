@@ -174,7 +174,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   }
 
-    initFilter(){
+  initFilter(){
     this.filteredOptions_Contratos = this.newEntryForm.controls.Contrato.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -237,7 +237,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.DataPgtoContrato = new Array();
     await this.server.get_Value({Identificacao: id},'pagamentos_contratos_query').then((response:any) => {
       response.forEach(element => {
-        console.log(element)
         this.DataPgtoContrato = [...this.DataPgtoContrato, element.DataPgto];
       });
     })
@@ -321,7 +320,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       let imp = this.Imposto[0].value;
 
       if (this.newEntryForm.get("Tipo").value == 0){
-        imp = this.newEntryForm.get("Imposto").value.value;
+        imp = this.newEntryForm.controls.Imposto.value.value;
       }
 
       let desp = this.Tipo_despesa[1].value;
@@ -330,13 +329,16 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         desp = this.newEntryForm.get("Tipo_despesa").value.value;
       }
 
+      if (this.newEntryForm.get("Contrato").value == '') this.newEntryForm.get("Contrato").setValue(null);
+      if (this.newEntryForm.get("DataPgtoContrato").value == '') this.newEntryForm.get("DataPgtoContrato").setValue(null);
+
       let input_json: Entrada = {
         ID: current_id,
         Descricao: this.newEntryForm.get("Descricao").value,
-        Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).toDate(),
+        Data_Entrada: moment(this.newEntryForm.get("Data_Entrada").value).startOf('day').toISOString(),
         CC: this.newEntryForm.get("CC").value.Nome,
         Div_CC: this.newEntryForm.get("Div_CC").value.Divisao,
-        Vencimento: moment(this.newEntryForm.get("Vencimento").value).toDate(),
+        Vencimento: moment(this.newEntryForm.get("Vencimento").value).startOf('day').toISOString(),
         Valor:  this.getNumberValue(this.newEntryForm.get("Valor").value),
         Observacao: this.newEntryForm.get("Observacao").value,
         Tipo: this.newEntryForm.get("Tipo").value,
@@ -352,7 +354,11 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
       this.Entradas = [...this.Entradas, input_json]
       this.cdk_empty = false;
-      if (this.Entradas.length > 1) this.viewport.scrollToIndex(this.Entradas.length + 1);
+      if (this.Entradas.length > 1) {
+        setTimeout(() => {
+          this.viewport.scrollToIndex(this.viewport.getDataLength());
+        }, 0);
+      }
 
       this.server.add_List(input_json,'main_table_query').then(() => {
         this.onClear();
@@ -374,6 +380,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.newEntryForm.controls.Valor.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
     this.newEntryForm.controls.Data_Entrada.patchValue(moment().toISOString());
     this.newEntryForm.controls.Vencimento.patchValue(moment().toISOString());
+    this.newEntryForm.controls.Imposto.patchValue(this.Imposto[0]);
+    this.newEntryForm.controls.Tipo_despesa.patchValue(this.Tipo_despesa[0]);
 
     if (document.getElementsByName("addButton")[0]) {
       document.getElementsByName("addButton")[0].style.opacity = "0.4";
