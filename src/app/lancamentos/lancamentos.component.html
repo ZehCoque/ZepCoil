@@ -161,15 +161,6 @@
 
                 </div>
 
-                <!-- <div class="el-tag--plain el-col-3" style="align-items: center;">
-                  <mat-icon style="font-size: 20px;">today</mat-icon>
-                  <div style="font-size: 0.7vw; ">
-                     {{ Entrada.Data_Entrada | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
-                  <div style="font-size: 0.7vw;">
-                    <mat-icon style="font-size: 20px;">work</mat-icon>
-                    {{ Entrada.Vencimento | amLocal | amDateFormat: 'DD/MM/YYYY' }}</div>
-                </div> -->
-
                 <div class="el-tag--plain el-col-3" style="align-items: center;">
                   <div style="font-size: 0.7vw;display:flex;justify-content: center;">
                     <mat-icon style="font-size: 20px;">today</mat-icon>
@@ -290,7 +281,7 @@
         </cdk-virtual-scroll-viewport>
       </ng-template>
 
-
+      <!-- FILTRAR E CLASSIFICAR -->
 
       <div style="visibility: hidden; position: fixed"
       [style.left]="contextMenuPosition.x"
@@ -325,23 +316,28 @@
 
       <mat-menu #filtrar="matMenu">
         <ng-template  matMenuContent let-values="values" let-column="column" let-class_msg="class_msg">
-          <div (click)="filterBy(column, item)" *ngFor="let item of values">
+          <!-- <div (click)="filterBy(column, item)" *ngFor="let item of values"> -->
 
             <div *ngIf="(column === 'Vencimento' || column === 'Data_Entrada'); then filtrarElseBlock1; else filtrarElseBlock2"></div>
             <ng-template #filtrarElseBlock1>
 
-              <button mat-menu-item>{{ item | amLocal | amDateFormat: 'DD/MM/YYYY' }}</button>
+              <mat-form-field style="padding-left: 10px;" class="form-field" (click)="$event.stopPropagation()">
+                <mat-label>Data de ínicio</mat-label>
+                <input matInput [matDatepicker]="picker_filtrardata">
+                <mat-datepicker-toggle matSuffix [for]="picker_filtrardata"></mat-datepicker-toggle>
+                <mat-datepicker #picker_filtrardata></mat-datepicker>
+              </mat-form-field>
 
             </ng-template>
 
             <ng-template #filtrarElseBlock2>
-              <div *ngIf="column === 'Valor'; then filtrarElseBlock3; else filtrarElseBlock4">
-            </div>
-            <ng-template #filtrarElseBlock3><button mat-menu-item>{{ item | currency:'BRL'}}</button> </ng-template>
-            <ng-template #filtrarElseBlock4><button mat-menu-item>{{ item | Tipo}}</button> </ng-template>
+              <!-- <div *ngIf="column === 'Valor'; then filtrarElseBlock3; else filtrarElseBlock4"></div> -->
+
+            <!-- <ng-template #filtrarElseBlock3><button mat-menu-item>{{ item | currency:'BRL'}}</button> </ng-template> -->
+            <!-- <ng-template #filtrarElseBlock4><button mat-menu-item>{{ item | Tipo}}</button> </ng-template> -->
             </ng-template>
 
-            </div>
+            <!-- </div> -->
             </ng-template>
 
       </mat-menu>
@@ -354,6 +350,8 @@
       </mat-menu>
 
     </div>
+
+    <!-- FIM DOS MENUS DE FILTROS E CLASSIFICAÇÃO -->
 
     <div class="rightmost">
 
@@ -489,8 +487,10 @@
       </mat-error>
     </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 0 || newEntryForm.get('Tipo').value === 4" style="width: 35%;" class="form-field">
-      <mat-label>Origem</mat-label>
+  <mat-form-field *ngIf="newEntryForm.get('Tipo').value >= 0" style="width: 35%;" class="form-field">
+      <mat-label *ngIf="newEntryForm.get('Tipo').value === 0 || newEntryForm.get('Tipo').value === 4">Origem</mat-label>
+      <mat-label *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 3">Destinatário</mat-label>
+      <mat-label *ngIf="newEntryForm.get('Tipo').value === 2">Destino</mat-label>
       <mat-select formControlName="Pessoa">
         <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
           {{ pessoa.Nome }}
@@ -498,16 +498,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 3" style="width: 35%;" class="form-field">
-      <mat-label>Destinatário</mat-label>
-      <mat-select formControlName="Pessoa">
-      <mat-option *ngFor="let pessoa of Pessoa" [value]="pessoa">
-       {{ pessoa.Nome }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <button *ngIf="newEntryForm.get('Tipo').value === 1 || newEntryForm.get('Tipo').value === 0 || newEntryForm.get('Tipo').value === 3 || newEntryForm.get('Tipo').value === 4" type="button" mat-icon-button color="primary" (click)="openPessoaDialog()">
+  <button *ngIf="newEntryForm.get('Tipo').value  >= 0" type="button" mat-icon-button color="primary" (click)="openPessoaDialog()">
     <mat-icon>add</mat-icon>
   </button>
 

@@ -135,7 +135,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       Observacao: new FormControl(''),
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
-      Tipo: new FormControl('',Validators.required),
+      Tipo: new FormControl(-1,Validators.required),
       Pessoa: new FormControl(''),
       Imposto: new FormControl(this.Imposto[0]),
       Tipo_despesa: new FormControl(this.Tipo_despesa[0]),
@@ -382,6 +382,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.newEntryForm.controls.Vencimento.patchValue(moment().toISOString());
     this.newEntryForm.controls.Imposto.patchValue(this.Imposto[0]);
     this.newEntryForm.controls.Tipo_despesa.patchValue(this.Tipo_despesa[0]);
+    this.newEntryForm.controls.Tipo.patchValue(-1);
 
     if (document.getElementsByName("addButton")[0]) {
       document.getElementsByName("addButton")[0].style.opacity = "0.4";
