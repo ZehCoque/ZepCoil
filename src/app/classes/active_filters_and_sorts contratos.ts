@@ -4,6 +4,7 @@ interface sortJson {
 }
 
 export class ContratosActiveFilters {
+  Identificacao: String = '';
   Descricao: String = '';
   Data_inicio: String = '';
   Data_termino: String = '';
@@ -12,9 +13,6 @@ export class ContratosActiveFilters {
   Valor: String = '';
   Pessoa: String = '';
   Tipo: String = '';
-  PCoil: String = '';
-  PZep: String = '';
-  PComissao: String = '';
   }
 
 export class ContratosActiveSorts {

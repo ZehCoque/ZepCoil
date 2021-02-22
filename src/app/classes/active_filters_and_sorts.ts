@@ -19,6 +19,7 @@ export class ActiveFilters {
     N_Invest: String = '';
     Pessoa: String = '';
     Responsavel: String = '';
+    Contrato: String = '';
   }
 
 export class ActiveSorts {
@@ -32,6 +33,7 @@ export class ActiveSorts {
   N_Invest: sortJson = {active: false, dir: 'arrow_downward'};
   Pessoa: sortJson = {active: false, dir: 'arrow_downward'};
   Responsavel: sortJson = {active: false, dir: 'arrow_downward'};
+  Contrato: sortJson = {active: false, dir: 'arrow_downward'};
 }
 
 export class SortMessages{
