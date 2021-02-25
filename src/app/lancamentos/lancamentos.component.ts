@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
-import { ActiveFilters, ActiveSorts, SortMessages } from '../classes/active_filters_and_sorts';
+import { ActiveFilters, ActiveSorts, FilterLists, SortMessages } from '../classes/active_filters_and_sorts';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { NovoCCComponent } from '../novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
@@ -55,6 +55,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   DataPgtoContrato: Array<String> = new Array();
 
   filteredOptions_Contratos: Observable<String[]>;
+
+  filterLists: FilterLists = new FilterLists;
 
   editRowDialogRef: MatDialogRef<EditRowComponent>;
   currentActiveSort: string;
@@ -116,6 +118,12 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   ngOnInit()  {
 
     this.setState();
+
+    // LINE FOR TESTING
+
+    this.filterLists.Tipo = [0,1,2];
+
+    // END
 
     this.routerEvents = this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))

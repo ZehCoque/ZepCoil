@@ -112,6 +112,17 @@ input[readonly] {
 .form-field{
   margin-right: 15px;
   margin-bottom: 15px;
+
+}
+
+.form-field.context-menu{
+  width: 200px;
+  text-align: center;
+  padding-left: 10px;
+}
+
+.form-field.autocomplete{
+  padding-top: 10px;
 }
 
 .unselectable-line{

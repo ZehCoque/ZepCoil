@@ -45,4 +45,15 @@ export class SortMessages{
   forExpire:dirMsgJson = {up: "Mais curto para o mais longo" , down: "Mais longo para o mais curto"};
 }
 
+export class FilterLists {
+  Descricao: Array<String>;
+  CC: Array<String>;
+  Div_CC: Array<String>;
+  Tipo:  Array<Number>;
+  N_Invest: Array<String>;
+  Pessoa: Array<String>;
+  Responsavel: Array<String>;
+  Contrato: Array<String>;
+}
+
 
