@@ -30,11 +30,16 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   @ViewChild('contextMenuTrigger') contextMenu: MatMenuTrigger;
 
+  columnToFilter = ['Descricao','CC','Div_CC','Tipo','N_Invest','Pessoa','Responsavel','Contrato','DataPgtoContrato'];
+
   contextMenuPosition = { x: '0px', y: '0px' };
   changeDetection: ChangeDetectionStrategy.OnPush;
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
+
+  textFilters: FormControl;
   newEntryForm: FormGroup;
+
   errorMatcher: ErrorMatcherDirective;
   loading = true;
   today = moment().startOf('day').toISOString();
@@ -90,6 +95,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       value: 'A'
     },
   ];
+  filteredOptionsText: Observable<String[]>;
+
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe : CurrencyPipe,
@@ -151,6 +158,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       DataPgtoContrato: new FormControl({value: '', disabled: true}),
     });
 
+    this.textFilters = new FormControl('',Validators.required);
+
     this.newEntryForm.valueChanges.subscribe(val => {
       if (val.Valor) {
         let valor = this.getNumberValue(val.Valor);
@@ -182,16 +191,23 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   }
 
-  initFilter(){
+  initFilter_Contratos(column_name){
     this.filteredOptions_Contratos = this.newEntryForm.controls.Contrato.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this._filter(value,column_name))
     );
   }
 
-  private _filter(value: String): Array<String> {
+  initFilter_Text(column_name){
+    this.filteredOptionsText = this.textFilters.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value,column_name))
+    );
+  }
+
+  private _filter(value: String, column_name): Array<String> {
     const filterValue = value.toString().toLowerCase();
-    return this.Contratos.filter(option => option.toString().toLowerCase().includes(filterValue));
+    return this.filterLists[column_name].filter(option => option.toString().toLowerCase().includes(filterValue));
   }
 
 
@@ -202,6 +218,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.div_CC = new Array();
     this.Pessoa = new Array();
     this.Entradas = new Array();
+    this.filterLists = new FilterLists;
+
     //GET ALL ENTRADAS
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
       await element.forEach(entrada => {
@@ -223,12 +241,15 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         });
       }).catch(err => reject(err));
 
-      //GET ALL CONTRATOS
-      await this.server.get_List('contratos_unique').then(async (response: any) => {
-        await response.forEach((element) => {
-          this.Contratos = [...this.Contratos, element.Identificacao];
-        });
-      }).catch(err => reject(err));
+      //GET ALL FILTER ARRAYS
+      this.columnToFilter.forEach(async (column_name) => {
+        this.filterLists[column_name] = new Array();
+        await this.server.get_List_CF({column_name: column_name},'get_distinct_lancamentos').then(async (response: any) => {
+          await response.forEach((element) => {
+            if (element[column_name] != null && element[column_name] != '')this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+          });
+        }).catch(err => reject(err));
+      })
 
       await this.updateSoma()
 
@@ -408,7 +429,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   }
 
   onContextMenu(event: MouseEvent, item, index) {
-
     event.preventDefault();
       this.contextMenuPosition.x = event.clientX + 'px';
       this.contextMenuPosition.y = event.clientY + 'px';

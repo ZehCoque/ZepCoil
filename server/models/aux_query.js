@@ -5,6 +5,31 @@ function aux_query_router() {
 
   const router = express.Router();
 
+  router.post('/get_distinct_lancamentos', function (req, res, next) {
+    auth.db_conn().getConnection((err,connection) => {
+
+    if (err) {
+    res.status(404).json((err));
+    return
+    }
+    let database = connection.config.database + '.';
+
+      connection.query(
+      'SELECT DISTINCT ' + req.body.column_name + ' FROM ' + database + 'view_lançamentos',
+      [],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+    connection.release();
+  });
+  });
+
     router.post('/main_table_query_get/:ID', function (req, res, next) {
       auth.db_conn().getConnection((err,connection) => {
 

@@ -54,6 +54,6 @@ export class FilterLists {
   Pessoa: Array<String>;
   Responsavel: Array<String>;
   Contrato: Array<String>;
+  DataPgtoContrato: Array<String>;
 }
-
 
