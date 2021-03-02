@@ -9,8 +9,8 @@ export class Entrada {
   Vencimento: any;
   Valor: String;
   Observacao: String;
-  Tipo:  number; //0 para receitas, 1 para despesas, 2 para investimentos
-  N_Invest: number;
+  Tipo:  Number; //0 para receitas, 1 para despesas, 2 para investimentos
+  N_Invest: String;
   Pessoa: String;
   Responsavel: String;
   Concluido: Boolean;

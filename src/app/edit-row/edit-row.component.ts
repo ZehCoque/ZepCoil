@@ -127,7 +127,7 @@ export class EditRowComponent implements OnInit {
 
   insertData(){
     if (this.current_data.N_Invest) {
-      if (this.current_data.N_Invest === 0) this.current_data.N_Invest = null;
+      if (this.current_data.N_Invest === '0') this.current_data.N_Invest = null;
     }
 
     this.editedEntryForm.patchValue(this.current_data);
@@ -170,7 +170,7 @@ export class EditRowComponent implements OnInit {
     this.selectResp(this.current_data.Responsavel);
   }
 
-  selectType(type:number){
+  selectType(type:Number){
     this.editedEntryForm.controls.Tipo.setValue(type);
     if (type == 0){
       document.getElementsByName("addButton_edit")[0].style.opacity = "1";
@@ -249,7 +249,7 @@ export class EditRowComponent implements OnInit {
       Observacao: this.editedEntryForm.get("Observacao").value,
       Tipo: this.editedEntryForm.get("Tipo").value,
       Responsavel: this.editedEntryForm.get("Responsavel").value,
-      N_Invest: Number(this.editedEntryForm.get("N_Invest").value),
+      N_Invest: this.editedEntryForm.get("N_Invest").value,
       Pessoa: this.editedEntryForm.get("Pessoa").value.Nome,
       Concluido: this.current_data.Concluido,
       Imposto: imp,

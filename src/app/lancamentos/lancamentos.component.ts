@@ -147,7 +147,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       CC: new FormControl('',Validators.required),
       Div_CC: new FormControl({value: '', disabled: true},Validators.required),
       Vencimento: new FormControl(moment().toISOString(), Validators.required),
-      Observacao: new FormControl(''),
+      Observacao: new FormControl('',Validators.maxLength(200)),
       N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
       Responsavel: new FormControl('',Validators.required),
       Tipo: new FormControl(-1,Validators.required),
@@ -159,6 +159,17 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     });
 
     this.textFilters = new FormControl('',Validators.required);
+
+    this.newEntryForm.controls.Contrato.valueChanges.subscribe(() => {
+      if (this.newEntryForm.controls.Contrato.value == '') {
+        this.newEntryForm.controls.DataPgtoContrato.setValidators([]);
+        this.newEntryForm.controls.DataPgtoContrato.updateValueAndValidity();
+        this.newEntryForm.controls.DataPgtoContrato.setValue('')
+      } else {
+        this.newEntryForm.controls.DataPgtoContrato.setValidators([Validators.required]);
+        this.newEntryForm.controls.DataPgtoContrato.updateValueAndValidity();
+      }
+    })
 
     this.newEntryForm.valueChanges.subscribe(val => {
       if (val.Valor) {
@@ -186,9 +197,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       .catch((error) => console.log(error));
 
 
-    })
-
-
+    });
   }
 
   initFilter_Contratos(column_name){
@@ -372,7 +381,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         Observacao: this.newEntryForm.get("Observacao").value,
         Tipo: this.newEntryForm.get("Tipo").value,
         Responsavel: this.newEntryForm.get("Responsavel").value,
-        N_Invest: Number(this.newEntryForm.get("N_Invest").value),
+        N_Invest: this.newEntryForm.get("N_Invest").value,
         Pessoa: this.newEntryForm.get("Pessoa").value.Nome,
         Concluido: false,
         Imposto: imp,

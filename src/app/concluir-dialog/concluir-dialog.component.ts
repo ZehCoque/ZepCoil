@@ -80,7 +80,7 @@ export class ConcluirDialogComponent implements OnInit {
 
   insertData(){
     if (this.current_data.N_Invest) {
-      if (this.current_data.N_Invest === 0) this.current_data.N_Invest = null;
+      if (this.current_data.N_Invest === '0') this.current_data.N_Invest = null;
     }
 
     this.doneForm.patchValue(this.current_data);
@@ -90,7 +90,7 @@ export class ConcluirDialogComponent implements OnInit {
   }
 
   loadData(ID:number){
-    let promise = new Promise(async (resolve, reject) => {
+    let promise = new Promise<void>(async (resolve, reject) => {
 
     await this.server.get_Value({ID: ID},'main_table_query_get').then(async (response: any) => {
       await response.forEach( (Entrada:Entrada) => {

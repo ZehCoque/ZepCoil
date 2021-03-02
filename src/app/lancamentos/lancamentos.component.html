@@ -147,7 +147,7 @@
                   <button *ngIf="Entrada.Tipo == 2" mat-mini-fab color="accent" style="color: white;">
                     <mat-icon >show_chart</mat-icon>
                   </button>
-                  <span *ngIf="Entrada.Tipo == 2 && Entrada.N_Invest"  class="dot blue absolute">
+                  <span *ngIf="Entrada.Tipo == 2 && Entrada.N_Invest != '0'"  class="dot blue absolute">
                     {{Entrada.N_Invest}}
                   </span>
 
@@ -720,7 +720,7 @@
   </mat-autocomplete>
 </mat-form-field>
 
-<mat-form-field style="width: 40%;" class="form-field">
+<mat-form-field style="width: 35%;" class="form-field">
   <mat-label>Data Pgmt</mat-label>
   <mat-select formControlName="DataPgtoContrato">
   <mat-option *ngFor="let data of DataPgtoContrato" [value]="data">
@@ -733,7 +733,10 @@
     <div>
       <mat-form-field style="width: 100%;" class="example-full-width">
         <mat-label>Observação</mat-label>
-        <textarea matInput formControlName="Observacao" [errorStateMatcher]="errorMatcher"></textarea>
+        <textarea style="height: 40px;" matInput formControlName="Observacao" [errorStateMatcher]="errorMatcher"></textarea>
+        <mat-error *ngIf="newEntryForm.controls.Observacao.hasError('maxlength')" >
+          O número máximo de caracteres é 200.
+        </mat-error>
       </mat-form-field>
     </div>
       </div>
