@@ -4,10 +4,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import * as moment from 'moment';
+import { CalcTotal } from '../classes/calcTotal';
 import { CC, Contratos, div_CC, PagamentosContratos, Pessoa } from '../classes/tableColumns';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
-import { TipoTextPipe } from '../pipes/tipo-text.pipe';
 import { ServerService } from '../services/server.service';
 
 @Component({
@@ -28,6 +28,9 @@ export class NovoContratoComponent implements OnInit {
 
     loading: Boolean = false;
     loading_ctrlpgmt: Boolean = false;
+
+    totalValor: number = 0;
+    totalPiscina: number = 0;
 
     CC:Array<CC> = new Array();
     div_CC:Array<div_CC> = new Array();
@@ -68,7 +71,8 @@ export class NovoContratoComponent implements OnInit {
                 @Inject(MAT_DIALOG_DATA) public preloaded,
                 private dialog: MatDialog,
                 private currencyPipe: CurrencyPipe,
-                private decimalPipe: DecimalPipe) { }
+                private calcTotal: CalcTotal,
+                  ) { }
 
     ngOnInit(): void {
       this.dialogRef.disableClose = true;
@@ -98,7 +102,6 @@ export class NovoContratoComponent implements OnInit {
         ValorCom: new FormControl({value: '', disabled: true}),
         PCom: new FormControl({value: '', disabled: true}),
       });
-
 
       this.novoContratoForm.valueChanges.subscribe(val => {
         if (val.Valor) {
@@ -368,6 +371,7 @@ export class NovoContratoComponent implements OnInit {
     onResetPgmts(){
       this.contratosPgmtForm.reset();
       this.contratosPgmtForm.get('Valor1').markAsUntouched();
+      this.contratosPgmtForm.get('Valor1').updateValueAndValidity();
       this.contratosPgmtForm.controls.DataPgto.patchValue(moment().toISOString());
       this.contratosPgmtForm.controls.Fav1.patchValue('Coil');
       this.contratosPgmtForm.controls.Fav2.patchValue('Não há');
@@ -388,6 +392,7 @@ export class NovoContratoComponent implements OnInit {
     async inserirPgmt(): Promise<void> {
 
       this.dataPgmtError = false;
+
       this.pagamentosContratos.forEach(async (element) => {
         if (moment(element.DataPgto).startOf('day').toString() == moment(this.contratosPgmtForm.controls.DataPgto.value).startOf('day').toString()) {
           this.dataPgmtError = true;
@@ -415,8 +420,11 @@ export class NovoContratoComponent implements OnInit {
       if (json.Fav3 == 'Não há') json.Fav3 = '';
       if (json.FavCom == 'Não há') json.FavCom = '';
 
-        this.pagamentosContratos = [...this.pagamentosContratos, json]
-
+      this.pagamentosContratos = [...this.pagamentosContratos, json];
+      this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+        this.totalValor = res[0];
+        this.totalPiscina = res[1];
+      });
 
       this.onResetPgmts();
     }
@@ -467,6 +475,10 @@ export class NovoContratoComponent implements OnInit {
           if (this.pagamentosContratos.length == 1) this.pagamentosContratos = new Array()
           else this.pagamentosContratos = this.pagamentosContratos.filter((item, index) => index !== row)
 
+          this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+            this.totalValor = res[0];
+            this.totalPiscina = res[1];
+          });
         }
       })
     }
@@ -490,6 +502,11 @@ export class NovoContratoComponent implements OnInit {
       else this.contratosPgmtForm.controls.FavCom.setValue('Não há');
 
       this.contratosPgmtForm.controls.Valor2.markAsUntouched();
+
+      this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+        this.totalValor = res[0];
+        this.totalPiscina = res[1];
+      });
     }
 
   }
