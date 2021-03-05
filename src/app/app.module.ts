@@ -50,6 +50,8 @@ import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.co
 import { PgmtContratosModalComponent } from './pgmt-contratos-modal/pgmt-contratos-modal.component';
 import { TipoTextPipe } from './pipes/tipo-text.pipe';
 
+import { CalcTotal } from './classes/calcTotal'
+
 registerLocaleData(localePtBr);
 
 @NgModule({
@@ -106,6 +108,7 @@ registerLocaleData(localePtBr);
     CurrencyPipe,
     DecimalPipe,
     TipoTextPipe,
+    CalcTotal,
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
