@@ -152,7 +152,7 @@
 
     </div>
 
-  <cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
+  <cdk-virtual-scroll-viewport itemSize="36" style="height: 144px">
     <div *ngIf="pagamentosContratos.length > 0">
       <mat-list  *cdkVirtualFor="let pgmt of pagamentosContratos" >
         <mat-card  style="text-align: center;">
@@ -213,8 +213,18 @@
         </mat-card>
     </mat-list>
     </div>
-    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
+    <div *ngIf="pagamentosContratos.length == 0" style="width: 100%;height: 72px;padding-top: 62px; text-align: center;" class="el-tag-pgmt-title">As programações de pagamento aparecerão aqui.</div>
   </cdk-virtual-scroll-viewport>
+
+  <div class="el-tag--plain totalValores">
+    <div style="flex: 0.5;">
+      Total Valores: {{totalValor | currency:'BRL'}}
+    </div>
+    <div style="flex: 0.5;">
+      Total Piscina: {{totalPiscina | currency:'BRL'}}
+    </div>
+
+  </div>
 
 </div>
 
@@ -266,17 +276,15 @@
 
   </div>
 
-<cdk-virtual-scroll-viewport itemSize="36" style="height: 180px">
+<cdk-virtual-scroll-viewport itemSize="36" style="height: 144px">
   <div>
     <mat-list  *cdkVirtualFor="let lxc of lanxcon" >
       <mat-card style="text-align: center;">
         <mat-card-content class="el-tag--plain unselectable-line" style="display: flex;width: 100%;">
 
           <div style="width: 5%">
-            <!-- {{lxc.Tipo}} -->
-            <!-- COLOCAR BOLINHA VERMELHA/VERDE/AMARELA -->
-            <span *ngIf="lxc.Tipo == 0" class="dot green"></span>
-            <span *ngIf="lxc.Tipo == 1" class="dot red"></span>
+            <span *ngIf="lxc.Tipo == 0 || lxc.Tipo == 3" class="dot green"></span>
+            <span *ngIf="lxc.Tipo == 1 || lxc.Tipo == 4" class="dot red"></span>
             <span *ngIf="lxc.Tipo == 2" class="dot yellow"></span>
           </div>
 
@@ -315,8 +323,16 @@
       </mat-card>
   </mat-list>
   </div>
-  <div *ngIf="lanxcon.length == 0" style="width: 100%;height: 90px;padding-top: 80px; text-align: center;" class="el-tag-pgmt-title">Os lançamentos referentes ao contrato selecionado aparecerão aqui.</div>
+  <div *ngIf="lanxcon.length == 0" style="width: 100%;height: 72px;padding-top: 62px; text-align: center;" class="el-tag-pgmt-title">Os lançamentos referentes ao contrato selecionado aparecerão aqui.</div>
 </cdk-virtual-scroll-viewport>
+
+<div class="el-tag--plain totalValores">
+  <div style="flex: 1;">
+      Total lançamentos: {{totalLancamentos | currency:'BRL'}}
+
+  </div>
+
+</div>
 
 </div>
 

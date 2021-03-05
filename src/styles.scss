@@ -238,3 +238,16 @@ input[readonly] {
 .display-flex {
   display: flex;
 }
+
+.totalValores {
+  width: 100%;
+  padding-top: 10px;
+  font-weight: bold;
+  display: flex;
+  align-self: auto;
+}
+
+.valorTotal{
+  border: solid 1px #187caf;
+  border-radius: 5px;
+}

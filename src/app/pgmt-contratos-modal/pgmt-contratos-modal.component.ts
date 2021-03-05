@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AdminPessoasComponent } from '../admin-pessoas/admin-pessoas.component';
+import { CalcTotal } from '../classes/calcTotal';
 import { Checkbox, LanXCon, PagamentosContratos } from '../classes/tableColumns';
 import { TipoTextPipe } from '../pipes/tipo-text.pipe';
 import { ServerService } from '../services/server.service';
@@ -37,13 +38,18 @@ export class PgmtContratosModalComponent implements OnInit {
   }
 
   selectedDataPgto: Array<String> = new Array();
+  totalValor: number = 0;
+  totalPiscina: number = 0;
+  totalLancamentos: number = 0;
+
 
   constructor(private formBuilder: FormBuilder,
     private currencyPipe: CurrencyPipe,
     private server: ServerService,
     public dialogRef: MatDialogRef<AdminPessoasComponent>,
     @Inject(MAT_DIALOG_DATA) public Identificacao: String,
-    private tipoPipe: TipoTextPipe) { }
+    private tipoPipe: TipoTextPipe,
+    private calcTotal: CalcTotal) { }
 
   ngOnInit(): void {
     this.novoContratoForm = this.formBuilder.group({
@@ -83,15 +89,21 @@ export class PgmtContratosModalComponent implements OnInit {
       this.novoContratoForm.controls.Tipo.patchValue(this.tipoPipe.transform(response[0].Tipo))
     })
 
-    this.server.get_Value({Identificacao: Identificacao},'pagamentos_contratos_query').then((response: Array<PagamentosContratos>) => {
+    this.server.get_Value({Identificacao: Identificacao},'pagamentos_contratos_query').then(async (response: Array<PagamentosContratos>) => {
 
-      response.forEach(element => {
+      await response.forEach(element => {
         element.checkbox = {
           completed: false,
           color: 'primary'
         }
         this.pagamentosContratos = [...this.pagamentosContratos, element]
       });
+
+      this.calcTotal.calcTotal(this.pagamentosContratos).then((res: [number,number]) => {
+        this.totalValor = res[0];
+        this.totalPiscina = res[1];
+      });
+
     })
 
 
@@ -138,10 +150,15 @@ onChoice(id: String){
     DataPgmtString: this.selectedDataPgto.toString()
   }
 
-  this.server.get_List_CF(json,'lanxcon').then((response: any) => {
+  this.server.get_List_CF(json,'lanxcon').then(async (response: any) => {
     this.lanxcon = new Array();
-    response.forEach(element => {
-      this.lanxcon = [...this.lanxcon, element]
+    await response.forEach(element => {
+      this.lanxcon = [...this.lanxcon, element];
+    });
+
+    //HERE
+    this.calcTotal.calcTotalLanXCon(this.lanxcon).then((res: number) => {
+      this.totalLancamentos = res;
     });
   });
 }
