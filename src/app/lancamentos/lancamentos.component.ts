@@ -96,6 +96,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     },
   ];
   filteredOptionsText: Observable<String[]>;
+  datasForm: FormGroup;
+  dateError: boolean = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -158,7 +160,31 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       DataPgtoContrato: new FormControl({value: '', disabled: true}),
     });
 
+    this.datasForm = this.formBuilder.group({
+      Data1: new FormControl(moment().toISOString(), Validators.required),
+      Data2: new FormControl(moment().add(1,'day').toISOString()),
+    });
+
     this.textFilters = new FormControl('',Validators.required);
+
+    this.datasForm.controls.Data1.valueChanges.subscribe(() => {
+      if (this.datasForm.controls.Data1.value == '') {
+        this.datasForm.controls.Data2.setValidators([]);
+        this.datasForm.controls.Data2.updateValueAndValidity();
+        this.datasForm.controls.Data2.setValue('')
+      } else {
+        this.datasForm.controls.Data2.setValidators([Validators.required]);
+        this.datasForm.controls.Data2.updateValueAndValidity();
+      }
+
+      this.dateError = this.datasForm.controls.Data1.value >= this.datasForm.controls.Data2.value;
+
+    });
+
+    this.datasForm.controls.Data2.valueChanges.subscribe(() => {
+      this.dateError = this.datasForm.controls.Data1.value >= this.datasForm.controls.Data2.value;
+      console.log(this.dateError)
+    });
 
     this.newEntryForm.controls.Contrato.valueChanges.subscribe(() => {
       if (this.newEntryForm.controls.Contrato.value == '') {
@@ -169,7 +195,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.newEntryForm.controls.DataPgtoContrato.setValidators([Validators.required]);
         this.newEntryForm.controls.DataPgtoContrato.updateValueAndValidity();
       }
-    })
+    });
 
     this.newEntryForm.valueChanges.subscribe(val => {
       if (val.Valor) {
@@ -304,23 +330,23 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       }
     }).catch(() => this.newEntryForm.controls.Div_CC.disable())
 
-    return promise
+    return promise;
   }
 
-  getColumnValues(column:string) {
-    this.filterValues = new Array<string>();
-    let select_col_value = this.activeFilters[column];
+  // getColumnValues(column:string) {
+  //   this.filterValues = new Array<string>();
+  //   let select_col_value = this.activeFilters[column];
 
-    if (this.activeFilters[column].length > 0) this.activeFilters[column] = '';
-    this.server.get_Value({column: column, active_filters: this.activeFilters},this.column_url).then((element: any) => {
-      element.forEach(el => {
-        if (el[column] != null) this.filterValues = [...this.filterValues, el[column]]
-      });
+  //   if (this.activeFilters[column].length > 0) this.activeFilters[column] = '';
+  //   this.server.get_Value({column: column, active_filters: this.activeFilters},this.column_url).then((element: any) => {
+  //     element.forEach(el => {
+  //       if (el[column] != null) this.filterValues = [...this.filterValues, el[column]]
+  //     });
 
-    });
-    this.activeFilters[column] = select_col_value;
-    return this.filterValues
-  }
+  //   });
+  //   this.activeFilters[column] = select_col_value;
+  //   return this.filterValues
+  // }
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
@@ -333,10 +359,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       numberValue = 0;
     }
     return numberValue;
-  }
-
-  scroll_func(event){
-    //console.log(event)
   }
 
   resetValue(){
@@ -581,13 +603,55 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.Entradas = [];
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
       await element.forEach(entrada => {
-        this.Entradas = [...this.Entradas, entrada]
+        this.Entradas = [...this.Entradas, entrada];
       });
       this.updateSoma();
+
+      this.columnToFilter.forEach(async (column_name) => {
+        this.filterLists[column_name] = new Array();
+
+        if (this.activeFilters[column_name]) {
+          await this.server.get_Value({column: column_name, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
+
+            await response.forEach((element) => {
+              if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+            });
+          }).catch(err => console.log(err));
+        } else {
+          await this.server.get_Value({column: column_name, active_filters : this.activeFilters, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
+
+            await response.forEach((element) => {
+              if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+            });
+          }).catch(err => console.log(err));
+        }
+
+
+      })
+
     })
     this.loading = false
 
   }
+
+  async filterByDate(column: string, type: string) {
+    this.loading = true
+    this.Entradas = [];
+
+    if (type == 'greater') {
+      this.activeFilters[column].greater = this.datasForm.controls.Data1.value;
+    } else if(type == 'smaller') {
+      this.activeFilters[column].smaller = this.datasForm.controls.Data1.value;
+    } else if(type == 'equals') {
+      this.activeFilters[column].equals = this.datasForm.controls.Data1.value;
+    } else if (type == 'between') {
+      this.activeFilters[column].smaller = this.datasForm.controls.Data1.value;
+      this.activeFilters[column].greater = this.datasForm.controls.Data2.value;
+    }
+
+
+  }
+
 
   async clearFilter(column: string){
     this.loading = true
@@ -607,11 +671,17 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   async clearAllFilters(){
     this.loading = true
     this.activeFilters = new ActiveFilters;
+    this.activeSorts = new ActiveSorts;
+
     this.Entradas = [];
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
       await element.forEach(entrada => {
         this.Entradas = [...this.Entradas, entrada]
       });
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+
+      }, 0);
       this.updateSoma();
     })
     this.loading = false

@@ -110,6 +110,17 @@ export class EditRowComponent implements OnInit {
 
     })
 
+    this.editedEntryForm.controls.Contrato.valueChanges.subscribe(() => {
+      if (this.editedEntryForm.controls.Contrato.value == '') {
+        this.editedEntryForm.controls.DataPgtoContrato.setValidators([]);
+        this.editedEntryForm.controls.DataPgtoContrato.updateValueAndValidity();
+        this.editedEntryForm.controls.DataPgtoContrato.setValue('')
+      } else {
+        this.editedEntryForm.controls.DataPgtoContrato.setValidators([Validators.required]);
+        this.editedEntryForm.controls.DataPgtoContrato.updateValueAndValidity();
+      }
+    });
+
 
   }
 

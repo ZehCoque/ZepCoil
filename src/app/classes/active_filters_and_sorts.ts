@@ -8,12 +8,18 @@ interface dirMsgJson{
   down: string;
 }
 
+interface dateOptions{
+  equals: String,
+  greater: String,
+  smaller: String
+}
+
 export class ActiveFilters {
     Descricao: String = '';
-    Data_Entrada: String = '';
+    Data_Entrada: dateOptions;
     CC: String = '';
     Div_CC: String = '';
-    Vencimento: String = '';
+    Vencimento: dateOptions;
     Valor: String = '';
     Tipo:  String = '';
     N_Invest: String = '';
