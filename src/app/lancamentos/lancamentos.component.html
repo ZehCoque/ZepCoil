@@ -35,7 +35,7 @@
 
           <div class="el-tag--plain el-col-4" >
             Descrição
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Descricao');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Descricao.active && !activeFilters.Descricao">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Descricao">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Descricao.active && activeFilters.Descricao" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Descricao.dir}}</mat-icon>
@@ -55,7 +55,7 @@
 
           <div class="el-tag--plain el-col-1">
             C.C.
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('CC');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.CC.active && !activeFilters.CC">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.CC">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.CC.active && activeFilters.CC" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.CC.dir}}</mat-icon>
@@ -65,7 +65,7 @@
 
           <div class="el-tag--plain el-col-3">
             Div. C.C
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Div_CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Div_CC');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Div_CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Div_CC.active && !activeFilters.Div_CC">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Div_CC">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Div_CC.active && activeFilters.Div_CC" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Div_CC.dir}}</mat-icon>
@@ -75,7 +75,7 @@
 
           <div class="el-tag--plain el-col-3">
             Vencimento
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Vencimento', 'class_msg':sortMessages.forExpire }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Vencimento');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Vencimento', 'class_msg':sortMessages.forExpire }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Vencimento.active && !activeFilters.Vencimento">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Vencimento">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Vencimento.active && activeFilters.Vencimento" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Vencimento.dir}}</mat-icon>
@@ -85,7 +85,7 @@
 
           <div class="el-tag--plain el-col-3">
             Pessoa
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Pessoa');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Pessoa.active && !activeFilters.Pessoa">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Pessoa">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Pessoa.active && activeFilters.Pessoa" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Pessoa.dir}}</mat-icon>
@@ -95,7 +95,7 @@
 
           <div class="el-tag--plain el-col-2">
             Resp.
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Responsavel', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Responsavel');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Responsavel', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Responsavel.active && !activeFilters.Responsavel">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Responsavel">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Responsavel.active && activeFilters.Responsavel" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Responsavel.dir}}</mat-icon>
@@ -105,7 +105,7 @@
 
           <div class="el-tag--plain el-col-3">
             Contrato
-            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Contrato', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Contrato');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Contrato', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Contrato.active && !activeFilters.Contrato">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Contrato">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Contrato.active && activeFilters.Contrato" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Contrato.dir}}</mat-icon>
@@ -351,20 +351,23 @@
 
             <ng-template #filtrarElseBlock3>
               <div *ngIf="column === 'Valor'; else filtrarElseBlock4" >
-                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'num' : 2}" mat-menu-item>
+                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'filter_type' : 'between','num' : 2}" mat-menu-item>
                   Entre
                 </button>
-                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'num' : 1}" mat-menu-item>
+                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'filter_type' : 'greater','num' : 1}" mat-menu-item>
                   Maior que
                 </button>
-                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'num' : 1}" mat-menu-item>
+                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'filter_type' : 'greater_and_equalTo','num' : 1}" mat-menu-item>
                   Maior ou igual que
                 </button>
-                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'num' : 1}" mat-menu-item>
+                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'filter_type' : 'smaller','num' : 1}" mat-menu-item>
                   Menor que
                 </button>
-                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'num' : 1}" mat-menu-item>
+                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'filter_type' : 'smaller_and_equalTo','num' : 1}" mat-menu-item>
                   Menor ou igual que
+                </button>
+                <button [matMenuTriggerFor]="escolher_valor" [matMenuTriggerData]="{'filter_type' : 'equals','num' : 1}" mat-menu-item>
+                  Valor específico
                 </button>
               </div>
 
@@ -418,37 +421,28 @@
       </mat-menu>
 
       <mat-menu #escolher_valor="matMenu">
-        <ng-template matMenuContent let-num="num">
+        <form [formGroup]="valorForm">
+          <ng-template matMenuContent let-num="num" let-filter_type="filter_type">
 
-          <div  style="display: flex; text-align: center; flex-direction:column">
-            <mat-form-field *ngIf="num==2" class="form-field context-menu" (click)="$event.stopPropagation()">
-              <mat-label>Valor mínimo</mat-label>
-              <input class="noselect" matInput [errorStateMatcher]="errorMatcher"   >
-              <!-- <mat-error *ngIf="newEntryForm.get('Valor').hasError('required')" >
-                É necessário inserir um valor.
-              </mat-error> -->
-            </mat-form-field>
+            <div  style="display: flex; text-align: center; flex-direction:column">
+              <mat-form-field  class="form-field context-menu" (click)="$event.stopPropagation()">
+                <mat-label *ngIf="num==2">Valor mínimo</mat-label>
+                <mat-label *ngIf="num==1">Valor</mat-label>
+                <input formControlName="Valor1" class="noselect" matInput [errorStateMatcher]="errorMatcher"   >
+              </mat-form-field>
 
-            <mat-form-field *ngIf="num==2" class="form-field context-menu" (click)="$event.stopPropagation()">
-              <mat-label>Valor máximo</mat-label>
-              <input class="noselect" matInput [errorStateMatcher]="errorMatcher"   >
-              <!-- <mat-error *ngIf="newEntryForm.get('Valor').hasError('required')" >
-                É necessário inserir um valor.
-              </mat-error> -->
-            </mat-form-field>
+              <mat-form-field *ngIf="num==2" class="form-field context-menu" (click)="$event.stopPropagation()">
+                <mat-label>Valor máximo</mat-label>
+                <input formControlName="Valor2" class="noselect" matInput [errorStateMatcher]="errorMatcher"   >
+              </mat-form-field>
 
-            <mat-form-field *ngIf="num==1" class="form-field context-menu" (click)="$event.stopPropagation()">
-              <mat-label>Valor</mat-label>
-              <input class="noselect" matInput [errorStateMatcher]="errorMatcher"   >
-              <!-- <mat-error *ngIf="newEntryForm.get('Valor').hasError('required')" >
-                É necessário inserir um valor.
-              </mat-error> -->
-            </mat-form-field>
+              <mat-error style="width: 220px;" *ngIf="valueError && num==2">O valor mínimo deve ser menor que o valor máximo</mat-error>
 
-            <button mat-raised-button color="primary">Confirmar</button>
-          </div>
+              <button mat-raised-button color="primary" (click)="filterBySpecial('Valor',filter_type)" [disabled]="valueError  && num==2">Confirmar</button>
+            </div>
 
-        </ng-template>
+          </ng-template>
+        </form>
       </mat-menu>
 
       <mat-menu #menu_datas="matMenu">
@@ -465,10 +459,16 @@
           <button mat-menu-item *ngIf="column == 'Vencimento'">
             Somente não vencidos
           </button>
-          <button [matMenuTriggerFor]="escolher_data" mat-menu-item>
+          <button [matMenuTriggerFor]="escolher_data" [matMenuTriggerData]="{'filter_type' : 'greater', 'column' : column}" mat-menu-item>
+            Depois de
+          </button>
+          <button [matMenuTriggerFor]="escolher_data" [matMenuTriggerData]="{'filter_type' : 'smaller', 'column' : column}" mat-menu-item>
+            Antes de
+          </button>
+          <button [matMenuTriggerFor]="escolher_data" [matMenuTriggerData]="{'filter_type' : 'equals', 'column' : column}" mat-menu-item>
             Data específica
           </button>
-          <button [matMenuTriggerFor]="periodo" mat-menu-item>
+          <button [matMenuTriggerFor]="periodo" [matMenuTriggerData]="{'column' : column}" mat-menu-item>
             Escolher período
           </button>
 
@@ -477,7 +477,7 @@
       </mat-menu>
 
       <mat-menu #periodo="matMenu">
-        <ng-template matMenuContent>
+        <ng-template matMenuContent let-column="column">
       <form [formGroup]="datasForm">
             <div style="display: flex; text-align: center; flex-direction:column">
               <mat-form-field class="form-field context-menu" (click)="$event.stopPropagation()">
@@ -495,16 +495,16 @@
                 <mat-datepicker #picker_filtrardata_f></mat-datepicker>
               </mat-form-field>
 
-              <mat-error *ngIf="dateError">A data do fim do período precisa ser maior que a do início.</mat-error>
+              <mat-error style="width: 220px;" *ngIf="dateError">A data do fim do período precisa ser maior que a do início.</mat-error>
 
-              <button mat-raised-button color="primary" [disabled]="dateError">Confirmar</button>
+              <button (click)="filterBySpecial(column,'between')" mat-raised-button color="primary" [disabled]="dateError">Confirmar</button>
             </div>
           </form>
         </ng-template>
       </mat-menu>
 
       <mat-menu #escolher_data="matMenu">
-        <ng-template matMenuContent>
+        <ng-template matMenuContent let-column="column" let-filter_type="filter_type">
           <form [formGroup]="datasForm">
             <div style="display: flex; text-align: center; flex-direction:column">
               <mat-form-field class="form-field context-menu" (click)="$event.stopPropagation()">
@@ -514,7 +514,7 @@
                 <mat-datepicker #picker_filtrardata></mat-datepicker>
               </mat-form-field>
 
-              <button mat-raised-button color="primary">Confirmar</button>
+              <button (click)="filterBySpecial(column,filter_type)" mat-raised-button color="primary">Confirmar</button>
             </div>
           </form>
         </ng-template>

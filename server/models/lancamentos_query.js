@@ -44,6 +44,8 @@ function lancamentos_router() {
 
     let query_string = query_builder.filter('WHERE 1=1',req.body.active_filters)
 
+
+
     connection.query(
       'SELECT DISTINCT ' + req.body.column + ' FROM ' + database + 'view_lançamentos ' + query_string,
       [],
@@ -74,10 +76,17 @@ function lancamentos_router() {
 
       let query_string = query_builder.sort(query_builder.filter('WHERE 1=1',req.body.active_filters),req.body.active_sorts,req.body.dir);
 
-      if (query_string == 'WHERE 1=1') query_string = query_string + ' ORDER BY ID DESC'
+      let query_text;
+
+      if (query_string == 'WHERE 1=1') {
+        query_string = query_string + ' ORDER BY ID DESC';
+        query_text = '(SELECT * FROM ' + database + 'view_lançamentos ' + query_string + ' LIMIT 200) ORDER BY ID ASC';
+      } else {
+        query_text = 'SELECT * FROM ' + database + 'view_lançamentos ' + query_string;
+      }
 
       connection.query(
-        '(SELECT * FROM ' + database + 'view_lançamentos ' + query_string + ' LIMIT 200) ORDER BY ID ASC',
+        query_text,
         [],
         (error, results) => {
           if (error) {

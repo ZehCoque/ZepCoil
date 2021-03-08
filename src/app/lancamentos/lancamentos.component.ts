@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditRowComponent } from '../edit-row/edit-row.component';
-import { ActiveFilters, ActiveSorts, FilterLists, SortMessages } from '../classes/active_filters_and_sorts';
+import { ActiveFilters, ActiveSorts, FilterLists, SortMessages} from '../classes/active_filters_and_sorts';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { NovoCCComponent } from '../novo.cc/novo.cc.component';
 import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
@@ -98,6 +98,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   filteredOptionsText: Observable<String[]>;
   datasForm: FormGroup;
   dateError: boolean = false;
+  valorForm: FormGroup;
+  valueError: boolean = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -165,7 +167,47 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       Data2: new FormControl(moment().add(1,'day').toISOString()),
     });
 
+    this.valorForm = this.formBuilder.group({
+      Valor1: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
+      Valor2: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'))
+    });
+
     this.textFilters = new FormControl('',Validators.required);
+
+    this.valorForm.controls.Valor1.valueChanges.subscribe((val) => {
+
+      if (val) {
+        let valor = this.getNumberValue(val);
+
+        this.valorForm.patchValue({
+          Valor1: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+          {emitEvent:false})
+      }
+
+      if (this.valorForm.controls.Valor1.value == this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')) {
+        this.valorForm.controls.Valor2.setValidators([]);
+        this.valorForm.controls.Valor2.updateValueAndValidity();
+        this.valorForm.controls.Valor2.setValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'))
+      } else {
+        this.valorForm.controls.Valor2.setValidators([Validators.required]);
+        this.valorForm.controls.Valor2.updateValueAndValidity();
+      }
+
+      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+
+    });
+
+    this.valorForm.controls.Valor2.valueChanges.subscribe((val) => {
+
+      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+
+      if (val) {
+        let valor = this.getNumberValue(val);
+        this.valorForm.patchValue({
+          Valor2: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+          {emitEvent:false})
+      }
+    });
 
     this.datasForm.controls.Data1.valueChanges.subscribe(() => {
       if (this.datasForm.controls.Data1.value == '') {
@@ -177,13 +219,12 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.datasForm.controls.Data2.updateValueAndValidity();
       }
 
-      this.dateError = this.datasForm.controls.Data1.value >= this.datasForm.controls.Data2.value;
+      this.dateError = moment(this.datasForm.controls.Data1.value).toDate() >= moment(this.datasForm.controls.Data2.value).toDate();
 
     });
 
     this.datasForm.controls.Data2.valueChanges.subscribe(() => {
-      this.dateError = this.datasForm.controls.Data1.value >= this.datasForm.controls.Data2.value;
-      console.log(this.dateError)
+      this.dateError = moment(this.datasForm.controls.Data1.value).toDate() >= moment(this.datasForm.controls.Data2.value).toDate();
     });
 
     this.newEntryForm.controls.Contrato.valueChanges.subscribe(() => {
@@ -332,21 +373,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
     return promise;
   }
-
-  // getColumnValues(column:string) {
-  //   this.filterValues = new Array<string>();
-  //   let select_col_value = this.activeFilters[column];
-
-  //   if (this.activeFilters[column].length > 0) this.activeFilters[column] = '';
-  //   this.server.get_Value({column: column, active_filters: this.activeFilters},this.column_url).then((element: any) => {
-  //     element.forEach(el => {
-  //       if (el[column] != null) this.filterValues = [...this.filterValues, el[column]]
-  //     });
-
-  //   });
-  //   this.activeFilters[column] = select_col_value;
-  //   return this.filterValues
-  // }
 
   getNumberValue(value){
     let numberValue = value.replace(/\D/g,"");
@@ -595,76 +621,158 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     }
 
     this.loading = false;
+    setTimeout(() => {
+      this.viewport.scrollToIndex(this.viewport.getDataLength());
+    }, 0);
+
+  }
+
+  clearFilterForms(){
+    this.datasForm.controls.Data1.patchValue(moment().toISOString());
+    this.datasForm.controls.Data2.patchValue(moment().add(1,'day').toISOString());
+    this.datasForm.markAsPristine();
+    this.datasForm.updateValueAndValidity;
+
+    this.valorForm.controls.Valor1.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+    this.valorForm.controls.Valor2.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+    this.valorForm.markAsPristine();
+    this.valorForm.updateValueAndValidity;
+
+    this.dateError = false;
+    this.valueError = false;
   }
 
   async filterBy(column: string, selected: string) {
     this.loading = true
     this.activeFilters[column] = String(selected);
     this.Entradas = [];
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
-      await element.forEach(entrada => {
-        this.Entradas = [...this.Entradas, entrada];
-      });
-      this.updateSoma();
 
-      this.columnToFilter.forEach(async (column_name) => {
-        this.filterLists[column_name] = new Array();
-
-        if (this.activeFilters[column_name]) {
-          await this.server.get_Value({column: column_name, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
-
-            await response.forEach((element) => {
-              if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
-            });
-          }).catch(err => console.log(err));
-        } else {
-          await this.server.get_Value({column: column_name, active_filters : this.activeFilters, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
-
-            await response.forEach((element) => {
-              if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
-            });
-          }).catch(err => console.log(err));
-        }
-
-
-      })
-
+    this.applyFilter().then(() =>{
+      this.loading = false;
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+        this.clearFilterForms();
+      }, 0);
     })
-    this.loading = false
+
 
   }
 
-  async filterByDate(column: string, type: string) {
+  async filterBySpecial(column: string, type: string) {
     this.loading = true
     this.Entradas = [];
 
-    if (type == 'greater') {
-      this.activeFilters[column].greater = this.datasForm.controls.Data1.value;
-    } else if(type == 'smaller') {
-      this.activeFilters[column].smaller = this.datasForm.controls.Data1.value;
-    } else if(type == 'equals') {
-      this.activeFilters[column].equals = this.datasForm.controls.Data1.value;
-    } else if (type == 'between') {
-      this.activeFilters[column].smaller = this.datasForm.controls.Data1.value;
-      this.activeFilters[column].greater = this.datasForm.controls.Data2.value;
+    this.activeFilters[column] = {
+      equals: '',
+      greater: '',
+      smaller: '',
+      greater_and_equalTo: '',
+      smaller_and_equalTo: '',
     }
 
+    let value1;
+    let value2;
 
+    if (column === "Data_Entrada" || column === "Vencimento"){
+      value1 = this.datasForm.controls.Data1.value;
+      value2 = this.datasForm.controls.Data2.value;
+    } else if (column === "Valor") {
+      value1 = this.getNumberValue(this.valorForm.controls.Valor1.value);
+      value2 = this.getNumberValue(this.valorForm.controls.Valor2.value);
+    }
+
+    if (type == 'between') {
+      this.activeFilters[column].greater_and_equalTo = value1;
+      this.activeFilters[column].smaller_and_equalTo = value2;
+    } else {
+      this.activeFilters[column][type] = value1;
+    }
+
+    this.applyFilter().then(() =>{
+      this.loading = false;
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+        this.clearFilterForms();
+      }, 0);
+
+    })
+
+  }
+
+  applyFilter(): Promise<void> {
+
+    let promise = new Promise<void>(async (resolve,reject) => {
+
+      await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
+        await element.forEach(entrada => {
+          this.Entradas = [...this.Entradas, entrada];
+        });
+        this.updateSoma();
+
+        this.columnToFilter.forEach(async (column_name) => {
+          this.filterLists[column_name] = new Array();
+
+          if (this.activeFilters[column_name]) {
+            await this.server.get_Value({column: column_name, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
+
+              await response.forEach((element) => {
+                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+              });
+            }).catch(err => {
+              console.log(err);
+              reject();
+            });
+          } else {
+            await this.server.get_Value({column: column_name, active_filters : this.activeFilters, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
+
+              await response.forEach((element) => {
+                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+              });
+            }).catch(err => {
+              console.log(err);
+              reject();
+            });
+          }
+        });
+
+        if (this.Entradas.length > 0) {
+          this.cdk_empty = false;
+        } else {
+          this.cdk_empty = true;
+        }
+
+        resolve();
+
+      });
+
+
+    })
+
+    return promise;
   }
 
 
   async clearFilter(column: string){
     this.loading = true
-    this.activeFilters[column] = '';
+
+    if (column === "Data_Entrada" || column === "Vencimento" || column === "Valor"){
+
+      delete this.activeFilters[column];
+
+    } else {
+      this.activeFilters[column] = '';
+    }
+
     this.Entradas = [];
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
-      await element.forEach(entrada => {
-        this.Entradas = [...this.Entradas, entrada]
-      });
-      this.updateSoma();
-      this.viewport.scrollToIndex(9999)
+
+    this.applyFilter().then(() =>{
+      this.loading = false;
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+        this.clearFilterForms();
+      }, 0);
+
     })
-    this.loading = false
 
   }
 
@@ -672,19 +780,31 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.loading = true
     this.activeFilters = new ActiveFilters;
     this.activeSorts = new ActiveSorts;
+    this.clearFilterForms();
 
     this.Entradas = [];
     await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
       await element.forEach(entrada => {
         this.Entradas = [...this.Entradas, entrada]
       });
+      this.loading = false
       setTimeout(() => {
         this.viewport.scrollToIndex(this.viewport.getDataLength());
 
       }, 0);
       this.updateSoma();
     })
-    this.loading = false
+
+    this.columnToFilter.forEach(async (column_name) => {
+      this.filterLists[column_name] = new Array();
+      await this.server.get_List_CF({column_name: column_name},'get_distinct_lancamentos').then(async (response: any) => {
+        await response.forEach((element) => {
+          if (element[column_name] != null && element[column_name] != '')this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+        });
+      }).catch(err => console.log(err));
+    })
+
+
 
   }
 
@@ -711,7 +831,13 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       if (this.totalDespesas === null) this.totalDespesas = 0;
       if (this.totalReceitas === null) this.totalReceitas = 0;
 
-      resolve()
+      if (this.Entradas.length > 0) {
+        this.cdk_empty = false;
+      } else {
+        this.cdk_empty = true;
+      }
+
+      resolve();
     })
 
     return promise;

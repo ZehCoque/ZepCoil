@@ -1,15 +1,39 @@
 function filter(init_query_string,active_filters) {
 
+  let options = ['equals','greater','smaller','greater_and_equalTo','smaller_and_equalTo'];
+  let signs = ['=', '>', '<', '>=', '<='];
+
   for (var key in active_filters) {
     if (active_filters.hasOwnProperty(key)) {
         if (active_filters[key] !== ''){
           let value;
-          if (key === 'Data_Entrada' || key === 'Vencimento'){
-            value = active_filters[key].substring(0,10);
+          let sign = "=";
+          if (key === 'Data_Entrada' || key === 'Vencimento' || key === 'Valor'){
+
+            for (var type in active_filters[key]){
+
+              if (active_filters[key].hasOwnProperty(type)){
+                if (active_filters[key][type] !== ''){
+
+                  let index = options.indexOf(type);
+                  sign = signs[index];
+
+                  if (key === 'Data_Entrada' || key === 'Vencimento') {
+                    value = ' Date(\'' + active_filters[key][type].substring(0,10) + '\')';
+                  } else value = ' \'' + active_filters[key][type] + '\'';
+
+                  init_query_string = init_query_string + ' AND ' + key + ' ' + sign + value;
+
+                }
+              }
+
+            }
+            return init_query_string;
+
           }else {
             value = active_filters[key];
           }
-          init_query_string = init_query_string + ' AND ' + key + ' = \'' + value + '\'';
+          init_query_string = init_query_string + ' AND ' + key + ' ' + sign +' \'' + value + '\'';
         }
     }
   }

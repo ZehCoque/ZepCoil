@@ -8,10 +8,12 @@ interface dirMsgJson{
   down: string;
 }
 
-interface dateOptions{
+export interface dateOptions{
   equals: String,
   greater: String,
   smaller: String
+  greater_and_equalTo: String,
+  smaller_and_equalTo: String,
 }
 
 export class ActiveFilters {
@@ -20,7 +22,7 @@ export class ActiveFilters {
     CC: String = '';
     Div_CC: String = '';
     Vencimento: dateOptions;
-    Valor: String = '';
+    Valor: dateOptions;
     Tipo:  String = '';
     N_Invest: String = '';
     Pessoa: String = '';
