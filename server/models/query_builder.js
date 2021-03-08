@@ -8,7 +8,7 @@ function filter(init_query_string,active_filters) {
         if (active_filters[key] !== ''){
           let value;
           let sign = "=";
-          if (key === 'Data_Entrada' || key === 'Vencimento' || key === 'Valor'){
+          if (key === 'Data_Entrada' || key === 'Vencimento' || key === 'Valor' || key === 'Contrato'){
 
             for (var type in active_filters[key]){
 
@@ -18,12 +18,23 @@ function filter(init_query_string,active_filters) {
                   let index = options.indexOf(type);
                   sign = signs[index];
 
-                  if (key === 'Data_Entrada' || key === 'Vencimento') {
+                  if (active_filters[key][type] === 'notNull'){
+
+                    value = "NULL"
+                    sign = "IS NOT"
+
+                  } else if (active_filters[key][type] === 'onlyNull') {
+
+                    value = "NULL"
+                    sign = "IS"
+
+                  } else if (key === 'Data_Entrada' || key === 'Vencimento') {
+
                     value = ' Date(\'' + active_filters[key][type].substring(0,10) + '\')';
+
                   } else value = ' \'' + active_filters[key][type] + '\'';
 
-                  init_query_string = init_query_string + ' AND ' + key + ' ' + sign + value;
-
+                  init_query_string = init_query_string + ' AND ' + key + ' ' + sign + ' ' + value;
                 }
               }
 

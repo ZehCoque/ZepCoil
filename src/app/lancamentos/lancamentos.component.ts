@@ -43,6 +43,11 @@ export class LancamentosComponent implements OnInit, OnDestroy {
   errorMatcher: ErrorMatcherDirective;
   loading = true;
   today = moment().startOf('day').toISOString();
+  monthStart = moment().startOf('month').toISOString();
+  monthEnd = moment().endOf('month').toISOString();
+
+  lastMonthStart = moment().add(-1,'month').startOf('month').toISOString();
+  lastMonthEnd = moment().add(-1,'month').endOf('month').toISOString();
 
   Entradas: Array<Entrada> = new Array();
   filterValues: Array<string>;
@@ -658,7 +663,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   }
 
-  async filterBySpecial(column: string, type: string) {
+  async filterBySpecial(column: string, type: string, diff?: String) {
     this.loading = true
     this.Entradas = [];
 
@@ -679,11 +684,13 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     } else if (column === "Valor") {
       value1 = this.getNumberValue(this.valorForm.controls.Valor1.value);
       value2 = this.getNumberValue(this.valorForm.controls.Valor2.value);
+    } else if (column === 'Contrato') {
+      value1 = diff;
     }
 
     if (type == 'between') {
-      this.activeFilters[column].greater_and_equalTo = value1;
-      this.activeFilters[column].smaller_and_equalTo = value2;
+      this.activeFilters[column].greater = value1;
+      this.activeFilters[column].smaller = value2;
     } else {
       this.activeFilters[column][type] = value1;
     }

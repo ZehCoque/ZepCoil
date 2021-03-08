@@ -82,8 +82,10 @@ function lancamentos_router() {
         query_string = query_string + ' ORDER BY ID DESC';
         query_text = '(SELECT * FROM ' + database + 'view_lançamentos ' + query_string + ' LIMIT 200) ORDER BY ID ASC';
       } else {
-        query_text = 'SELECT * FROM ' + database + 'view_lançamentos ' + query_string;
+        query_text = 'SELECT * FROM ' + database + 'view_lançamentos ' + query_string + ' LIMIT 200';
       }
+
+      console.log(query_text)
 
       connection.query(
         query_text,

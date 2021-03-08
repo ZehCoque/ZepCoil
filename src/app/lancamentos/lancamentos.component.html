@@ -329,16 +329,19 @@
 
             <ng-template #filtrarElseBlock2>
               <div *ngIf="column === 'Vencimento'; else filtrarElseBlock3" >
-              <button mat-menu-item>
+              <button mat-menu-item (click)="datasForm.controls.Data1.patchValue(today);filterBySpecial(column,'equals')">
                 Hoje
               </button>
-              <button mat-menu-item>
+              <button mat-menu-item (click)="datasForm.controls.Data1.patchValue(monthStart);datasForm.controls.Data2.patchValue(monthEnd);filterBySpecial(column,'between')">
                 Este mês
               </button>
-              <button mat-menu-item>
+              <button mat-menu-item (click)="datasForm.controls.Data1.patchValue(lastMonthStart);datasForm.controls.Data2.patchValue(lastMonthEnd);filterBySpecial(column,'between')">
+                Mês passado
+              </button>
+              <button mat-menu-item *ngIf="column == 'Vencimento'" (click)="datasForm.controls.Data1.patchValue(today);filterBySpecial(column,'smaller')">
                 Somente vencidos
               </button>
-              <button mat-menu-item>
+              <button mat-menu-item *ngIf="column == 'Vencimento'" (click)="datasForm.controls.Data1.patchValue(today);filterBySpecial(column,'greater')">
                 Somente não vencidos
               </button>
               <button [matMenuTriggerFor]="escolher_data" mat-menu-item>
@@ -383,7 +386,8 @@
 
             <ng-template #filtrarElseBlock5>
               <div *ngIf="column === 'Contrato'; else filtrarElseBlock6" >
-                <button mat-menu-item>Apenas Contratos</button>
+                <button mat-menu-item (click)="filterBySpecial(column,'equals','notNull')">Apenas <b>com</b> contratos</button>
+                <button mat-menu-item (click)="filterBySpecial(column,'equals','onlyNull')">Apenas <b>sem</b> contratos</button>
                 <button [matMenuTriggerFor]="filtrarEspec" mat-menu-item>
                   Contrato específico
                 </button>
@@ -447,16 +451,19 @@
 
       <mat-menu #menu_datas="matMenu">
         <ng-template matMenuContent let-column="column">
-          <button mat-menu-item>
+          <button mat-menu-item (click)="datasForm.controls.Data1.patchValue(today);filterBySpecial(column,'equals')">
             Hoje
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item (click)="datasForm.controls.Data1.patchValue(monthStart);datasForm.controls.Data2.patchValue(monthEnd);filterBySpecial(column,'between')">
             Este mês
           </button>
-          <button mat-menu-item *ngIf="column == 'Vencimento'">
+          <button mat-menu-item (click)="datasForm.controls.Data1.patchValue(lastMonthStart);datasForm.controls.Data2.patchValue(lastMonthEnd);filterBySpecial(column,'between')">
+            Mês passado
+          </button>
+          <button mat-menu-item *ngIf="column == 'Vencimento'" (click)="datasForm.controls.Data1.patchValue(today);filterBySpecial(column,'smaller')">
             Somente vencidos
           </button>
-          <button mat-menu-item *ngIf="column == 'Vencimento'">
+          <button mat-menu-item *ngIf="column == 'Vencimento'" (click)="datasForm.controls.Data1.patchValue(today);filterBySpecial(column,'greater')">
             Somente não vencidos
           </button>
           <button [matMenuTriggerFor]="escolher_data" [matMenuTriggerData]="{'filter_type' : 'greater', 'column' : column}" mat-menu-item>
