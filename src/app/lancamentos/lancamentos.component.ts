@@ -327,7 +327,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.filterLists[column_name] = new Array();
         await this.server.get_List_CF({column_name: column_name},'get_distinct_lancamentos').then(async (response: any) => {
           await response.forEach((element) => {
-            if (element[column_name] != null && element[column_name] != '')this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+            if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+            if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
           });
         }).catch(err => reject(err));
       })
@@ -723,7 +724,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
             await this.server.get_Value({column: column_name, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
 
               await response.forEach((element) => {
-                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
+                if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
               });
             }).catch(err => {
               console.log(err);
@@ -733,7 +735,8 @@ export class LancamentosComponent implements OnInit, OnDestroy {
             await this.server.get_Value({column: column_name, active_filters : this.activeFilters, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
 
               await response.forEach((element) => {
-                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
+                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
+                if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
               });
             }).catch(err => {
               console.log(err);
