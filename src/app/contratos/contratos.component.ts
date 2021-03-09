@@ -5,12 +5,18 @@ import { CC, div_CC, Contratos, Pessoa } from '../classes/tableColumns'
 
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SortMessages } from '../classes/active_filters_and_sorts';
+import { FilterLists, SortMessages } from '../classes/active_filters_and_sorts';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
 import { ContratosActiveFilters, ContratosActiveSorts } from '../classes/active_filters_and_sorts contratos';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { NovoContratoComponent } from '../novo-contrato/novo-contrato.component';
 import { PgmtContratosModalComponent } from '../pgmt-contratos-modal/pgmt-contratos-modal.component';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
+import { CurrencyPipe } from '@angular/common';
+import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contratos',
@@ -26,6 +32,10 @@ export class ContratosComponent implements OnInit {
   viewport: CdkVirtualScrollViewport;
 
   loading: boolean = true;
+
+  errorMatcher: ErrorMatcherDirective;
+
+  filterLists: FilterLists = new FilterLists;
 
   Contratos: Array<Contratos>;
   filterValues: Array<string>;
@@ -43,12 +53,34 @@ export class ContratosComponent implements OnInit {
   editRowDialogRefVisualizarContrato: MatDialogRef<PgmtContratosModalComponent>;
   currentActiveSort: string;
   currentActiveFilter: string;
-  contratos: any[];
+
+  datasForm: FormGroup;
+  valorForm: FormGroup;
+
+  today = moment().startOf('day').toISOString();
+  monthStart = moment().startOf('month').toISOString();
+  monthEnd = moment().endOf('month').toISOString();
+
+  lastMonthStart = moment().add(-1,'month').startOf('month').toISOString();
+  lastMonthEnd = moment().add(-1,'month').endOf('month').toISOString();
+
+  query_url: string = 'contratos_query';
+  dateError: boolean = false;
+  valueError: boolean = false;
+  textFilters: FormControl;
+
+  columnToFilter = ['Identificacao','Pessoa','Descricao','CC','Div_CC','Tipo'];
+  column_url: string = 'contratos_query_column';
+
+  filteredOptionsText: Observable<String[]>;
+
 
   constructor(
+    private formBuilder: FormBuilder,
     private server: ServerService,
     private dialog: MatDialog,
-    private newDataEmitter: newDataTrackerService
+    private newDataEmitter: newDataTrackerService,
+    private currencyPipe : CurrencyPipe,
     ) { }
 
   ngOnInit()  {
@@ -66,11 +98,86 @@ export class ContratosComponent implements OnInit {
         }, 0);
       })
       .catch((error) => console.log(error));
-    })
+    });
+
+    this.datasForm = this.formBuilder.group({
+      Data1: new FormControl(moment().toISOString(), Validators.required),
+      Data2: new FormControl(moment().add(1,'day').toISOString()),
+    });
+
+    this.valorForm = this.formBuilder.group({
+      Valor1: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'), Validators.required),
+      Valor2: new FormControl(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'))
+    });
+
+    this.textFilters = new FormControl('',Validators.required);
+
+    this.valorForm.controls.Valor1.valueChanges.subscribe((val) => {
+
+      if (val) {
+        let valor = this.getNumberValue(val);
+
+        this.valorForm.patchValue({
+          Valor1: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+          {emitEvent:false})
+      }
+
+      if (this.valorForm.controls.Valor1.value == this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2')) {
+        this.valorForm.controls.Valor2.setValidators([]);
+        this.valorForm.controls.Valor2.updateValueAndValidity();
+        this.valorForm.controls.Valor2.setValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'))
+      } else {
+        this.valorForm.controls.Valor2.setValidators([Validators.required]);
+        this.valorForm.controls.Valor2.updateValueAndValidity();
+      }
+
+      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+
+    });
+
+    this.valorForm.controls.Valor2.valueChanges.subscribe((val) => {
+
+      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+
+      if (val) {
+        let valor = this.getNumberValue(val);
+        this.valorForm.patchValue({
+          Valor2: this.currencyPipe.transform(valor,'BRL','symbol','1.2-2') },
+          {emitEvent:false})
+      }
+    });
+
+    this.datasForm.controls.Data1.valueChanges.subscribe(() => {
+      if (this.datasForm.controls.Data1.value == '') {
+        this.datasForm.controls.Data2.setValidators([]);
+        this.datasForm.controls.Data2.updateValueAndValidity();
+        this.datasForm.controls.Data2.setValue('')
+      } else {
+        this.datasForm.controls.Data2.setValidators([Validators.required]);
+        this.datasForm.controls.Data2.updateValueAndValidity();
+      }
+
+      this.dateError = moment(this.datasForm.controls.Data1.value).toDate() >= moment(this.datasForm.controls.Data2.value).toDate();
+
+    });
+
+    this.datasForm.controls.Data2.valueChanges.subscribe(() => {
+      this.dateError = moment(this.datasForm.controls.Data1.value).toDate() >= moment(this.datasForm.controls.Data2.value).toDate();
+    });
   }
 
 
+  initFilter_Text(column_name){
+    this.filteredOptionsText = this.textFilters.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value,column_name))
+    );
+  }
 
+  private _filter(value: String, column_name): Array<String> {
+    const filterValue = value.toString().toLowerCase();
+    return this.filterLists[column_name].filter(option => option.toString().toLowerCase().includes(filterValue));
+  }
 
   loadData(){
         let promise = new Promise<void>(async (resolve, reject) => {
@@ -183,18 +290,6 @@ export class ContratosComponent implements OnInit {
 
    }
 
-   async filterBy(column: string, selected: string) {
-    this.loading = true
-    this.activeFilters[column] = String(selected);
-    this.Contratos = [];
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'contratos_query').then(async (element: any) => {
-      await element.forEach(contratos => {
-        this.Contratos = [...this.Contratos, contratos]
-      });
-    })
-    this.loading = false
-
-  }
 
   async clearFilter(column: string){
     this.loading = true
@@ -225,37 +320,6 @@ export class ContratosComponent implements OnInit {
 
   }
 
-  async sortBy(column: string, sort_dir: string){
-    this.loading = true;
-    if (this.currentActiveSort){
-      this.activeSorts[this.currentActiveSort].active = false;
-    }
-
-    this.activeSorts[column].active = true;
-    if (sort_dir == 'ASC'){
-      this.activeSorts[column].dir = 'arrow_downward';
-    } else {
-      this.activeSorts[column].dir = 'arrow_upward';
-    }
-
-    this.currentActiveSort = column;
-
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'contratos_query').then(async (response: any) => {
-      this.Contratos = [];
-      await response.forEach( (element:Contratos) => {
-        this.Contratos = [...this.Contratos, element];
-
-      });
-
-    });
-
-    if (this.Contratos.length > 0) {
-      this.cdk_empty = false;
-    }
-
-    this.loading = false;
-  }
-
   openContratosDialog(){
 
     this.editRowDialogRefNovoContrato = this.dialog.open(NovoContratoComponent,{
@@ -278,4 +342,167 @@ export class ContratosComponent implements OnInit {
       this.newDataEmitter.newDataEmit(results);
     });
   }
+
+  async sortBy(column: string, sort_dir: string){
+    this.loading = true;
+    if (this.currentActiveSort){
+      this.activeSorts[this.currentActiveSort].active = false;
+    }
+
+    this.activeSorts[column].active = true;
+    if (sort_dir == 'ASC'){
+      this.activeSorts[column].dir = 'arrow_downward';
+    } else {
+      this.activeSorts[column].dir = 'arrow_upward';
+    }
+
+    this.currentActiveSort = column;
+
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (response: any) => {
+      this.Contratos = [];
+      await response.forEach( (element:Contratos) => {
+        this.Contratos = [...this.Contratos, element];
+
+      });
+
+    });
+
+    if (this.Contratos.length > 0) {
+      this.cdk_empty = false;
+    }
+
+    this.loading = false;
+    setTimeout(() => {
+      this.viewport.scrollToIndex(this.viewport.getDataLength());
+    }, 0);
+
+  }
+
+  async filterBy(column: string, selected: string) {
+    this.loading = true
+    this.activeFilters[column] = String(selected);
+    this.Contratos = [];
+
+    this.applyFilter().then(() =>{
+      this.loading = false;
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+        this.clearFilterForms();
+      }, 0);
+    })
+
+
+  }
+
+  async filterBySpecial(column: string, type: string, diff?: String) {
+    this.loading = true
+    this.Contratos = [];
+
+    this.activeFilters[column] = {
+      equals: '',
+      greater: '',
+      smaller: '',
+      greater_and_equalTo: '',
+      smaller_and_equalTo: '',
+    }
+
+    let value1;
+    let value2;
+
+    if (column === "Data_Entrada" || column === "Vencimento"){
+      value1 = this.datasForm.controls.Data1.value;
+      value2 = this.datasForm.controls.Data2.value;
+    } else if (column === "Valor") {
+      value1 = this.getNumberValue(this.valorForm.controls.Valor1.value);
+      value2 = this.getNumberValue(this.valorForm.controls.Valor2.value);
+    } else if (column === 'Contrato') {
+      value1 = diff;
+    }
+
+    if (type == 'between') {
+      this.activeFilters[column].greater = value1;
+      this.activeFilters[column].smaller = value2;
+    } else {
+      this.activeFilters[column][type] = value1;
+    }
+
+    this.applyFilter().then(() =>{
+      this.loading = false;
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+        this.clearFilterForms();
+      }, 0);
+
+    })
+
+  }
+
+  applyFilter(): Promise<void> {
+
+    let promise = new Promise<void>(async (resolve,reject) => {
+
+      await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
+        await element.forEach(entrada => {
+          this.Contratos = [...this.Contratos, entrada];
+        });
+
+        this.columnToFilter.forEach(async (column_name) => {
+          this.filterLists[column_name] = new Array();
+
+          if (this.activeFilters[column_name]) {
+            await this.server.get_Value({column: column_name, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
+
+              await response.forEach((element) => {
+                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
+                if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
+              });
+            }).catch(err => {
+              console.log(err);
+              reject();
+            });
+          } else {
+            await this.server.get_Value({column: column_name, active_filters : this.activeFilters, active_sorts : this.activeSorts},this.column_url).then(async (response: any) => {
+
+              await response.forEach((element) => {
+                if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
+                if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
+              });
+            }).catch(err => {
+              console.log(err);
+              reject();
+            });
+          }
+        });
+
+        if (this.Contratos.length > 0) {
+          this.cdk_empty = false;
+        } else {
+          this.cdk_empty = true;
+        }
+
+        resolve();
+
+      });
+
+
+    })
+
+    return promise;
+  }
+
+  clearFilterForms(){
+    this.datasForm.controls.Data1.patchValue(moment().toISOString());
+    this.datasForm.controls.Data2.patchValue(moment().add(1,'day').toISOString());
+    this.datasForm.markAsPristine();
+    this.datasForm.updateValueAndValidity;
+
+    this.valorForm.controls.Valor1.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+    this.valorForm.controls.Valor2.patchValue(this.currencyPipe.transform(0.00,'BRL','symbol','1.2-2'));
+    this.valorForm.markAsPristine();
+    this.valorForm.updateValueAndValidity;
+
+    this.dateError = false;
+    this.valueError = false;
+  }
+
 }
