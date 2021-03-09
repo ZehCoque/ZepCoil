@@ -50,7 +50,8 @@ import { AlertaContratosComponent } from './alerta-contratos/alerta-contratos.co
 import { PgmtContratosModalComponent } from './pgmt-contratos-modal/pgmt-contratos-modal.component';
 import { TipoTextPipe } from './pipes/tipo-text.pipe';
 
-import { CalcTotal } from './classes/calcTotal'
+import { CalcTotal } from './classes/calcTotal';
+import { ColumnNamePipe } from './pipes/column-name.pipe'
 
 registerLocaleData(localePtBr);
 
@@ -76,7 +77,8 @@ registerLocaleData(localePtBr);
     NovoContratoComponent,
     AlertaContratosComponent,
     PgmtContratosModalComponent,
-    TipoTextPipe
+    TipoTextPipe,
+    ColumnNamePipe
   ],
   imports: [
     TextMaskModule,

@@ -399,7 +399,7 @@
 
                 <div style="display: flex; text-align: center; flex-direction:column">
                   <mat-form-field (click)="textFilters.setValue('');initFilter_Text(column);$event.stopPropagation()"  class="form-field context-menu autocomplete" >
-                    <mat-label>{{column}}</mat-label>
+                    <mat-label>{{column | columnName}}</mat-label>
                     <input type="text"
                            placeholder="Pesquisar..."
                            matInput
