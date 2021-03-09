@@ -359,10 +359,13 @@
   </cdk-virtual-scroll-viewport>
 
   <div class="el-tag--plain totalValores">
-    <div style="flex: 0.5;">
-      Total Valores: {{totalValor | currency:'BRL'}}
+    <div style="flex: 0.33;">
+      Total Bruto: {{totalBruto | currency:'BRL'}}
     </div>
-    <div style="flex: 0.5;">
+    <div style="flex: 0.33;">
+      Total Liquido: {{totalLiquido | currency:'BRL'}}
+    </div>
+    <div style="flex: 0.33;">
       Total Piscina: {{totalPiscina | currency:'BRL'}}
     </div>
 

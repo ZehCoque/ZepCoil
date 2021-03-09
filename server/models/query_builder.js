@@ -3,12 +3,14 @@ function filter(init_query_string,active_filters) {
   let options = ['equals','greater','smaller','greater_and_equalTo','smaller_and_equalTo'];
   let signs = ['=', '>', '<', '>=', '<='];
 
+
+
   for (var key in active_filters) {
     if (active_filters.hasOwnProperty(key)) {
         if (active_filters[key] !== ''){
           let value;
           let sign = "=";
-          if (key === 'Data_Entrada' || key === 'Vencimento' || key === 'Valor' || key === 'Contrato'){
+          if (key === 'Data_Entrada' || key === 'Data_inicio' || key === 'Data_termino' || key === 'Vencimento' || key === 'Valor' || key === 'Contrato'){
 
             for (var type in active_filters[key]){
 

@@ -1,3 +1,4 @@
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -17,6 +18,9 @@ import { ServerService } from '../services/server.service';
 })
 export class NovoContratoComponent implements OnInit {
 
+    @ViewChild(CdkVirtualScrollViewport)
+    viewport: CdkVirtualScrollViewport;
+
     @ViewChild('contextMenuTrigger') contextMenu: MatMenuTrigger;
     contextMenuPosition = { x: '0px', y: '0px' };
 
@@ -29,7 +33,8 @@ export class NovoContratoComponent implements OnInit {
     loading: Boolean = false;
     loading_ctrlpgmt: Boolean = false;
 
-    totalValor: number = 0;
+    totalBruto: number = 0;
+    totalLiquido: number = 0;
     totalPiscina: number = 0;
 
     CC:Array<CC> = new Array();
@@ -57,10 +62,9 @@ export class NovoContratoComponent implements OnInit {
 
     Favorecidos = ['Coil', 'Zep', 'MZ'];
     Favorecidos2 = ['Não há','Coil', 'Zep', 'MZ'];
-    FavoricidosComissao = ['Não há', 'Marcia'];
+    FavoricidosComissao = ['Não há', 'Marcia', 'Outro'];
 
     errorMatcher: ErrorMatcherDirective;
-
 
     today = moment().toISOString();
     dataPgmtError: boolean = false;
@@ -371,6 +375,7 @@ export class NovoContratoComponent implements OnInit {
     onResetPgmts(){
       this.contratosPgmtForm.reset();
       this.contratosPgmtForm.get('Valor1').markAsUntouched();
+      this.contratosPgmtForm.get('Valor1').markAsPristine();
       this.contratosPgmtForm.get('Valor1').updateValueAndValidity();
       this.contratosPgmtForm.controls.DataPgto.patchValue(moment().toISOString());
       this.contratosPgmtForm.controls.Fav1.patchValue('Coil');
@@ -422,9 +427,15 @@ export class NovoContratoComponent implements OnInit {
 
       this.pagamentosContratos = [...this.pagamentosContratos, json];
       this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
-        this.totalValor = res[0];
-        this.totalPiscina = res[1];
+        this.totalBruto = res[0];
+        this.totalLiquido = res[1];
+        this.totalPiscina = res[2];
       });
+
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+
+      }, 0);
 
       this.onResetPgmts();
     }
@@ -476,8 +487,9 @@ export class NovoContratoComponent implements OnInit {
           else this.pagamentosContratos = this.pagamentosContratos.filter((item, index) => index !== row)
 
           this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
-            this.totalValor = res[0];
-            this.totalPiscina = res[1];
+            this.totalBruto = res[0];
+            this.totalLiquido = res[1];
+            this.totalPiscina = res[2];
           });
         }
       })
@@ -504,8 +516,9 @@ export class NovoContratoComponent implements OnInit {
       this.contratosPgmtForm.controls.Valor2.markAsUntouched();
 
       this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
-        this.totalValor = res[0];
-        this.totalPiscina = res[1];
+        this.totalBruto = res[0];
+        this.totalLiquido = res[1];
+        this.totalPiscina = res[2];
       });
     }
 

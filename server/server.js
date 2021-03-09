@@ -1,20 +1,18 @@
 const express = require('express');
 const app = express();
-require('dotenv').config();
+const dbConfig = require('./server.variables')
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const port = '3000';
+// const port = '3000';
+const port = dbConfig.PORT
 const www = "MYSQL DATABASE CONNECTION" || './';
 app.use(express.static(www));
 app.use(bodyParser.json())
 app.use(cookieParser());
 
-var allowedOrigins = ['zepcoil.cq9uwckifigu.sa-east-1.rds.amazonaws.com:3306',
-                      'http://localhost:3000',
-                      'http://localhost:4401',
-                      'http://localhost:4200'];
+var allowedOrigins = dbConfig.ORIGINS;
 
 app.use(cors({
   credentials: true,
@@ -59,4 +57,4 @@ console.log(`serving ${www}`);
 app.get('*', (req, res) => {
   res.send(`MYSQL SERVER - ZEPCOIL DATABASE`);
 });
-app.listen(port, () => console.log(`listening on http://localhost:${port}`));
+app.listen(port, () =>  console.log(`listening on http://localhost:${port}`));

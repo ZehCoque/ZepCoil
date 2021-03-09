@@ -135,12 +135,6 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
     this.setState();
 
-    // LINE FOR TESTING
-
-    this.filterLists.Tipo = [0,1,2];
-
-    // END
-
     this.routerEvents = this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
     .subscribe((event: NavigationEnd) => {
@@ -157,7 +151,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
       Div_CC: new FormControl({value: '', disabled: true},Validators.required),
       Vencimento: new FormControl(moment().toISOString(), Validators.required),
       Observacao: new FormControl('',Validators.maxLength(200)),
-      N_Invest: new FormControl('', Validators.pattern("^[0-9]*$")),
+      N_Invest: new FormControl(''),
       Responsavel: new FormControl('',Validators.required),
       Tipo: new FormControl(-1,Validators.required),
       Pessoa: new FormControl(''),
@@ -198,13 +192,12 @@ export class LancamentosComponent implements OnInit, OnDestroy {
         this.valorForm.controls.Valor2.updateValueAndValidity();
       }
 
-      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
-
+      this.valueError = Number(this.getNumberValue(this.valorForm.controls.Valor1.value)) >= Number(this.getNumberValue(this.valorForm.controls.Valor2.value));
     });
 
     this.valorForm.controls.Valor2.valueChanges.subscribe((val) => {
 
-      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+      this.valueError = Number(this.getNumberValue(this.valorForm.controls.Valor1.value)) >= Number(this.getNumberValue(this.valorForm.controls.Valor2.value));
 
       if (val) {
         let valor = this.getNumberValue(val);
@@ -793,29 +786,15 @@ export class LancamentosComponent implements OnInit, OnDestroy {
     this.clearFilterForms();
 
     this.Entradas = [];
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
-      await element.forEach(entrada => {
-        this.Entradas = [...this.Entradas, entrada]
-      });
+    this.loadData().then(() => {
       this.loading = false
+      this.updateSoma();
       setTimeout(() => {
         this.viewport.scrollToIndex(this.viewport.getDataLength());
 
       }, 0);
-      this.updateSoma();
+
     })
-
-    this.columnToFilter.forEach(async (column_name) => {
-      this.filterLists[column_name] = new Array();
-      await this.server.get_List_CF({column_name: column_name},'get_distinct_lancamentos').then(async (response: any) => {
-        await response.forEach((element) => {
-          if (element[column_name] != null && element[column_name] != '')this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]]
-        });
-      }).catch(err => console.log(err));
-    })
-
-
-
   }
 
   updateSoma(){

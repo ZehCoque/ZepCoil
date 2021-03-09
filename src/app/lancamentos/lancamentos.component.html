@@ -413,7 +413,7 @@
                     </mat-autocomplete>
                   </mat-form-field>
 
-                  <button mat-raised-button color="primary" (click)="filterBy(column, textFilters.value)" [disabled]="!textFilters.valid">Confirmar</button>
+                  <button mat-raised-button color="primary" (click)="filterBy(column, textFilters.value)" [disabled]="textFilters.value == ''">Confirmar</button>
                 </div>
               </ng-template>
             </mat-menu>

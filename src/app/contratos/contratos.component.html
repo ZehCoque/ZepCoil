@@ -1,11 +1,11 @@
 <div class="content-fluid" role="main">
 
     <div class="header-padding">
-      <div class="unselectable-line display-flex header-row" style=" align-items: center">
+      <div class="unselectable-line display-flex header-row" style=" align-items: center" (click)="textFilters.setValue('');textFilters.clearValidators();">
 
         <div class="el-tag--plain el-col-3">
           Identificação
-          <button (click)="getColumnValues('Identificacao')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Identificacao', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+          <button (click)="initFilter_Text('Identificacao');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Identificacao', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Identificacao.active && !activeFilters.Identificacao">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Identificacao">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Identificacao.active && activeFilters.Identificacao" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Identificacao.dir}}</mat-icon>
@@ -15,7 +15,7 @@
 
         <div class="el-tag--plain el-col-4">
             Locatário
-            <button (click)="getColumnValues('Pessoa')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+            <button (click)="initFilter_Text('Pessoa');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Pessoa', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Pessoa.active && !activeFilters.Pessoa">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Pessoa">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Pessoa.active && activeFilters.Pessoa" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Pessoa.dir}}</mat-icon>
@@ -25,7 +25,7 @@
 
         <div class="el-tag--plain el-col-5">
           Descrição
-          <button (click)="getColumnValues('Descricao')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+          <button (click)="initFilter_Text('Descricao');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Descricao' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Descricao.active && !activeFilters.Descricao">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Descricao">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Descricao.active && activeFilters.Descricao" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Descricao.dir}}</mat-icon>
@@ -35,7 +35,7 @@
 
         <div class="el-tag--plain el-col-3">
           Data de Início
-          <button (click)="getColumnValues('Data_inicio')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Data_inicio', 'class_msg':sortMessages.forDates }" class="small-icon-button position-absolute" mat-icon-button >
+          <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Data_inicio', 'class_msg':sortMessages.forDates }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Data_inicio.active && !activeFilters.Data_inicio">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Data_inicio">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Data_inicio.active && activeFilters.Data_inicio" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Data_inicio.dir}}</mat-icon>
@@ -46,7 +46,7 @@
 
         <div class="el-tag--plain el-col-3">
           Data de Término
-            <button (click)="getColumnValues('Data_termino')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Data_termino', 'class_msg':sortMessages.forDates }" class="small-icon-button position-absolute" mat-icon-button >
+            <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Data_termino', 'class_msg':sortMessages.forDates }" class="small-icon-button position-absolute" mat-icon-button >
               <mat-icon color="darker-primary" *ngIf="!activeSorts.Data_termino.active && !activeFilters.Data_termino">arrow_drop_down</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Data_termino">filter_alt</mat-icon>
               <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Data_termino.active && activeFilters.Data_termino" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Data_termino.dir}}</mat-icon>
@@ -57,7 +57,7 @@
 
         <div class="el-tag--plain el-col-3">
           Valor
-          <button (click)="getColumnValues('Valor')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Valor', 'class_msg':sortMessages.forNumber }" class="small-icon-button position-absolute" mat-icon-button >
+          <button [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Valor', 'class_msg':sortMessages.forNumber }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Valor.active && !activeFilters.Valor">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Valor">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Valor.active && activeFilters.Valor" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Valor.dir}}</mat-icon>
@@ -67,7 +67,7 @@
 
         <div class="el-tag--plain el-col-2">
           C.C
-          <button (click)="getColumnValues('CC')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+          <button (click)="initFilter_Text('CC');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'CC', 'class_msg':sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.CC.active && !activeFilters.CC">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.CC">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.CC.active && activeFilters.CC" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.CC.dir}}</mat-icon>
@@ -77,7 +77,7 @@
 
         <div class="el-tag--plain el-col-2">
           Div. C.C
-          <button (click)="getColumnValues('Div_CC')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Div_CC', 'class_msg':sortMessages.forNumber }" class="small-icon-button position-absolute" mat-icon-button >
+          <button (click)="initFilter_Text('Div_CC');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Div_CC', 'class_msg':sortMessages.forNumber }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Div_CC.active && !activeFilters.Div_CC">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Div_CC">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Div_CC.active && activeFilters.Div_CC" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Div_CC.dir}}</mat-icon>
@@ -87,7 +87,7 @@
 
         <div class="el-tag--plain el-col-2">
           Tipo
-          <button (click)="getColumnValues('Tipo')" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Tipo' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
+          <button (click)="initFilter_Text('Tipo');" [matMenuTriggerFor]="dropdown_menu" [matMenuTriggerData]="{ 'column': 'Tipo' , 'class_msg': sortMessages.forText }" class="small-icon-button position-absolute" mat-icon-button >
             <mat-icon color="darker-primary" *ngIf="!activeSorts.Tipo.active && !activeFilters.Tipo">arrow_drop_down</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeFilters.Tipo">filter_alt</mat-icon>
             <mat-icon color="darker-primary" style="font-size: 18px" *ngIf="activeSorts.Tipo.active && activeFilters.Tipo" style="font-size: 15px; margin-left: -15px; line-height: 35px;">{{activeSorts.Tipo.dir}}</mat-icon>
@@ -258,28 +258,14 @@
             </button>
           </div>
 
-        <ng-template #filtrarElseBlock3>
-
-
-        </ng-template>
-
         <ng-template #filtrarElseBlock4>
-          <div *ngIf="column === 'Tipo'; else filtrarElseBlock5" >
+          <div *ngIf="column === 'Tipo'; else filtrarElseBlock6" >
             <div *ngFor="let item of this.filterLists.Tipo" (click)="filterBy(column, item)">
-              <button mat-menu-item>{{item | Tipo}}</button>
+              <button mat-menu-item>{{item | tipoText}}</button>
             </div>
           </div>
         </ng-template>
 
-        <ng-template #filtrarElseBlock5>
-          <div *ngIf="column === 'Contrato'; else filtrarElseBlock6" >
-            <button mat-menu-item (click)="filterBySpecial(column,'equals','notNull')">Apenas <b>com</b> contratos</button>
-            <button mat-menu-item (click)="filterBySpecial(column,'equals','onlyNull')">Apenas <b>sem</b> contratos</button>
-            <button [matMenuTriggerFor]="filtrarEspec" mat-menu-item>
-              Contrato específico
-            </button>
-          </div>
-        </ng-template>
 
         <mat-menu #filtrarEspec="matMenu">
           <ng-template #filtrarElseBlock6 matMenuContent>
@@ -300,7 +286,7 @@
                 </mat-autocomplete>
               </mat-form-field>
 
-              <button mat-raised-button color="primary" (click)="filterBy(column, textFilters.value)" [disabled]="!textFilters.valid">Confirmar</button>
+              <button mat-raised-button color="primary" (click)="filterBy(column, textFilters.value)" [disabled]="textFilters.value == ''">Confirmar</button>
             </div>
           </ng-template>
         </mat-menu>

@@ -1,10 +1,11 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu, ipcMain} = require('electron')
 const url = require("url");
 const path = require("path");
-const server = require("../../server/server")
-const auth = require('../../server/models/auth');
+const server = require("./server/server")
+const auth = require('./server/models/auth');
+const appEnv = require('dotenv').config();
 
-let mainWindow
+let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -19,7 +20,7 @@ function createWindow () {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `../../dist/zepcoil/index.html`),
+      pathname: path.join(__dirname, `./dist/zepcoil/index.html`),
       protocol: "file:",
       slashes: true
     })
@@ -32,7 +33,8 @@ function createWindow () {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
+Menu.setApplicationMenu(null);
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

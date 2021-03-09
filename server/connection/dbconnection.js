@@ -1,12 +1,13 @@
 const mysql = require('mysql');
+const dbConfig = require('../server.variables')
 
 function create_connection(username,password) {
       return new Promise((resolve, reject) => {
         var connection  = mysql.createPool({
-          host            : 'zepcoil.cq9uwckifigu.sa-east-1.rds.amazonaws.com',
+          host            : dbConfig.HOST,
           user            : username,
           password        : password,
-          database        : 'zepcoil',
+          database        : dbConfig.MAINDATABASE,
         });
 
         resolve(connection);

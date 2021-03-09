@@ -1,11 +1,11 @@
 var mysql = require('mysql');
-require('dotenv').config();
+const dbConfig = require('../server.variables')
 
 var connection  = mysql.createPool({
-  host            : 'zepcoil.cq9uwckifigu.sa-east-1.rds.amazonaws.com',
-  user            : 'authenticator',
-  password        : 'N99FrLuBDNPCqb58',
-  database        : 'accounts',
+  host            :  dbConfig.HOST,
+  user            :  dbConfig.USER,
+  password        :  dbConfig.PASSWORD,
+  database        :  dbConfig.DATABASE,
 });
 
 module.exports = connection;

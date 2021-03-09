@@ -2,19 +2,21 @@ import { LanXCon, PagamentosContratos } from "./tableColumns";
 
 export class CalcTotal {
 
-  async calcTotal(pagamentosContratos: Array<PagamentosContratos>): Promise<[number, number]>{
+  async calcTotal(pagamentosContratos: Array<PagamentosContratos>): Promise<[number, number, number]>{
 
-    let totalValor = 0;
+    let totalBruto = 0;
+    let totalLiquido = 0;
     let totalPiscina = 0;
 
     await pagamentosContratos.forEach((element: PagamentosContratos) => {
 
-      totalValor = totalValor + Number(element.Valor1) + Number(element.Valor2) + Number(element.Valor3);
+      totalBruto = totalLiquido + Number(element.Valor1) + Number(element.Valor2) + Number(element.Valor3) + Number(element.ValorCom);
+      totalLiquido = totalLiquido + Number(element.Valor1) + Number(element.Valor2) + Number(element.Valor3);
       totalPiscina = totalPiscina + Number(element.ValorPiscina);
 
     });
 
-    return [totalValor, totalPiscina];
+    return [totalBruto, totalLiquido, totalPiscina];
 
   }
 
@@ -24,8 +26,7 @@ export class CalcTotal {
 
     await lanxcon.forEach((element: LanXCon) => {
 
-      if (element.Tipo == 1) total = total - Number(element.Valor);
-      else total = total + Number(element.Valor);
+      if (element.Tipo == 0) total = total + Number(element.Valor);
 
     });
 

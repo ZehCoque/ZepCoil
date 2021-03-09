@@ -38,7 +38,9 @@ export class PgmtContratosModalComponent implements OnInit {
   }
 
   selectedDataPgto: Array<String> = new Array();
-  totalValor: number = 0;
+
+  totalBruto: number = 0;
+  totalLiquido: number = 0;
   totalPiscina: number = 0;
   totalLancamentos: number = 0;
 
@@ -99,9 +101,10 @@ export class PgmtContratosModalComponent implements OnInit {
         this.pagamentosContratos = [...this.pagamentosContratos, element]
       });
 
-      this.calcTotal.calcTotal(this.pagamentosContratos).then((res: [number,number]) => {
-        this.totalValor = res[0];
-        this.totalPiscina = res[1];
+      this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+        this.totalBruto = res[0];
+        this.totalLiquido = res[1];
+        this.totalPiscina = res[2];
       });
 
     })

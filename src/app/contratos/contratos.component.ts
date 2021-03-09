@@ -5,9 +5,9 @@ import { CC, div_CC, Contratos, Pessoa } from '../classes/tableColumns'
 
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { FilterLists, SortMessages } from '../classes/active_filters_and_sorts';
+import { SortMessages } from '../classes/active_filters_and_sorts';
 import { newDataTrackerService } from '../services/new-data-tracker.service';
-import { ContratosActiveFilters, ContratosActiveSorts } from '../classes/active_filters_and_sorts contratos';
+import { ContratosActiveFilters, ContratosActiveSorts, FilterListsContratos } from '../classes/active_filters_and_sorts contratos';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { NovoContratoComponent } from '../novo-contrato/novo-contrato.component';
 import { PgmtContratosModalComponent } from '../pgmt-contratos-modal/pgmt-contratos-modal.component';
@@ -35,7 +35,7 @@ export class ContratosComponent implements OnInit {
 
   errorMatcher: ErrorMatcherDirective;
 
-  filterLists: FilterLists = new FilterLists;
+  filterLists: FilterListsContratos = new FilterListsContratos;
 
   Contratos: Array<Contratos>;
   filterValues: Array<string>;
@@ -65,15 +65,15 @@ export class ContratosComponent implements OnInit {
   lastMonthEnd = moment().add(-1,'month').endOf('month').toISOString();
 
   query_url: string = 'contratos_query';
+  column_url: string = 'contratos_query_column';
+
   dateError: boolean = false;
   valueError: boolean = false;
   textFilters: FormControl;
 
   columnToFilter = ['Identificacao','Pessoa','Descricao','CC','Div_CC','Tipo'];
-  column_url: string = 'contratos_query_column';
 
   filteredOptionsText: Observable<String[]>;
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -89,6 +89,7 @@ export class ContratosComponent implements OnInit {
       this.loading = true;
       this.loadData()
       .then(() => {
+        console.log(this.filterLists)
         this.loading = false;
         if (this.Contratos.length > 0) {
           this.cdk_empty = false;
@@ -131,13 +132,14 @@ export class ContratosComponent implements OnInit {
         this.valorForm.controls.Valor2.updateValueAndValidity();
       }
 
-      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+      this.valueError = Number(this.getNumberValue(this.valorForm.controls.Valor1.value)) >= Number(this.getNumberValue(this.valorForm.controls.Valor2.value));
 
     });
 
     this.valorForm.controls.Valor2.valueChanges.subscribe((val) => {
 
-      this.valueError = this.getNumberValue(this.valorForm.controls.Valor1.value) >= this.getNumberValue(this.valorForm.controls.Valor2.value);
+      this.valueError = Number(this.getNumberValue(this.valorForm.controls.Valor1.value)) >= Number(this.getNumberValue(this.valorForm.controls.Valor2.value));
+
 
       if (val) {
         let valor = this.getNumberValue(val);
@@ -186,8 +188,10 @@ export class ContratosComponent implements OnInit {
         this.Pessoa = new Array();
 
         this.Contratos = new Array();
+
+        this.filterLists = new FilterListsContratos;
         //GET ALL Contratos
-        await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'contratos_query').then(async (response: any) => {
+        await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (response: any) => {
             await response.forEach( (element:Contratos) => {
               this.Contratos = [...this.Contratos, element];
             });
@@ -206,6 +210,21 @@ export class ContratosComponent implements OnInit {
           this.Pessoa = [...this.Pessoa, Pessoa];
         });
       }).catch(err => reject(err));
+
+
+      //GET ALL FILTER ARRAYS
+      this.columnToFilter.forEach(async (column_name) => {
+
+        this.filterLists[column_name] = new Array();
+        await this.server.get_Value({column: column_name},this.column_url).then(async (response: any) => {
+          await response.forEach((element) => {
+            if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
+
+          });
+        }).catch(err => reject(err));
+      })
+
+
 
           resolve();
 
@@ -226,22 +245,6 @@ export class ContratosComponent implements OnInit {
       numberValue = 0;
     }
     return numberValue;
-  }
-
-  getColumnValues(column:string) {
-    this.filterValues = new Array<string>();
-    let select_col_value = this.activeFilters[column];
-
-    if (this.activeFilters[column].length > 0) this.activeFilters[column] = '';
-
-    this.server.get_Value({column: column, active_filters: this.activeFilters},'contratos_query_column').then((element: any) => {
-      element.forEach(el => {
-        if (el[column] != null) this.filterValues = [...this.filterValues, el[column]]
-      });
-
-    });
-    this.activeFilters[column] = select_col_value;
-    return this.filterValues
   }
 
 
@@ -281,7 +284,7 @@ export class ContratosComponent implements OnInit {
     confirmationDialog.afterClosed().subscribe(result => {
       if (result){
         this.Contratos = this.Contratos.filter((item, index) => index !== row)
-        this.server.delete_List(item,'contratos_query').then(() =>{
+        this.server.delete_List(item,this.query_url).then(() =>{
           if (this.Contratos.length == 0) this.cdk_empty = true;
 
         })
@@ -295,7 +298,7 @@ export class ContratosComponent implements OnInit {
     this.loading = true
     this.activeFilters[column] = '';
     this.Contratos = [];
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'contratos_query').then(async (element: any) => {
+    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , this.query_url).then(async (element: any) => {
       await element.forEach(contratos => {
         this.Contratos = [...this.Contratos, contratos]
       });
@@ -310,13 +313,14 @@ export class ContratosComponent implements OnInit {
     this.loading = true
     this.activeFilters = new ContratosActiveFilters;
     this.Contratos = [];
-    await this.server.get_List_CF({active_filters : this.activeFilters, active_sorts : this.activeSorts} , 'contratos_query').then(async (element: any) => {
-      await element.forEach(contratos => {
-        this.Contratos = [...this.Contratos, contratos]
-      });
+    this.loadData().then(() => {
+      this.loading = false
+      setTimeout(() => {
+        this.viewport.scrollToIndex(this.viewport.getDataLength());
+
+      }, 0);
 
     })
-    this.loading = false
 
   }
 
@@ -409,14 +413,13 @@ export class ContratosComponent implements OnInit {
     let value1;
     let value2;
 
-    if (column === "Data_Entrada" || column === "Vencimento"){
+    if (column === "Data_inicio" || column === "Data_termino"){
       value1 = this.datasForm.controls.Data1.value;
       value2 = this.datasForm.controls.Data2.value;
+      console.log(value1,value2)
     } else if (column === "Valor") {
       value1 = this.getNumberValue(this.valorForm.controls.Valor1.value);
       value2 = this.getNumberValue(this.valorForm.controls.Valor2.value);
-    } else if (column === 'Contrato') {
-      value1 = diff;
     }
 
     if (type == 'between') {
@@ -425,6 +428,8 @@ export class ContratosComponent implements OnInit {
     } else {
       this.activeFilters[column][type] = value1;
     }
+
+    console.log(this.activeFilters)
 
     this.applyFilter().then(() =>{
       this.loading = false;
@@ -454,7 +459,6 @@ export class ContratosComponent implements OnInit {
 
               await response.forEach((element) => {
                 if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
-                if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
               });
             }).catch(err => {
               console.log(err);
@@ -465,7 +469,6 @@ export class ContratosComponent implements OnInit {
 
               await response.forEach((element) => {
                 if (element[column_name] != null && element[column_name] != '') this.filterLists[column_name] = [...this.filterLists[column_name], element[column_name]];
-                if(column_name === 'Tipo' && element[column_name] == '') this.filterLists[column_name] = [...this.filterLists[column_name], 0]
               });
             }).catch(err => {
               console.log(err);
