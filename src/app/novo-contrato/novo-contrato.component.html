@@ -21,7 +21,7 @@
       <mat-hint *ngIf="preloaded">Não é possível editar este campo.</mat-hint>
   </mat-form-field>
 
-    <mat-form-field style="width: 13%;" class="form-field">
+    <mat-form-field style="width: 8%;" class="form-field">
       <mat-label>Locatário</mat-label>
       <mat-select formControlName="Pessoa">
       <mat-option *ngFor="let locatario of Pessoa" [value]="locatario">
@@ -32,6 +32,10 @@
       É necessário inserir um locatário.
     </mat-error>
   </mat-form-field>
+
+  <button type="button" mat-icon-button color="primary" (click)="openPessoaDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
 
     <mat-form-field  style="width: 18%;text-align: center;" class="form-field">
       <mat-label>Descrição</mat-label>

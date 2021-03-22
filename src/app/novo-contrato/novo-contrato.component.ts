@@ -9,6 +9,7 @@ import { CalcTotal } from '../classes/calcTotal';
 import { CC, Contratos, div_CC, PagamentosContratos, Pessoa } from '../classes/tableColumns';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ErrorMatcherDirective } from '../directives/error-matcher.directive';
+import { NovaPessoaComponent } from '../nova-pessoa/nova-pessoa.component';
 import { ServerService } from '../services/server.service';
 
 @Component({
@@ -519,6 +520,23 @@ export class NovoContratoComponent implements OnInit {
         this.totalBruto = res[0];
         this.totalLiquido = res[1];
         this.totalPiscina = res[2];
+      });
+    }
+
+    openPessoaDialog(): void {
+      const dialogRef = this.dialog.open(NovaPessoaComponent, {
+        width: '1000px',
+        data: {}
+      });
+
+      let sub = dialogRef.afterClosed().subscribe(async (results) => {
+        //GET ALL PESSOA
+        await this.server.get_List('pessoa_query').then(async (response: any) => {
+          await response.forEach( (Pessoa:Pessoa) => {
+            this.Pessoa = [...this.Pessoa, Pessoa];
+          });
+        }).catch(err => console.log(err));
+        sub.unsubscribe();
       });
     }
 
