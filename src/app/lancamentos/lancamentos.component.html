@@ -530,8 +530,14 @@
       <mat-menu  #classificar="matMenu">
         <ng-template  matMenuContent let-column="column" let-class_msg="class_msg">
           <div *ngIf="column != 'Tipo'">
-            <button mat-menu-item (click)="sortBy(column, 'ASC')"><mat-icon>arrow_downward</mat-icon>{{class_msg.up}}</button>
-            <button mat-menu-item (click)="sortBy(column, 'DESC')"><mat-icon>arrow_upward</mat-icon>{{class_msg.down}}</button>
+            <div *ngIf="column == 'Data_Entrada'">
+              <button mat-menu-item (click)="sortBy('Vencimento', 'ASC')"><mat-icon>arrow_downward</mat-icon>{{class_msg.up}}</button>
+              <button mat-menu-item (click)="sortBy('Vencimento', 'DESC')"><mat-icon>arrow_upward</mat-icon>{{class_msg.down}}</button>
+            </div>
+            <div *ngIf="column != 'Data_Entrada'">
+              <button mat-menu-item (click)="sortBy(column, 'ASC')"><mat-icon>arrow_downward</mat-icon>{{class_msg.up}}</button>
+              <button mat-menu-item (click)="sortBy(column, 'DESC')"><mat-icon>arrow_upward</mat-icon>{{class_msg.down}}</button>
+            </div>
           </div>
           <div *ngIf="column == 'Tipo'">
             <button mat-menu-item (click)="sortBy(column, 'ASC')">Esse menu</button>
