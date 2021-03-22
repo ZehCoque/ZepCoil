@@ -1,6 +1,8 @@
 # ZepCoil
 
-This projects consists in a tool to manage renting contracts and all the incomes and outcomes of the renting process.
+This projects consists in a tool to manage renting contracts and all the incomes and outcomes of the renting process. It was developed to a specific client with very specific requirements.
+
+This github page has the only purpose to show my work. This project is missing crucial files with classified information. It will be possible to build it, but logging in will not be.
 
 This project was developed using Angular 9.0.1. Backend uses AWS MySQL and Node.js.
 
