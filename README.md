@@ -6,7 +6,7 @@ This project was developed using Angular 9.0.1. Backend uses AWS MySQL and Node.
 
 Some usage examples can be seen in the gifs below (the presented values and names are fake).
 
-![menu scrolling and form filling](https://i.imgur.com/PQaE9Yt.gif)
+![menu scrolling and form filling](https://imgur.com/PQaE9Yt.gif)
 
 Main page with a scroll at the center and all the entries made by the user. UX/UI improved by colors, icons and well designed css.
 
