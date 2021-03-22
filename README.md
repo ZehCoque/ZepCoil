@@ -23,3 +23,5 @@ The page design changes between pages but the filter feature is still accessible
 <img src="./gifs/contracts.gif">
 
 Exemple of a form accessible via a button at the bottom of the page.
+
+These are only examples. There is much more in the app: CRUD for renting places and responsible third parties, reports, contract due date alerts, login page and so on.
