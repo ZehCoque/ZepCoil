@@ -12,7 +12,7 @@ Main page with a scroll at the center and all the entries made by the user. UX/U
 
 *Menu on the right side of the page was a strict requirement made by the client.
 
-<img src="https://i.imgur.com/Dzk0E7F.gif" width="200px">
+<img src="./gifs/filters.gif" width="200px">
 
 Filters were designed to look like MS Excel. Some frequent options can be access simply by clicking the extra buttons, like "today", "this month" and so forth.
 
