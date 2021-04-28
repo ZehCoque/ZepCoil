@@ -37,7 +37,7 @@ export class AdminPessoasComponent implements OnInit {
 
   openPessoaDialog(pessoa?: Pessoa): void {
     const dialogRef = this.dialog.open(NovaPessoaComponent, {
-      width: '1000px',
+      width: '1500px',
       data: {pessoa}
     });
 

@@ -846,7 +846,7 @@ export class LancamentosComponent implements OnInit, OnDestroy {
 
   openPessoaDialog(): void {
     const dialogRef = this.dialog.open(NovaPessoaComponent, {
-      width: '1000px',
+      width: '1500px',
       data: {}
     });
 

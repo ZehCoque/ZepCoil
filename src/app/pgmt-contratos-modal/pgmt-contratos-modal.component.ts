@@ -104,7 +104,7 @@ export class PgmtContratosModalComponent implements OnInit {
         this.pagamentosContratos = [...this.pagamentosContratos, element]
       });
 
-      this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+      this.calcTotal.calcTotal(this.pagamentosContratos,this.novoContratoForm.controls.Tipo.value).then((res) => {
         this.totalBruto = res[0];
         this.totalLiquido = res[1];
         this.totalPiscina = res[2];
@@ -163,7 +163,7 @@ onChoice(id: String){
     });
 
     //HERE
-    this.calcTotal.calcTotalLanXCon(this.lanxcon).then((res: number) => {
+    this.calcTotal.calcTotalLanXCon(this.lanxcon,this.novoContratoForm.controls.Tipo.value).then((res: number) => {
       this.totalLancamentos = res;
     });
   });

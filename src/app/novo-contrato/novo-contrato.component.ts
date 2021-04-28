@@ -427,7 +427,8 @@ export class NovoContratoComponent implements OnInit {
       if (json.FavCom == 'Não há') json.FavCom = '';
 
       this.pagamentosContratos = [...this.pagamentosContratos, json];
-      this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+
+      this.calcTotal.calcTotal(this.pagamentosContratos,this.novoContratoForm.controls.Tipo.value).then((res) => {
         this.totalBruto = res[0];
         this.totalLiquido = res[1];
         this.totalPiscina = res[2];
@@ -487,7 +488,7 @@ export class NovoContratoComponent implements OnInit {
           if (this.pagamentosContratos.length == 1) this.pagamentosContratos = new Array()
           else this.pagamentosContratos = this.pagamentosContratos.filter((item, index) => index !== row)
 
-          this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+          this.calcTotal.calcTotal(this.pagamentosContratos,this.novoContratoForm.controls.Tipo.value).then((res) => {
             this.totalBruto = res[0];
             this.totalLiquido = res[1];
             this.totalPiscina = res[2];
@@ -516,7 +517,7 @@ export class NovoContratoComponent implements OnInit {
 
       this.contratosPgmtForm.controls.Valor2.markAsUntouched();
 
-      this.calcTotal.calcTotal(this.pagamentosContratos).then((res) => {
+      this.calcTotal.calcTotal(this.pagamentosContratos,this.novoContratoForm.controls.Tipo.value).then((res) => {
         this.totalBruto = res[0];
         this.totalLiquido = res[1];
         this.totalPiscina = res[2];
@@ -525,7 +526,7 @@ export class NovoContratoComponent implements OnInit {
 
     openPessoaDialog(): void {
       const dialogRef = this.dialog.open(NovaPessoaComponent, {
-        width: '1000px',
+        width: '1500px',
         data: {}
       });
 

@@ -40,7 +40,7 @@ function CC_router() {
 
     let database = connection.config.database + '.';
     connection.query(
-      'INSERT INTO ' + database + 'func_forn (`Nome`,`Sobrenome`,`CPF_CNPJ`,`Banco`,`Agencia`,`Conta`,`Tipo`) VALUES (?,?,?,?,?,?,?)',
+      'INSERT INTO ' + database + 'func_forn (`Nome`,`Sobrenome`,`CPF_CNPJ`,`Banco`,`Agencia`,`Conta`,`Tipo`,`Email`,`Telefone`) VALUES (?,?,?,?,?,?,?,?,?)',
       [
         req.body.Nome,
         req.body.Sobrenome,
@@ -49,6 +49,8 @@ function CC_router() {
         req.body.Agencia,
         req.body.Conta,
         req.body.Tipo,
+        req.body.Email,
+        req.body.Telefone,
       ],
       (error, results) => {
         if (error) {

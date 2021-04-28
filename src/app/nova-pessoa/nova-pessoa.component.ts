@@ -43,6 +43,8 @@ export class NovaPessoaComponent implements OnInit {
       Agencia: new FormControl('',Validators.pattern("^[0-9]*$")),
       Conta: new FormControl('',Validators.pattern("^[0-9]*$")),
       Tipo: new FormControl('', Validators.required),
+      Email: new FormControl('',Validators.email),
+      Telefone: new FormControl('',Validators.pattern("^[0-9]*$")),
     });
 
     if (this.preloaded.pessoa){
@@ -96,7 +98,7 @@ export class NovaPessoaComponent implements OnInit {
     let given_agencia;
     let given_conta;
 
-    let promise = new Promise((resolve,reject) => {
+    let promise = new Promise<void>((resolve,reject) => {
       if (this.novaPessoaForm.get('CPF_CNPJ').value == '') {
         given_cpj_cnpj = 0;
       } else {
@@ -123,6 +125,8 @@ export class NovaPessoaComponent implements OnInit {
         Agencia: given_agencia,
         Conta: given_conta,
         Tipo: this.novaPessoaForm.get('Tipo').value,
+        Email: this.novaPessoaForm.get('Email').value,
+        Telefone: this.novaPessoaForm.get('Telefone').value,
       }
 
       this.server.add_List(this.novaPessoa,'pessoa_query_add').then(() => {
@@ -142,7 +146,7 @@ export class NovaPessoaComponent implements OnInit {
 
     this.dialogRef.disableClose = true;
     this.loading = true;
-    let promise = new Promise((resolve,reject) => {
+    let promise = new Promise<void>((resolve,reject) => {
       this.server.delete_Value({Nome: this.preloaded.pessoa.Nome},'pessoa_query_delete').then(() => {
         resolve();
       }).catch(error => {

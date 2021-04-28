@@ -89,7 +89,6 @@ export class ContratosComponent implements OnInit {
       this.loading = true;
       this.loadData()
       .then(() => {
-        console.log(this.filterLists)
         this.loading = false;
         if (this.Contratos.length > 0) {
           this.cdk_empty = false;
@@ -416,7 +415,6 @@ export class ContratosComponent implements OnInit {
     if (column === "Data_inicio" || column === "Data_termino"){
       value1 = this.datasForm.controls.Data1.value;
       value2 = this.datasForm.controls.Data2.value;
-      console.log(value1,value2)
     } else if (column === "Valor") {
       value1 = this.getNumberValue(this.valorForm.controls.Valor1.value);
       value2 = this.getNumberValue(this.valorForm.controls.Valor2.value);
@@ -428,8 +426,6 @@ export class ContratosComponent implements OnInit {
     } else {
       this.activeFilters[column][type] = value1;
     }
-
-    console.log(this.activeFilters)
 
     this.applyFilter().then(() =>{
       this.loading = false;

@@ -41,6 +41,8 @@ export class Pessoa{
   Agencia: number;
   Conta: number;
   Tipo: String;
+  Email: String;
+  Telefone: number;
 }
 
 export class Contratos {
