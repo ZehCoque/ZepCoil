@@ -84,17 +84,17 @@ export class PgmtContratosModalComponent implements OnInit {
 
   }
 
-  getData(Identificacao: String) {
+  async getData(Identificacao: String) {
 
     this.pagamentosContratos = new Array;
 
-    this.server.get_Value({Identificacao: Identificacao},'contratos_query_get').then(response => {
+    await this.server.get_Value({Identificacao: Identificacao},'contratos_query_get').then(response => {
       this.novoContratoForm.patchValue(response[0]);
       this.novoContratoForm.controls.Valor.patchValue(this.currencyPipe.transform(response[0].Valor ,'BRL','symbol','1.2-2'))
       this.novoContratoForm.controls.Tipo.patchValue(this.tipoPipe.transform(response[0].Tipo))
     })
 
-    this.server.get_Value({Identificacao: Identificacao},'pagamentos_contratos_query').then(async (response: Array<PagamentosContratos>) => {
+    await this.server.get_Value({Identificacao: Identificacao},'pagamentos_contratos_query').then(async (response: Array<PagamentosContratos>) => {
       this.pagamentosContratos = new Array;
       await response.forEach(element => {
         element.checkbox = {
