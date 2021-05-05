@@ -86,7 +86,12 @@ export class PgmtContratosModalComponent implements OnInit {
 
   async getData(Identificacao: String) {
 
-    this.pagamentosContratos = new Array;
+    this.setAll(false);
+
+    this.totalBruto = 0;
+    this.totalLiquido = 0;
+    this.totalPiscina = 0;
+    this.totalLancamentos= 0;
 
     await this.server.get_Value({Identificacao: Identificacao},'contratos_query_get').then(response => {
       this.novoContratoForm.patchValue(response[0]);
