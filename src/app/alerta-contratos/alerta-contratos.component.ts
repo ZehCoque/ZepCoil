@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AlertaContratos } from '../classes/tableColumns';
+import { PgmtContratosModalComponent } from '../pgmt-contratos-modal/pgmt-contratos-modal.component';
 import { ServerService } from '../services/server.service';
 
 
@@ -12,6 +13,12 @@ import { ServerService } from '../services/server.service';
 export class AlertaContratosComponent implements OnInit {
 
   AlertaContratos: Array<AlertaContratos> = [];
+  AlertaContratos6Meses: Array<AlertaContratos> = [];
+
+  label6Meses: String = "Aviso de 6 meses ";
+  labelTermino: String = "Término de Contratos ";
+
+  dialogRefVisualizarContrato: MatDialogRef<PgmtContratosModalComponent>;
 
   constructor(
     private server: ServerService,
@@ -27,12 +34,36 @@ export class AlertaContratosComponent implements OnInit {
         this.AlertaContratos = [...this.AlertaContratos, element];
       });
 
-      console.log(this.AlertaContratos);
     })
+
+    this.server.get_List('contratos_alerta_6_meses').then((response: any) => {
+
+      response.forEach(element => {
+        this.AlertaContratos6Meses = [...this.AlertaContratos6Meses, element];
+      });
+
+    })
+
+    this.server.get_List('contagem_contratos_alerta').then((response) => {
+      this.labelTermino = this.labelTermino + '(' + response[0].Contagem + ')';
+    });
+    this.server.get_List('contagem_contratos_alerta_6_meses').then((response) => {
+      this.label6Meses = this.label6Meses + '(' + response[0].Contagem + ')';
+    })
+
   }
 
   onCancel(){
     this.dialogRef.close();
+  }
+
+  viewContrato(IdentificacaoContrato){
+
+    this.dialogRefVisualizarContrato = this.dialog.open(PgmtContratosModalComponent,{
+      width: "100%",
+      data: IdentificacaoContrato
+    });
+
   }
 
 }

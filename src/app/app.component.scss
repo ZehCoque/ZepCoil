@@ -171,20 +171,7 @@ svg#clouds {
   width: 1920px;
 }
 
-
-/* Responsive Styles */
-@media screen and (max-width: 767px) {
-
-
-  svg#rocket-smoke {
-    right: 120px;
-    transform: rotate(-5deg);
-  }
-}
-
-@media screen and (max-width: 575px) {
-  svg#rocket-smoke {
-    display: none;
-    visibility: hidden;
-  }
+::ng-deep .mat-tooltip {
+  font-size: 1vw;
+  text-align: center;
 }

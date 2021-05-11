@@ -20,7 +20,8 @@ import { PgmtContratosModalComponent } from './pgmt-contratos-modal/pgmt-contrat
 export class AppComponent {
   user: User;
   current_url: string;
-  contagem: number = 0;
+  contagem: number = 0; //Contagem de término de contrato
+  contagem6Meses: number = 0; //Contagem de aviso de 6 meses
 
   constructor(private authenticationService: AuthenticationService,
     public dialog: MatDialog,
@@ -49,6 +50,9 @@ export class AppComponent {
         this.contagem = response[0].Contagem;
 
       })
+      this.server.get_List('contagem_contratos_alerta_6_meses').then((response) => {
+        this.contagem6Meses = response[0].Contagem;
+      })
     }
 
 
@@ -56,6 +60,9 @@ export class AppComponent {
       if (this.user) {
         this.server.get_List('contagem_contratos_alerta').then((response) => {
           this.contagem = response[0].Contagem;
+        });
+        this.server.get_List('contagem_contratos_alerta_6_meses').then((response) => {
+          this.contagem6Meses = response[0].Contagem;
         })
       }
     })

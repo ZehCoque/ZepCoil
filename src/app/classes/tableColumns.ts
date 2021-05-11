@@ -58,7 +58,7 @@ export class Contratos {
 }
 
 export class AlertaContratos {
-  Descricao: String;
+  Identificacao: String;
   Delta: Number;
   Data_inicio: Date;
   Data_termino: Date;

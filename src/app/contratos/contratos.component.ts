@@ -341,6 +341,8 @@ export class ContratosComponent implements OnInit {
       data: IdentificacaoContrato
     });
 
+
+
     this.editRowDialogRefVisualizarContrato.afterClosed().subscribe((results) => {
       this.newDataEmitter.newDataEmit(results);
     });

@@ -2,18 +2,18 @@
     <div class="toolbar" role="banner">
       <div style="padding-left: 10px;">
       <button (click)="refresh()" color="darker-primary" *ngIf="user" mat-mini-fab>
-        <mat-icon >autorenew</mat-icon>
+        <mat-icon matTooltip="Recarregar página">autorenew</mat-icon>
       </button>
       </div>
       <div style="padding-left: 10px;">
 
         <button (click)="openPessoaDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
-          <mat-icon >person</mat-icon>
+          <mat-icon matTooltip="Gerenciamento de Pessoas">person</mat-icon>
         </button>
       </div>
       <div style="padding-left: 10px;">
         <button (click)="openCCDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
-          <mat-icon >apartment</mat-icon>
+          <mat-icon matTooltip="Gerenciamento de Centro de Custo">apartment</mat-icon>
         </button>
       </div>
 
@@ -31,17 +31,20 @@
 
       <div style="padding-left: 10px;">
         <button (click)="openLanXConDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
-          <mat-icon>manage_search</mat-icon>
+          <mat-icon matTooltip="Busca de Contratos">manage_search</mat-icon>
         </button>
       </div>
 
       <div style="padding-left: 10px;">
         <button (click)="openAlertsDialog()" color="darker-primary" *ngIf="user" mat-mini-fab>
-          <mat-icon *ngIf="contagem == 0">notifications</mat-icon>
-          <mat-icon *ngIf="contagem > 0">notification_important</mat-icon>
+          <mat-icon matTooltip="Não há notificações de contratos" *ngIf="contagem == 0">notifications</mat-icon>
+          <mat-icon matTooltip="Alerta de contratos" *ngIf="contagem > 0">notification_important</mat-icon>
         </button>
-        <span *ngIf="contagem > 0 && user" style="position: absolute; top: 30px; padding-left: 5px;">
-          {{contagem}}
+        <span *ngIf="user" style="position: absolute; top: 30px; padding-left: 5px;">
+          Alerta de Término: {{contagem}}
+        </span>
+        <span *ngIf="user" style="position: absolute; padding-left: 5px;">
+          Alerta de 6 Meses: {{contagem6Meses}}
         </span>
       </div>
 

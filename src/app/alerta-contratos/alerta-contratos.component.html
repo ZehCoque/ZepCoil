@@ -9,32 +9,69 @@
 </div>
 <div>
 
-<div class="header-padding">
-  <div class="unselectable-line display-flex header-row" style=" align-items: center">
 
-    <div class="el-tag" style="width: 60%;">
-      Descrição do Contrato
+
+<mat-tab-group mat-stretch-tabs>
+  <mat-tab [label]="labelTermino">
+
+    <div class="header-padding">
+      <div class="unselectable-line display-flex header-row" style=" align-items: center">
+
+        <div class="el-tag" style="width: 60%;">
+          Identificação
+        </div>
+        <div class="el-tag" style="width: 30%;">
+          Criado há
+        </div>
+      </div>
     </div>
-    <div class="el-tag" style="width: 30%;">
-      Criado há
+
+    <cdk-virtual-scroll-viewport itemSize="56" style="height: 500px">
+    <mat-list *cdkVirtualFor="let alerta of AlertaContratos">
+            <mat-card style="text-align: center; display: flex; height: 20px;" (click)="viewContrato(alerta.Identificacao)">
+              <mat-card-content style="width: 60%;" class="el-tag--plain unselectable-line">
+                {{alerta.Identificacao}}
+              </mat-card-content>
+              <mat-card-content style="width: 30%;"  class="el-tag--plain unselectable-line">
+                {{alerta.Delta}} meses
+              </mat-card-content>
+            </mat-card>
+    </mat-list>
+   </cdk-virtual-scroll-viewport>
+  </mat-tab>
+
+  <mat-tab [label]="label6Meses">
+
+    <div class="header-padding">
+      <div class="unselectable-line display-flex header-row" style=" align-items: center">
+
+        <div class="el-tag" style="width: 60%;">
+          Identificação
+        </div>
+        <div class="el-tag" style="width: 30%;">
+          Término
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
+    <cdk-virtual-scroll-viewport itemSize="56" style="height: 500px">
+      <mat-list *cdkVirtualFor="let alerta of AlertaContratos6Meses">
+              <mat-card style="text-align: center; display: flex; height: 20px;" (click)="viewContrato(alerta.Identificacao)">
+                <mat-card-content style="width: 60%;" class="el-tag--plain unselectable-line">
+                  {{alerta.Identificacao}}
+                </mat-card-content>
+                <mat-card-content style="width: 30%;"  class="el-tag--plain unselectable-line">
+                  {{alerta.Data_termino | amLocal | amDateFormat: 'DD/MM/YYYY'}}
+                </mat-card-content>
+              </mat-card>
+      </mat-list>
+     </cdk-virtual-scroll-viewport>
+  </mat-tab>
+
+</mat-tab-group>
 
 
-<cdk-virtual-scroll-viewport itemSize="56" style="height: 500px">
-  <mat-list *cdkVirtualFor="let alerta of AlertaContratos">
-          <mat-card style="text-align: center; display: flex; height: 20px;">
-            <mat-card-content style="width: 60%;" class="el-tag--plain unselectable-line">
-              {{alerta.Descricao}}
-            </mat-card-content>
-            <mat-card-content style="width: 30%;"  class="el-tag--plain unselectable-line">
-              {{alerta.Delta}} meses
-            </mat-card-content>
-          </mat-card>
-  </mat-list>
 
- </cdk-virtual-scroll-viewport>
 
  <div class="button-row">
   <button mat-raised-button  (click)='onCancel()'>Fechar</button>
