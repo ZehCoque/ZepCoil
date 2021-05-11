@@ -15,8 +15,8 @@ export class AlertaContratosComponent implements OnInit {
   AlertaContratos: Array<AlertaContratos> = [];
   AlertaContratos6Meses: Array<AlertaContratos> = [];
 
-  label6Meses: String = "Aviso de 6 meses ";
-  labelTermino: String = "Término de Contratos ";
+  label6Meses: String = "Final de Contrato ";
+  labelTermino: String = "Reajuste de Aluguel ";
 
   dialogRefVisualizarContrato: MatDialogRef<PgmtContratosModalComponent>;
 
